@@ -1,0 +1,52 @@
+Frontend
+    Component development including business logic
+        Register User
+            ☐ Register Component (takes basic info from user. eg: Name to be used, age, interests.)
+        Home page
+            ☐ Menu with banner (UI)
+            ☐ Category selection
+            ☐ Posts container
+            ☐ Post cards
+            ☐ Footer (UI)
+        New Post Page
+            ☐ New Post Component
+        Post Detail Page
+            ☐ Post detail Component
+            ☐ Comments list Component
+    Routing for navigation
+        ☐ Register to Home
+        ☐ Home to Detail
+        ☐ Home to Create New Post
+        ☐ Detail to Create New Post
+    
+
+Backend
+    services
+        ☐ post service
+            create
+            search
+            searchPostsByUserID
+            getByPostID
+            upvote
+            downvote
+            flag
+            delete (for admin)
+        ☐ comment service
+            create
+            search
+            delete
+            flag
+        ☐ user service
+            create
+            getInfo
+            flag
+            delete
+    routes for REST API
+        posts
+        users
+
+
+Database
+    ☐ To update the schema to include all fields
+    ☐ Create index for the important search fields
+

@@ -1,0 +1,6 @@
+let searchDocBody = ""
+
+
+export {
+    searchDocBody
+}
