@@ -37,16 +37,16 @@ Backend
             delete
             flag
         ☐ user service
-            create
-            getInfo
-            flag
-            delete
+            ✔ create @done (01/11/2020, 10:21:46 am)
+            ✔ getInfo @done (01/11/2020, 10:21:53 am)
+            ☐ flag
+            ✘ delete @cancelled (01/11/2020, 10:22:03 am)
     routes for REST API
-        posts
-        users
+        ☐ posts
+        ✔ users @done (01/11/2020, 10:23:39 am)
 
 
 Database
-    ☐ To update the schema to include all fields
+    ✔ To update the schema to include all fields @done (01/11/2020, 10:22:46 am)
     ☐ Create index for the important search fields
 
