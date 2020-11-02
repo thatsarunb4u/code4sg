@@ -4,8 +4,11 @@ import routes from './route';
 import {testConnection, getTestRecords} from './service/db-client'
 import cors from 'cors';
 
-
 const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
 
 app.use('/post', routes.posts);
 app.use('/user', routes.users);
