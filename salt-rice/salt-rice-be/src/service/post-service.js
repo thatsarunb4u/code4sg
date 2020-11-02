@@ -80,12 +80,8 @@ let flag = async (postID) => {
     const resp = await conn.query("UPDATE post set isFlagged=1 where postID="+postID);
     console.log(resp);
     return resp;
-  } catch (err) {
-    throw err;
-  } finally {
-    if (conn) conn.release(); //release to pool
-  }
 }
+
 
 let getByPostID = async (postID) => {
     let conn;

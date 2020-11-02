@@ -1,14 +1,18 @@
 import express from 'express';
 import 'dotenv/config';
 import routes from './route';
-import {testConnection, getTestRecords} from './service/db-client'
+import {testConnection, getTestRecords} from './repo/db-client'
 import cors from 'cors';
+import bodyParser from 'body-parser';
+
 
 const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
+
+app.use(bodyParser.json())
 
 app.use('/post', routes.posts);
 app.use('/user', routes.users);

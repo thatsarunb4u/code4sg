@@ -1,0 +1,440 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,600");
+
+$colors: (
+    white: #fff,
+    beidge: #fffae1,
+    yellow: #ffc529,
+    grey: #707070,
+    black: #000000,
+    gray-transparent: rgb(36, 41, 44),
+    gray-transparent2: rgb(49, 55, 59),
+    gray-transparent3: rgb(65, 73, 78),
+);
+
+@function color($color-name) {
+    @return map-get($colors, $color-name);
+}
+
+$layout-types: (
+    pc: 1024px,
+    desktop: 875px,
+    tablet: 650px,
+);
+
+$side-spaces: (
+    mobile: 2em,
+    pc: 5em,
+);
+
+@function side-space($space-name) {
+    @return map-get($side-spaces, $space-name);
+}
+
+$border-radius: 5px;
+$font-size: 12pt;
+
+@mixin layout($the-size) {
+    @media (min-width: #{map-get($layout-types, $the-size)}) {
+        @content;
+    }
+}
+
+body,
+html {
+    min-width: 300px;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    font-size: $font-size;
+
+    ul {
+        list-style-type: none;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    header {
+        background-color: color(beidge);
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8em side-space(mobile);
+        z-index: 3;
+
+        @include layout(pc) {
+            padding: 0.8em side-space(pc);
+        }
+
+        .logo {
+            width: 120px;
+            @include layout(pc) {
+                width: 150px;
+            }
+        }
+
+        .menu {
+            width: 25px;
+            margin-top: 30%;
+        }
+
+        nav {
+            ul {
+                position: fixed;
+                width: 60%;
+                top: 0;
+                right: 0;
+                text-align: left;
+                background: color(gray-transparent);
+                height: 100%;
+                z-index: 7;
+                padding-top: 3em;
+
+                @include layout(tablet) {
+                    width: 40%;
+                }
+
+                @include layout(pc) {
+                    position: inherit;
+                    width: auto;
+                    background: none;
+                    height: auto;
+                    display: flex;
+                    padding-top: 0;
+                }
+
+                li {
+                    @include layout(pc) {
+                        float: left;
+                        padding-right: 2em;
+                    }
+                }
+
+                li a {
+                    color: color(white);
+                    text-decoration: none;
+                    display: block;
+                    width: 100%;
+                    padding: 1em 2em;
+                    background: color(gray-transparent2);
+
+                    @include layout(pc) {
+                        color: color(black);
+                        background-color: inherit;
+                        text-align: right;
+                        padding: 1em 2em;
+                    }
+
+                    &:hover {
+                        background-color: color(gray-transparent3);
+
+                        @include layout(pc) {
+                            background-color: inherit;
+                        }
+                    }
+                }
+
+                li.exit-btn {
+                    margin-bottom: 1em;
+                    margin-top: -1.3em;
+                    text-align: right;
+                    padding: 0 1.4em;
+
+                    img {
+                        width: 15px;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+
+    .show-desktop {
+        display: none;
+
+        @include layout(pc) {
+            display: block;
+            margin: 0 auto 13% auto;
+        }
+    }
+
+    .hide-desktop {
+        display: block;
+
+        @include layout(pc) {
+            display: none;
+        }
+    }
+
+    .hide-mobile {
+        display: block;
+    }
+
+    section {
+        background-size: 100%;
+        background-position: left bottom;
+        height: 100%;
+        background-color: color(beidge);
+        padding: 1.8em side-space(mobile) 0 0;
+
+        @include layout(tablet) {
+            padding: 1.8em side-space(mobile) 0 0;
+        }
+
+        @include layout(pc) {
+            padding: 1.8em side-space(pc) 0 0;
+        }
+
+        h3 {
+            @include layout(tablet) {
+                font-size: calc(#{$font-size} + 3pt);
+            }
+        }
+
+        h3,
+        .subhead {
+            text-align: right;
+            position: relative;
+            z-index: 3;
+
+            @include layout(pc) {
+                font-size: calc(#{$font-size} + 8pt);
+            }
+        }
+
+        .subhead {
+            font-weight: 400;
+        }
+
+        .cta {
+            background: color(yellow);
+            padding: 1.3em 0.7em 1.3em 1.3em;
+            text-decoration: none;
+            z-index: 1;
+            color: black;
+            clip-path: polygon(7% 19%, 100% 8%, 100% 83%, 59% 82%, 51% 100%, 42% 83%, 0 83%);
+            position: absolute;
+            right: 35%;
+
+            @include layout(tablet) {
+                right: side-space(mobile);
+                padding: 1.2em 0.9em 1.2em 1.2em;
+                font-size: calc(#{$font-size} + 1pt);
+                margin-top: 2%;
+            }
+
+            @include layout(pc) {
+                right: side-space(pc)-1.2em;
+                padding: 1.2em 0.9em 1.2em 1.2em;
+                font-size: calc(#{$font-size} + 4pt);
+                margin-top: 5%;
+            }
+        }
+
+        img {
+            width: 100%;
+            position: inherit;
+            bottom: 0;
+            left: 0;
+            @include layout(tablet) {
+                width: 65%;
+                margin-top: -15%;
+                margin-left: -35%;
+            }
+        }
+    }
+
+    .font-yellow {
+        color: color(yellow);
+    }
+
+    .card {
+        $margin-top-card-elements: 7%;
+        width: 100%;
+        margin: $margin-top-card-elements auto;
+        background-size: 30%;
+        background-position: 0 30%, 100% 100%;
+        background-repeat: no-repeat, no-repeat;
+        height: 100%;
+        background-image: url('../../../public/images/yellow.png'),url('../../../public/images/green.png');
+        //padding: 1.8em side-space(mobile) 0 0;
+
+        @include layout(pc) {
+            margin: calc(#{$margin-top-card-elements} - 4%) auto;
+        }
+
+        .filter {
+            @include layout(pc) {
+                display: flex;
+                flex-direction: row-reverse;
+                width: 100%;
+                .search-filter,
+                .category-filter {
+                    width: 50%;
+                }
+                .category-filter {
+                    .category-label {
+                        text-align: left;
+                        padding-left: side-space(pc);
+                    }
+                    .category-container {
+                        width: 100%;
+                        text-align: left;
+                        padding-left: side-space(pc);
+                    }
+                }
+
+                .search-filter {
+                    .search-label {
+                        padding-right: side-space(pc);
+                    }
+                    .search-container {
+                        text-align: right;
+                        padding-right: side-space(pc);
+                    }
+                }
+            }
+            .search-label,
+            .category-label {
+                text-align: right;
+                padding-right: side-space(mobile);
+            }
+            .search-container {
+                form {
+                    display: inline-flex;
+
+                    input {
+                        padding: 0.5em 1em;
+                        border: 1px solid color(grey);
+                        border-radius: $border-radius 0 0 $border-radius;
+                        font-size: $font-size;
+                    }
+                    button {
+                        padding: 0.5em 1em;
+                        border: 1px solid color(grey);
+                        border-radius: 0 $border-radius $border-radius 0;
+                        font-size: $font-size;
+                        background-color: color(black);
+                        color: color(white);
+                    }
+                }
+            }
+            .category-container {
+                display: inline-flex;
+
+                .relationship-category,
+                .social-category {
+                    text-decoration: none;
+                    z-index: 1;
+                    color: black;
+                    padding: 0.5em 2.5em;
+                    border: 1px solid color(grey);
+                }
+                .relationship-category {
+                    background: color(yellow);
+                    border-radius: $border-radius 0 0 $border-radius;
+                }
+                .social-category {
+                    background: color(white);
+                    border-radius: 0 $border-radius $border-radius 0;
+                }
+                .search-container {
+                    margin: $margin-top-card-elements auto;
+                }
+            }
+        }
+        .cards {
+            margin: $margin-top-card-elements side-space(mobile);
+            @include layout(pc) {
+                margin: 0 side-space(pc);
+            }
+            ul {
+                column-count: 1;
+                padding: 0;
+                margin: $margin-top-card-elements 0;
+                @include layout(tablet) {
+                    display: block;
+                    column-count: 3;
+                    margin: calc(#{$margin-top-card-elements} - 2%) 0;
+                }
+                @include layout(pc) {
+                    display: block;
+                    column-count: 4;
+                }
+                li {
+                    border: 1px solid color(grey);
+                    border-radius: $border-radius;
+                    margin: $margin-top-card-elements 0;
+                    background-color: color(yellow);
+                    height: auto;
+                    width: 100%;
+
+                    @include layout(tablet) {
+                        display: inline-block;
+                        margin: calc(#{$margin-top-card-elements} - 4%) 0;
+                    }
+
+                    &:first-child,
+                    &:last-child {
+                        background-color: color(white);
+                        .card-info {
+                            color: color(grey);
+                        }
+                    }
+
+                    .card-message {
+                        padding: 2em;
+                        margin: 0;
+                    }
+                    .card-info {
+                        padding: 1em 2em;
+                        border-top: 1px solid color(grey);
+                        text-align: left;
+                        font-size: calc(#{$font-size} - 2pt);
+                        color: color(black);
+
+                        .love-img,
+                        .comment-img {
+                            width: 20px;
+                            position: relative;
+                            top: 0.3em;
+                            margin-right: 10px;
+                        }
+                    }
+                }
+            }
+        }
+        .more {
+            padding-top: calc(#{$margin-top-card-elements}/ 2);
+
+            .more-label {
+                text-decoration: none;
+                color: color(black);
+                border: 1px solid color(yellow);
+                padding: 0.5em 2.5em;
+                border-radius: $border-radius;
+
+                &:hover {
+                    border: 3px solid color(yellow);
+                }
+            }
+        }
+    }
+
+    footer {
+        background-color: color(black);
+        padding: side-space(mobile);
+        .footer-link {
+            text-decoration: none;
+            color: color(white);
+            font-size: calc(#{$font-size} - 2pt);
+        }
+    }
+}
