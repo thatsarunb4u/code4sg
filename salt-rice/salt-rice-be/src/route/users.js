@@ -1,13 +1,9 @@
 import Router from 'express';
-import models from '../models';
-import {registerUser, getUserInfoByNRIC, getUserInfoByID, getUserInfoByUUID} from '../service/user-service';
+import {registerUser, getUserInfoByNRIC, getUserInfoByID, getUserInfoByUUID, flagUser} from '../service/user-service';
 
 
 const router = Router();
 
-router.get('/', (req,res) => {
-    res.send(Object.values(models.users));
-});
 
 router.get('/byID/:userId', async (req,res) => {
     console.log('Getting user information by ID')
@@ -50,13 +46,25 @@ router.get('/byUUID/:uuid', async (req,res) => {
 });
 
 
-router.put('/register', (req,res) => {
+router.put('/register', async (req,res) => {
     console.log('Registering new user')
     console.log(req.body)
     
-    registerUser(req.body)
+    
 
-    res.send('Registered USER.');
+    res.send(registerUser(req.body));
+
+});
+
+router.put('/flag/:userId', async (req,res) => {
+    console.log('Flagging User')
+
+    let userId = req.params.userId
+    console.log(userId)
+    
+    await flagUser(userId)
+
+    res.send('Flagged USER.');
 
 });
 
