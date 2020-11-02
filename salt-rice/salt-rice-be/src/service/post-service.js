@@ -6,7 +6,7 @@
 //downvote
 //flag
 //delete (for admin)
-import {dbConnPool} from './db-client'
+import {dbConnPool} from '../repo/db-client'
 
 let searchPostsByUserID = async (userID) => {
   let conn;
@@ -80,6 +80,11 @@ let flag = async (postID) => {
     const resp = await conn.query("UPDATE post set isFlagged=1 where postID="+postID);
     console.log(resp);
     return resp;
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) conn.release(); //release to pool
+  }
 }
 
 

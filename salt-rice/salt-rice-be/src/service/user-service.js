@@ -3,7 +3,7 @@
 //flag
 //delete
 
-import {registerUserInDB, getUserInfoFromDB, getUserInfoByIdFromDB} from '../repo/user-repo'
+import {registerUserInDB, getUserInfoFromDB, getUserInfoByIdFromDB, flagUserInDB} from '../repo/user-repo'
 import * as CryptoJS from 'crypto-js';
 
 let registerUser = async (newUserJSON) => {
@@ -40,11 +40,7 @@ let getUserInfoByUUID = async (UUID) => {
 
 let flagUser = async (ID) => {
     
-    newUserJSON.UUID = CryptoJS.SHA256(newUserJSON.NRIC).toString()
-    
-    delete newUserJSON.NRIC
-
-    registerUser(newUserJSON)
+    return await flagUserInDB(ID)
 }
 export {
     registerUser, getUserInfoByNRIC, getUserInfoByID, getUserInfoByUUID, flagUser

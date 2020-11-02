@@ -54,6 +54,22 @@ let getUserInfoByIdFromDB = async (ID) => {
     }
 }
 
+let flagUserInDB = async (ID) => {
+  let conn;
+  try {
+
+    console.log(ID)
+    conn = await dbConnPool.getConnection();
+    const result = await conn.query("UPDATE user set isBlacklisted=1 where userID="+ID );
+    return result
+
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) conn.release(); //release to pool
+  }
+}
+
 export {
-    registerUserInDB, getUserInfoFromDB,getUserInfoByIdFromDB
+    registerUserInDB, getUserInfoFromDB,getUserInfoByIdFromDB,flagUserInDB
 }
