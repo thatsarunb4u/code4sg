@@ -5,9 +5,9 @@ Frontend
         Home page
             ☐ Menu with banner (UI)
             ☐ Category selection
-            ☐ Posts container
-            ☐ Post cards
-            ☐ Footer (UI)
+            ✔ Posts container
+            ✔ Post cards
+            ✔ Footer (UI)
         New Post Page
             ☐ New Post Component
         Post Detail Page
@@ -18,7 +18,7 @@ Frontend
         ☐ Home to Detail
         ☐ Home to Create New Post
         ☐ Detail to Create New Post
-    
+
 
 Backend
     services

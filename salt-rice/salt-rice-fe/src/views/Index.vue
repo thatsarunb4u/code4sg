@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      searchQuery: null,
+      searchQuery: "",
       category: null,
       page: 0,
       cards: []
@@ -183,6 +183,51 @@ export default {
 </script>
 
 <style scoped>
+section {
+  background-size: 100%;
+  background-position: left bottom;
+  height: 100%;
+  background-color: #fffae1;
+  padding: 1.8em 2em 0 0;
+}
+
+section h3, section .subhead {
+  text-align: right;
+  position: relative;
+  z-index: 3;
+}
+
+section .subhead {
+  font-weight: 400;
+}
+
+section img {
+  width: 100%;
+  position: inherit;
+  bottom: 0;
+  left: 0;
+}
+
+.card .cards {
+  margin: 7% 2em;
+}
+
+.more {
+  padding-top: calc(7%/ 2);
+}
+
+.more-label {
+  text-decoration: none;
+  color: #000000;
+  border: 1px solid #ffc529;
+  padding: 0.5em 2.5em;
+  border-radius: 5px;
+}
+
+.card .more .more-label:hover {
+  border: 3px solid #ffc529;
+}
+
 .card {
   width: 100%;
   margin: 7% auto;
@@ -286,5 +331,21 @@ export default {
 .filter .search-filter .search-container {
   text-align: right;
   padding-right: 5em;
+}
+
+@media (min-width: 650px) {
+  section {
+    padding: 1.8em 2em 0 0;
+  }
+
+  section h3 {
+    font-size: calc(12pt + 3pt);
+  }
+
+  section img {
+    width: 65%;
+    margin-top: -15%;
+    margin-left: -35%;
+  }
 }
 </style>
