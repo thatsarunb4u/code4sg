@@ -60,9 +60,9 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`commentID`),
-  KEY `comment_user_fk` (`authorID`),
   KEY `post_comment_fk` (`postID`),
-  CONSTRAINT `comment_user_fk` FOREIGN KEY (`authorID`) REFERENCES `user` (`userID`),
+  KEY `comment_author_fk` (`authorID`),
+  CONSTRAINT `comment_author_fk` FOREIGN KEY (`authorID`) REFERENCES `user` (`userID`),
   CONSTRAINT `post_comment_fk` FOREIGN KEY (`postID`) REFERENCES `post` (`postID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `tag` (
 
 -- Dumping structure for table saltrice.user
 CREATE TABLE IF NOT EXISTS `user` (
-  `userID` int(10) unsigned NOT NULL DEFAULT 0,
+  `userID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` tinytext NOT NULL,
   `nickname` tinytext DEFAULT NULL,
   `score` float DEFAULT NULL,
@@ -132,8 +132,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `isBlacklisted` tinyint(1) unsigned DEFAULT 0,
   `createdAt` datetime DEFAULT current_timestamp(),
   `updatedAt` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`userID`),
+  UNIQUE KEY `UUID` (`UUID`) USING HASH
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
