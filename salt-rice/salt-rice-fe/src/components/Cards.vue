@@ -43,7 +43,7 @@ ul {
 
 ul li {
   border: 1px solid #707070;
-  border-radius: 5px;
+  border-radius: 27px;
   margin: 7% 0;
   background-color: #ffc529;
   height: auto;

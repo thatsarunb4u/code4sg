@@ -23,7 +23,7 @@
         </div>
       </div>
       <Cards :cards="resultQuery" />
-      <div class="more"><a @click="loadMore" class="more-label">More</a></div>
+      <div class="more"><a @click="loadMore" class="more-label">More comments</a></div>
     </div>
   </div>
 </template>
@@ -221,7 +221,7 @@ section .cta {
   color: #000000;
   border: 1px solid #ffc529;
   padding: 0.5em 2.5em;
-  border-radius: 5px;
+  border-radius: 27px;
 }
 
 .card .more .more-label:hover {
@@ -232,7 +232,7 @@ section .cta {
   width: 100%;
   margin: 7% auto;
   background-size: 30%;
-  background-position: 0 30%, 100% 100%;
+  background-position: 0 30%, 100% 62%;
   background-repeat: no-repeat, no-repeat;
   height: 100%;
   background-image: url("/images/yellow.png"), url("/images/green.png");
@@ -252,14 +252,14 @@ section .cta {
 .search-container input {
   padding: 0.5em 1em;
   border: 1px solid #707070;
-  border-radius: 5px 0 0 5px;
+  border-radius: 27px;
   font-size: 12pt;
 }
 
 .search-container button {
   padding: 0.5em 1em;
   border: 1px solid #707070;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 27px 27px 0;
   font-size: 12pt;
   background-color: #000000;
   color: #fff;
@@ -281,12 +281,12 @@ section .cta {
 
 .relationship-category {
   background: #ffc529;
-  border-radius: 5px 0 0 5px;
+  border-radius: 27px 0 0 27px;
 }
 
 .card .filter .category-container .social-category {
   background: #fff;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 27px 27px 0;
 }
 
 .card {
