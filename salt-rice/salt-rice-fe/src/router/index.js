@@ -7,6 +7,10 @@ const routes = [{
     "path": "/",
     "name": "Index",
     "component": () => import("../views/Index.vue")
+}, {
+    "path": "/post",
+    "name": "CreatePost",
+    "component": () => import("../views/CreatePost.vue")
 }];
 
 const router = new VueRouter({
