@@ -5,7 +5,7 @@ import store from './store'
 import router from "./router";
 import "./assets/css/main.css";
 
-Vue.prototype.$http_client = Axios
+Vue.prototype.$http = Axios
 Vue.config.productionTip = false
 
 new Vue({ store, render: h => h(App), router }).$mount('#app')

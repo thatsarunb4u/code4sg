@@ -50,11 +50,6 @@ ul li {
   width: 100%;
 }
 
-ul li:first-child, ul li:last-child {
-  color: #707070;
-  background-color: #fff;
-}
-
 @media (min-width: 650px) {
   ul {
     display: block;

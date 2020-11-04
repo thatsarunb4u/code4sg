@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="categoryID === 0 ? '' : 'social-card'">
     <p class="card-message">
       <strong>{{ title }}</strong>
       {{ body }}
@@ -62,6 +62,11 @@ export default {
   text-align: left;
   font-size: calc(12pt - 2pt);
   color: #000000;
+}
+
+.social-card {
+  color: #707070;
+  background-color: #fff;
 }
 
 .love-img, .comment-img {

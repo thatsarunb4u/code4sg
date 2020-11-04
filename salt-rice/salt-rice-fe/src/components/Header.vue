@@ -3,7 +3,7 @@
     <img src="/images/saltrice.svg" alt="SaltRice logo" class="logo">
     <nav>
       <a class="hide-desktop" @click="toggleMobileNav">
-        <img src="/images/ham.png" alt="toogle menu" class="menu">
+        <img src="/images/ham.png" alt="toogle menu" class="menu" style="cursor: pointer;">
       </a>
       <ul :class="`show-desktop ${mobileNav ? 'hide-mobile' : ''}`">
         <li class="exit-btn" @click="toggleMobileNav"><img src="/images/exit.svg" alt=""></li>

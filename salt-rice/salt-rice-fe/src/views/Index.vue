@@ -17,14 +17,8 @@
         <div class="category-filter">
           <p class="category-label bold">Category</p>
           <div class="category-container">
-            <a
-                :class="`relationship-category${category === 0 ? ' active' : ''}`"
-                @click="changeCategory(0)"
-            >Relationship</a>
-            <a
-                :class="`social-category${category === 1 ? ' active' : ''}`"
-                @click="changeCategory(1)"
-            >Social</a>
+            <a class="relationship-category">Relationship</a>
+            <a class="social-category">Social</a>
           </div>
         </div>
       </div>
@@ -45,16 +39,11 @@ export default {
   data() {
     return {
       searchQuery: "",
-      category: null,
       page: 0,
       cards: []
     };
   },
   methods: {
-    changeCategory(newCategory) {
-      if (this.category === newCategory) return this.category = null;
-      return this.category = newCategory;
-    },
     loadMore() {
       // todo: pagination
       this.cards = [...this.cards, ...this.cards];
@@ -63,13 +52,12 @@ export default {
   computed: {
     resultQuery() {
       // todo: Send search request to server instead of filtering dummy data
-      if (!this.searchQuery && this.category === null) return this.cards;
+      if (!this.searchQuery) return this.cards;
 
-      return this.cards.filter(({ title, body, author, categoryID }) =>
+      return this.cards.filter(({ title, body, author }) =>
           (this.searchQuery.length && title.includes(this.searchQuery)) ||
           (this.searchQuery.length &&body.includes(this.searchQuery)) ||
-          (this.searchQuery.length &&(author && author.nickname.includes(this.searchQuery))) ||
-          (categoryID === this.category)
+          (this.searchQuery.length &&(author && author.nickname.includes(this.searchQuery)))
       );
     }
   },
@@ -208,6 +196,18 @@ section img {
   left: 0;
 }
 
+section .cta {
+  background: #ffc529;
+  padding: 1.3em 0.7em 1.3em 1.3em;
+  text-decoration: none;
+  z-index: 1;
+  color: black;
+  -webkit-clip-path: polygon(7% 19%, 100% 8%, 100% 83%, 59% 82%, 51% 100%, 42% 83%, 0 83%);
+  clip-path: polygon(7% 19%, 100% 8%, 100% 83%, 59% 82%, 51% 100%, 42% 83%, 0 83%);
+  position: absolute;
+  right: 35%;
+}
+
 .card .cards {
   margin: 7% 2em;
 }
@@ -269,7 +269,6 @@ section img {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  cursor: pointer;
 }
 
 .relationship-category, .social-category {
@@ -280,7 +279,7 @@ section img {
   border: 1px solid #707070;
 }
 
-.relationship-category.active, .social-category.active {
+.relationship-category {
   background: #ffc529;
   border-radius: 5px 0 0 5px;
 }
@@ -290,47 +289,8 @@ section img {
   border-radius: 0 5px 5px 0;
 }
 
-.card .filter .category-container .search-container {
-  margin: 7% auto;
-}
-
 .card {
   margin: calc(7% - 4%) auto;
-}
-
-.filter {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: reverse;
-  -ms-flex-direction: row-reverse;
-  flex-direction: row-reverse;
-  width: 100%;
-}
-
-.filter .search-filter, .filter .category-filter {
-  width: 50%;
-}
-
-.filter .category-filter .category-label {
-  text-align: left;
-  padding-left: 5em;
-}
-
-.filter .category-filter .category-container {
-  width: 100%;
-  text-align: left;
-  padding-left: 5em;
-}
-
-.filter .search-filter .search-label {
-  padding-right: 5em;
-}
-
-.filter .search-filter .search-container {
-  text-align: right;
-  padding-right: 5em;
 }
 
 @media (min-width: 650px) {
@@ -346,6 +306,61 @@ section img {
     width: 65%;
     margin-top: -15%;
     margin-left: -35%;
+  }
+
+  section .cta {
+    right: 2em;
+    padding: 1.2em 0.9em 1.2em 1.2em;
+    font-size: calc(12pt + 1pt);
+    margin-top: 2%;
+  }
+}
+
+@media (min-width: 1024px) {
+  section .cta {
+    right: 3.8em;
+    padding: 1.2em 0.9em 1.2em 1.2em;
+    font-size: calc(12pt + 4pt);
+    margin-top: 5%;
+  }
+
+  section h3, section .subhead {
+    font-size: calc(12pt + 8pt);
+  }
+
+  .filter {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    width: 100%;
+  }
+
+  .search-filter, .category-filter {
+    width: 50%;
+  }
+
+  .filter .category-filter .category-label {
+    text-align: left;
+    padding-left: 5em;
+  }
+
+  .category-container {
+    width: 100%;
+    text-align: left;
+    padding-left: 5em;
+  }
+
+  .filter .search-filter .search-label {
+    padding-right: 5em;
+  }
+
+  .search-container {
+    text-align: right;
+    padding-right: 5em;
   }
 }
 </style>

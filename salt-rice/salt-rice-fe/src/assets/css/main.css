@@ -15,6 +15,10 @@ body {
   text-align: center;
 }
 
+.font-yellow {
+  color: #ffc529;
+}
+
 .bold {
   font-weight: bold;
 }
