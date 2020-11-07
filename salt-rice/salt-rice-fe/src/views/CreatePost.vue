@@ -139,37 +139,4 @@ input::placeholder, textarea::placeholder {
 .button-group button {
   margin: 0 10px;
 }
-
-.submit-button, .draft-button, .cancel-button {
-  padding: 0.5em 1.5rem;
-  text-decoration: none;
-  border: none;
-  border-radius: 15px 13px;
-  font-size: 12pt;
-  font-family: "Montserrat", sans-serif;
-  display: inline-block;
-}
-
-.draft-button {
-  background-color: dimgrey;
-  color: #fff;
-}
-
-.tag-button {
-  padding: 0.5em 1em;
-  text-decoration: none;
-  border: none;
-  border-radius: 13px;
-  font-size: small;
-  font-family: "Montserrat", sans-serif;
-  display: inline-block;
-  background-color: black;
-  color: #fff;
-  margin-right: 1mm;
-}
-
-.submit-button {
-  background-color: #ffc529;
-  color: #fff;
-}
 </style>

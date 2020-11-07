@@ -22,7 +22,7 @@
       </p>
     </div>
     <section>
-      <div>
+      <div style="margin-bottom: 50px;">
         <div class="new-comment">
           <div>
             <img src="/images/iconfinder_1_avatar_2754574.svg" alt="" />
@@ -30,7 +30,10 @@
           </div>
           <textarea id="textarea" placeholder="Add your comment" v-model="comment" />
         </div>
-        <button @click="reply" type="button" class="submit-button">Submit</button>
+        <div style="float: right;">
+          <button @click="cancel" type="button" class="cancel-button" style="margin-right: 20px;">Cancel</button>
+          <button @click="reply" type="button" class="submit-button">Submit</button>
+        </div>
       </div>
       <comments :comments="comments.comments"/>
       <div style="margin-top: 30px;" class="more container">
@@ -86,6 +89,9 @@ export default {
     reply() {
       // simulate posting  data to server
       return 0;
+    },
+    cancel() {
+      this.comment = "";
     },
     copyLink() {
       navigator.clipboard.writeText(document.location.href);
