@@ -35,6 +35,34 @@ body {
   display: block;
 }
 
+.more-label {
+  text-decoration: none;
+  color: #000000;
+  border: 1px solid #ffc529;
+  padding: 0.5em 2.5em;
+  border-radius: 27px;
+  cursor: pointer;
+}
+
+.more-label:hover {
+  border: 3px solid #ffc529;
+}
+
+.post-actions {
+  font-size: 15px;
+}
+
+.post-actions span img {
+  height: 19px;
+  width: 19px;
+  margin-right: 2px;
+}
+
+.post-actions > * {
+  cursor: pointer;
+  margin-right: 20px;
+}
+
 @media (min-width: 1024px) {
   body section h3, body section .subhead {
     font-size: calc(12pt + 8pt);
