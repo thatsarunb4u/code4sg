@@ -68,9 +68,10 @@ export default {
       if (!this.message) return;
       if (!this.category) return;
 
-      // todo: request  server
+      // todo: request server
     },
     draft() {
+      // todo: send draft to server... Or save to localstorage?
     },
     addTag(e) {
       const value = e.target.value.slice(0, -1);

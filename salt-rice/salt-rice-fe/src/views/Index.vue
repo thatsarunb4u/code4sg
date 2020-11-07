@@ -9,9 +9,9 @@
     <div class="card container" id="card">
       <div class="filter">
         <div class="search-filter">
-          <p class="search-label bold">Search</p>
+          <p class="search-label bold">Search posts</p>
           <div class="search-container">
-            <input v-model.lazy="searchQuery" type="text" placeholder="How to...">
+            <input v-model.lazy="searchQuery" type="text" placeholder="Search by title and tags">
           </div>
         </div>
         <div class="category-filter">
@@ -214,18 +214,6 @@ section .cta {
 
 .more {
   padding-top: calc(7%/ 2);
-}
-
-.more-label {
-  text-decoration: none;
-  color: #000000;
-  border: 1px solid #ffc529;
-  padding: 0.5em 2.5em;
-  border-radius: 27px;
-}
-
-.card .more .more-label:hover {
-  border: 3px solid #ffc529;
 }
 
 .card {
