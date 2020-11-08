@@ -1,5 +1,5 @@
 import Router from 'express';
-import {create, searchPostsByUserID, getByPostID, upvote, downvote, deletePost, flag, getPosts} from '../service/post-service';
+import {create, searchPostsByTagOrTitle, searchPostsByUserID, getByPostID, upvote, downvote, deletePost, flag, getPosts} from '../service/post-service';
 
 const router = Router();
 
@@ -24,6 +24,18 @@ router.get('/byuserid/:userId', (req,res) => {
         res.send(err);
     });
 });
+
+router.get('/bytagortitle/:querystr', (req,res) => {
+    let response = searchPostsByTagOrTitle(req.params.querystr);
+    response.then((result) => {
+        console.log(result);
+        res.send(result);
+    }).catch((err) => {
+        console.log(err)
+        res.send(err);
+    });
+});
+
 router.put('/', (req,res) => {
     res.send('Received a put request.');
 });

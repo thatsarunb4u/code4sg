@@ -6,7 +6,17 @@
 //downvote
 //flag
 //delete (for admin)
-import {dbConnPool} from '../repo/db-client'
+import {dbConnPool} from '../repo/db-client';
+import {searchPostsByTitleInDB, searchPostsByTagInDB} from '../repo/post-repo';
+
+
+let searchPostsByTagOrTitle = async (queryString) => {
+  let postsByTitleArr = await searchPostsByTitleInDB(queryString)
+  let postsByTagArr = await searchPostsByTagInDB(queryString)
+
+  return postsByTitleArr.concat(postsByTagArr)
+  
+}
 
 let searchPostsByUserID = async (userID) => {
   let conn;
@@ -28,7 +38,7 @@ let create = async (input_json) => {
   try {
   
     conn = await dbConnPool.getConnection();
-    const resp = await conn.query("INSERT into post (postID, title, body, categoryID, authorID, isAnonymous) VALUES (?, ?, ?, ?, ?, ?)", [input_json['postID'], input_json['title'],input_json['body'], input_json['categoryID'], input_json['authorID'], input_json['isAnonymous']]);
+    const resp = await conn.query("INSERT into post ( title, body, categoryID, authorID, isAnonymous) VALUES ( ?, ?, ?, ?, ?)", [input_json['title'],input_json['body'], input_json['categoryID'], input_json['authorID'], input_json['isAnonymous']]);
     console.log(resp);
     return resp;
   } catch (err) {
@@ -129,5 +139,5 @@ let getByPostID = async (postID) => {
   }
 
 export {
-    getByPostID, create, searchPostsByUserID, upvote, downvote, deletePost, flag, getPosts
+  searchPostsByTagOrTitle, getByPostID, create, searchPostsByUserID, upvote, downvote, deletePost, flag, getPosts
 }
