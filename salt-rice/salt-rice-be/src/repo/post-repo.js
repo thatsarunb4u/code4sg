@@ -32,7 +32,23 @@ let searchPostsByTitleInDB = async (inpText) => {
 }
 
 
+let createPostInDB = async (inpObj) => {
+  let conn;
+  try {
+  
+    conn = await dbConnPool.getConnection();
+    const resp = await conn.query("INSERT into post ( title, body, categoryID, authorID, isAnonymous) VALUES ( ?, ?, ?, ?, ?)", [inpObj['title'],inpObj['body'], inpObj['categoryID'], inpObj['authorID'], inpObj['isAnonymous']]);
+    console.log(resp);
+    return resp;
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) conn.release(); //release to pool
+  }
+}
+
+
 
 export {
-  searchPostsByTagInDB, searchPostsByTitleInDB
+  searchPostsByTagInDB, searchPostsByTitleInDB, createPostInDB
 }

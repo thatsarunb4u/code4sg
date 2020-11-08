@@ -7,7 +7,8 @@
 //flag
 //delete (for admin)
 import {dbConnPool} from '../repo/db-client';
-import {searchPostsByTitleInDB, searchPostsByTagInDB} from '../repo/post-repo';
+import {searchPostsByTitleInDB, searchPostsByTagInDB, createPostInDB} from '../repo/post-repo';
+import { createTagInDBIfNotExists, createPostTagInDB } from '../repo/tag-repo';
 
 
 let searchPostsByTagOrTitle = async (queryString) => {
@@ -34,18 +35,21 @@ let searchPostsByUserID = async (userID) => {
 }
 
 let create = async (input_json) => {
-  let conn;
   try {
-  
-    conn = await dbConnPool.getConnection();
-    const resp = await conn.query("INSERT into post ( title, body, categoryID, authorID, isAnonymous) VALUES ( ?, ?, ?, ?, ?)", [input_json['title'],input_json['body'], input_json['categoryID'], input_json['authorID'], input_json['isAnonymous']]);
-    console.log(resp);
-    return resp;
+    let createPostResponse = await createPostInDB(input_json)
+    let createTagResponse = await createTagInDBIfNotExists(input_json.tags)
+    console.log(createTagResponse)
+    let createPostTagResponse = await createPostTagInDB(createPostResponse.insertId, input_json.tags)
+    console.log(createPostTagResponse)
+
+    return createPostResponse
+
   } catch (err) {
     throw err;
   } finally {
-    if (conn) conn.release(); //release to pool
+    
   }
+
 }
 
 let upvote = async (postID) => {

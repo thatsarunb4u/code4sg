@@ -16,6 +16,7 @@ app.use(cors());
 
 app.use('/post', routes.posts);
 app.use('/user', routes.users);
+app.use('/tag', routes.tags);
 
 
 app.listen(process.env.PORT, () => {
