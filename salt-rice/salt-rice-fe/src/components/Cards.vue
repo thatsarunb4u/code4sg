@@ -3,6 +3,7 @@
     <ul>
       <li v-for="card in cards" :key="card.postID">
         <card
+          :postID="card.postID"
           :title="card.title"
           :body="card.body"
           :categoryID="card.categoryID"

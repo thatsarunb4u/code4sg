@@ -1,22 +1,24 @@
 <template>
-  <div :style="{ [categoryID === 0 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }">
-    <p class="card-message">
-      <strong>{{ title }}</strong>
-      {{ body }}
-    </p>
-    <div class="card-info" v-if="upvote !== 0 && downvote !== 0 && updatedAt && comments && comments.length !== undefined">
-      <p v-if="author && !isAnonymous">Posted by {{ author.nickname }}</p>
-      <p>Last updated {{ updatedAtCalender }}</p>
-      <p>
-        <img src="/images/love.svg" alt="love image" class="love-img">
-        <span class="like-count">{{ this.likes }} likes</span>
+  <router-link tag="a" :to="{ name: 'Post', params: { id: postID }}">
+    <div :style="{ [categoryID === 0 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }">
+      <p class="card-message">
+        <strong>{{ title }}</strong>
+        {{ body }}
       </p>
-      <p>
-        <img src="/images/message.svg" alt="comment image" class="comment-img">
-        <span class="comment-count">{{ comments.length }} comments</span>
-      </p>
+      <div class="card-info" v-if="upvote !== 0 && downvote !== 0 && updatedAt && comments && comments.length !== undefined">
+        <p v-if="author && !isAnonymous">Posted by {{ author.nickname }}</p>
+        <p>Last updated {{ updatedAtCalender }}</p>
+        <p>
+          <img src="/images/love.svg" alt="love image" class="love-img">
+          <span class="like-count">{{ this.likes }} likes</span>
+        </p>
+        <p>
+          <img src="/images/message.svg" alt="comment image" class="comment-img">
+          <span class="comment-count">{{ comments.length }} comments</span>
+        </p>
+      </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -25,6 +27,7 @@ import moment from "moment";
 export default {
   name: "Card",
   props: {
+    postID: Number,
     title: String,
     body: String,
     categoryID: Number,
@@ -51,6 +54,11 @@ export default {
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .card-message {
   padding: 2em;
   margin: 0;

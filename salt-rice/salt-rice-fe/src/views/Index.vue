@@ -17,8 +17,8 @@
         <div class="category-filter">
           <p class="category-label bold">Category</p>
           <div class="category-container">
-            <a class="relationship-category">Relationship</a>
-            <a class="social-category">Social</a>
+            <a class="relationship-category" @click="changeCategory(0)">Relationship</a>
+            <a class="social-category" @click="changeCategory(1)">Social</a>
           </div>
         </div>
       </div>
@@ -39,11 +39,16 @@ export default {
   data() {
     return {
       searchQuery: "",
+      category: null,
       page: 0,
       cards: []
     };
   },
   methods: {
+    changeCategory(newCategory) {
+      if (this.category === newCategory) return this.category = null;
+      return this.category = newCategory;
+    },
     loadMore() {
       // todo: pagination
       this.cards = [...this.cards, ...this.cards];
@@ -52,120 +57,36 @@ export default {
   computed: {
     resultQuery() {
       // todo: Send search request to server instead of filtering dummy data
-      if (!this.searchQuery) return this.cards;
+      if (!this.searchQuery && this.category === null) return this.cards;
 
-      return this.cards.filter(({ title, body, author }) =>
+      return this.cards.filter(({ title, body, author, categoryID }) =>
           (this.searchQuery.length && title.includes(this.searchQuery)) ||
           (this.searchQuery.length &&body.includes(this.searchQuery)) ||
-          (this.searchQuery.length &&(author && author.nickname.includes(this.searchQuery)))
+          (this.searchQuery.length &&(author && author.nickname.includes(this.searchQuery))) ||
+          (categoryID === this.category)
       );
     }
   },
   beforeCreate() {
     // simulate getting posts from api
-    setTimeout(() => this.cards.push({
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    }, {
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    },{
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    },{
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    },{
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    },{
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    },{
-      "title": "test",
-      "body": "more test",
-      "categoryID": 0,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    }, {
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1
-    }), 200);
+    setTimeout(() => this.cards.push(
+        ...Array(8).fill().map((value, postID) => ({
+          postID,
+          "title": "test",
+          "body": "more test",
+          "categoryID": Math.floor(Math.random () * 2),
+          "author": {
+            "userID": 1,
+            "UUID": "3754394705",
+            "nickname": "Username"
+          },
+          "upvote": 12,
+          "downvote": 2,
+          "isAnonymous": Math.random() > .4,
+          "updatedAt": new Date(),
+          "comments": []
+      }))
+    ));
   }
 }
 </script>
@@ -257,6 +178,7 @@ section .cta {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
+  cursor: pointer;
 }
 
 .relationship-category, .social-category {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="comment in comments" :key="comment.commentID"><comment :comment="comment" /></div>
+    <Comment v-for="comment in comments" :key="comment.commentID" :comment="comment" />
   </div>
 </template>
 
@@ -19,5 +19,13 @@ export default {
 </script>
 
 <style scoped>
-
+div {
+  width: 100%;
+  margin: 7% auto;
+  background-size: 30%;
+  background-position: 0 30%, 100% 62%;
+  background-repeat: no-repeat, no-repeat;
+  height: 100%;
+  background-image: url("/images/yellow.png"), url("/images/green.png");
+}
 </style>

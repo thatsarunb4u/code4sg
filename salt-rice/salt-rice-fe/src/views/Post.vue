@@ -5,10 +5,10 @@
       <p>{{ post.body }}</p>
       <div class="post-actions">
         <span class="underline" @click="upVote">
-          <img src="/images/like.svg" alt="Likes" /> {{ post.upVote }}
+          <img src="/images/like.svg" alt="Likes" /> {{ postUpVotes }}
         </span>
         <span class="underline" @click="downVote">
-          <img src="/images/dislike.svg" alt="Dislikes" /> {{ post.downVote }}
+          <img src="/images/dislike.svg" alt="Dislikes" /> {{ postDownVotes }}
         </span>
         <span @click="copyLink">
           <img src="/images/share.svg" alt="Dislikes" /> SHARE
@@ -52,6 +52,8 @@ export default {
   components: { Comments },
   data() {
     return {
+      isLoading: true,
+      error: false,
       comment: "",
       post: {
         postID: null,
@@ -78,17 +80,56 @@ export default {
     };
   },
   methods: {
-    upVote() {
-      // simulate posting  data to server
-      return 0;
+    async getPostData() {
+      const post = await this.$http.get(`/post/bypostid/${this.$route.params.id}`);
+      const author = await this.$http.get(`/user/byID/${post.data.authorID}`);
+
+      // put 500 page error when true
+      if (post.data.errno || author.data.errno) this.error = true;
+
+      this.post = post.data;
+      this.author = author.data;
+
+      return [post, author];
     },
-    downVote() {
-      // simulate posting  data to server
-      return 0;
+    async upVote() {
+      try {
+        this.post.upVote++;
+        await this.$http.get(`/post/${this.post.postID}/upvote`);
+        await this.getPostData();
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    async downVote() {
+      try {
+        this.post.downVote++;
+        await this.$http.get(`/post/${this.post.postID}/downvote`);
+        await this.getPostData();
+      } catch (err) {
+        console.error(err);
+      }
     },
     reply() {
-      // simulate posting  data to server
-      return 0;
+      if (!this.comment) return;
+
+      // simulate posting data to server
+      this.comments.comments.push({
+        commentID: this.comments.comments.length - 1,
+        body: this.comment,
+        postID: this.post.postID,
+        author: this.author,
+        upVote: 0,
+        downVote: 0,
+        isActive: true,
+        isFlagged: false,
+        isAnonymous: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+
+      // clear posting comment data
+      this.cancel();
     },
     cancel() {
       this.comment = "";
@@ -101,60 +142,6 @@ export default {
 
       // simulate getting data from server
       setTimeout(() => this.comments.comments.push(
-          ...Array(25).fill().map((value, commentID) => ({
-                commentID,
-                body: "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." +
-                    " Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. " +
-                    "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. " +
-                    "Vogel Quax zwickt Johnys Pferd Bim. Sylvia wagt quick den Jux bei",
-                postID: this.post.postID,
-                author: this.author,
-                upVote: 0,
-                downVote: 0,
-                isActive: true,
-                isFlagged: false,
-                isAnonymous: false,
-                createdAt: new Date(),
-                updatedAt: new Date()
-              })
-          )
-      ), 200);
-    }
-  },
-  computed: {
-    updatedAtCalendar() {
-      return moment(this.post.updatedAt).fromNow();
-    }
-  },
-  beforeCreate() {
-    /**
-     * todo: request post from server
-     *       request author from server
-     *
-     */
-
-    // simulate getting data from server
-    setTimeout(() => {
-      this.post = {
-        postID: 1,
-        title: "Zwei finke Boxer jagen die quirlige Eva und ihren Mops durch Sylt.",
-        body: "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt. " +
-            "Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. Zwölf Boxkämpfer " +
-            "jagen Viktor quer über den großen Sylter Deich. Vogel Quax zwickt Johnys Pferd " +
-            "Bim. Sylvia wagt quick den Jux bei Pforzheim. Polyfon zwitschernd aßen Mäxchens " +
-            "Vögel Rüben, Joghurt und Quark. \"Fix, Schwyz!\" quäkt Jürgen blöd vom Paß. Victor " +
-            "jagt zwölf Boxkämpfer quer über den großen Sylter Deich. Falsches Üben von " +
-            "Xylophonmusik quält jeden größeren Zwerg. Heizölrückstoßabdämpfung. " +
-            "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops.",
-        categoryID: 1,
-        authorID: 1,
-        upVote: 200,
-        downVote: 20
-      }
-
-      this.author = { userID: 1, nickname: "Al-Khamai" }
-
-      this.comments.comments.push(
           ...Array(25).fill().map((value, commentID) => ({
             commentID,
             body: "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." +
@@ -172,9 +159,33 @@ export default {
             updatedAt: new Date()
           })
         )
-      )
-    }, 200)
-    return 0;
+      ), 200);
+    }
+  },
+  computed: {
+    updatedAtCalendar() {
+      return moment(this.post.updatedAt).fromNow();
+    },
+    postUpVotes() {
+      return this.post.upVote;
+    },
+    postDownVotes() {
+      return this.post.downVote;
+    }
+  },
+  async created() {
+    /**
+     * todo: get comments from server
+     */
+    try {
+      await this.getPostData();
+      this.isLoading = false;
+
+      // todo: if post ID is missing, put up 404 page error
+    } catch (err) {
+      console.error(err);
+      // todo: put up 500 page error
+    }
   }
 }
 </script>

@@ -33,7 +33,7 @@
           id="tags"
           name="tags"
           autocomplete="off"
-          placeholder="Enter tags followed by space.."
+          placeholder="Enter tags followed by space..."
           @input="addTag"
       />
       <button @click="e => e.preventDefault()" class="tag-button" v-for="tag in tags" :key="tag">
@@ -54,6 +54,7 @@ export default {
   name: "CreatePost",
   data() {
     return {
+      error: false,
       title: "",
       message: "",
       category: "Relationship",
@@ -61,14 +62,28 @@ export default {
     };
   },
   methods: {
-    submit(e) {
-      e.preventDefault();
-      if (!e.isTrusted) return;
-      if (!this.title) return;
-      if (!this.message) return;
-      if (!this.category) return;
+    async submit(e) {
+      try {
+        e.preventDefault();
+        if (!e.isTrusted) return;
+        if (!this.title) return;
+        if (!this.message) return;
+        if (!this.category) return;
 
-      // todo: request server
+        const response  = await this.$http.post("/post", {
+          title: this.title,
+          body: this.message,
+          categoryID: 1,
+          authorID: 1, // authentication have not been implemented yet, just putting null for now
+          isAnonymous: false // since authorID is null
+        });
+
+        // put 500 page error when true
+        if (response.data.errno) this.error = true;
+        else await this.$router.push("/");
+      } catch (err) {
+        console.error(err);
+      }
     },
     draft() {
       // todo: send draft to server... Or save to localstorage?
@@ -78,7 +93,7 @@ export default {
 
       if (e.inputType !== "insertText") return;
       if (!e.isTrusted) return;
-      if (e.data !== ",") return;
+      if (!(e.data === "," || e.data === " ")) return;
       if (!value) return;
 
       e.target.value = "";
