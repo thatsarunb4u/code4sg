@@ -60,8 +60,8 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`commentID`),
-  KEY `post_comment_fk` (`postID`),
   KEY `comment_author_fk` (`authorID`),
+  KEY `post_comment_fk` (`postID`),
   CONSTRAINT `comment_author_fk` FOREIGN KEY (`authorID`) REFERENCES `user` (`userID`),
   CONSTRAINT `post_comment_fk` FOREIGN KEY (`postID`) REFERENCES `post` (`postID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
 
 -- Dumping structure for table saltrice.post
 CREATE TABLE IF NOT EXISTS `post` (
-  `postID` int(10) unsigned NOT NULL,
+  `postID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` tinytext NOT NULL DEFAULT '',
   `body` mediumtext NOT NULL DEFAULT '',
   `categoryID` int(10) unsigned NOT NULL DEFAULT 0,
@@ -100,8 +100,8 @@ CREATE TABLE IF NOT EXISTS `posttag` (
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`postTagID`),
-  KEY `post_fk` (`postID`),
   KEY `tag_fk` (`tagID`),
+  KEY `post_fk` (`postID`),
   CONSTRAINT `post_fk` FOREIGN KEY (`postID`) REFERENCES `post` (`postID`),
   CONSTRAINT `tag_fk` FOREIGN KEY (`tagID`) REFERENCES `tag` (`tagID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
