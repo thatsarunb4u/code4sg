@@ -38,11 +38,11 @@ export default {
       postID: Number,
       upVote: Number,
       downVote: Number,
-      isActive: Boolean,
-      isFlagged: Boolean,
-      isAnonymous: Boolean,
-      createdAt: Date,
-      updatedAt: Date,
+      isActive: Number,
+      isFlagged: Number,
+      isAnonymous: Number,
+      createdAt: String,
+      updatedAt: String,
       author: {
         nickname: String,
         userID: String

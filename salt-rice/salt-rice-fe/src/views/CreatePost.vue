@@ -34,8 +34,20 @@
           name="tags"
           autocomplete="off"
           placeholder="Enter tags followed by space..."
-          @input="addTag"
+          ref="tagInput"
+          @input="(e) => {addTag(e.target.value, e); recommendTag(e.target.value);}"
       />
+      <div class="tag-suggestion" v-if="tagSuggestions.length">
+        <ul>
+          <li
+              v-for="suggestion in tagSuggestions"
+              :key="suggestion.tagID"
+              @click="addTag(`${suggestion.tagName},`)"
+          >
+            {{ suggestion.tagName }}
+          </li>
+        </ul>
+      </div>
       <button @click="e => e.preventDefault()" class="tag-button" v-for="tag in tags" :key="tag">
         #{{ tag }}
         <span @click="removeTag(tag)">x</span>
@@ -58,6 +70,8 @@ export default {
       title: "",
       message: "",
       category: "Relationship",
+      timeoutTag: null,
+      tagSuggestions: [],
       tags: []
     };
   },
@@ -70,17 +84,19 @@ export default {
         if (!this.message) return;
         if (!this.category) return;
 
+        this.addTag(this.$refs.tagInput.value);
         const response  = await this.$http.post("/post", {
           title: this.title,
           body: this.message,
-          categoryID: 1,
-          authorID: 1, // authentication have not been implemented yet, just putting null for now
-          isAnonymous: false // since authorID is null
+          categoryID: 1, // category will be dynamic once I get all categories from server
+          authorID: 1, // authentication have not been implemented yet, just putting 1 for now
+          isAnonymous: false,
+          tags: this.tags.map((tagName) => ({ tagName }))
         });
 
         // put 500 page error when true
         if (response.data.errno) this.error = true;
-        else await this.$router.push("/");
+        else await this.$router.push(`/post/${response.data.insertId}`);
       } catch (err) {
         console.error(err);
       }
@@ -88,19 +104,35 @@ export default {
     draft() {
       // todo: send draft to server... Or save to localstorage?
     },
-    addTag(e) {
-      const value = e.target.value.slice(0, -1);
+    addTag(tag) {
+      const value = tag.split(/,|\s/)[0];
 
-      if (e.inputType !== "insertText") return;
-      if (!e.isTrusted) return;
-      if (!(e.data === "," || e.data === " ")) return;
+      if (!(tag[tag.length -  1] === "," || tag[tag.length -  1] === " ")) return;
       if (!value) return;
 
-      e.target.value = "";
+      this.$refs.tagInput.value = "";
+      this.recommendTag("");
       this.tags = [...new Set([...this.tags, value])];
     },
     removeTag(tag) {
       this.tags.splice(this.tags.findIndex((e) => e === tag), 1);
+    },
+    recommendTag(tag) {
+      const value = tag.split(/,|\s/)[0];
+      if (!tag || !value) return this.tagSuggestions = [];
+
+      clearTimeout(this.timeoutTag);
+      this.timeoutTag = setTimeout(async () => {
+        try {
+          const response = await this.$http.get(`/tag/byname/${value}`);
+
+          // put 500 page error when true
+          if (response.data.errno) this.error = true;
+          this.tagSuggestions = response.data;
+        } catch (err) {
+          console.error(err);
+        }
+      }, 500)
     }
   },
   computed: {
@@ -144,6 +176,35 @@ input[type=text], textarea, select {
 input::placeholder, textarea::placeholder {
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
+}
+
+.tag-suggestion {
+  padding: 10px;
+  box-shadow:
+      0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+      0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+      0 12.5px 10px rgba(0, 0, 0, 0.06),
+      0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+      0 41.8px 33.4px rgba(0, 0, 0, 0.086);
+  min-height: 90px;
+  background: white;
+  position: relative;
+  margin-top: -20.5px;
+  border-radius: 0 0 10px 10px;
+}
+
+.tag-suggestion ul {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.tag-suggestion ul li {
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.tag-suggestion ul li:hover {
+  background-color: #eee;
 }
 
 .button-group {

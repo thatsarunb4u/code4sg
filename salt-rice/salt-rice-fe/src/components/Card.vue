@@ -1,6 +1,6 @@
 <template>
   <router-link tag="a" :to="{ name: 'Post', params: { id: postID }}">
-    <div :style="{ [categoryID === 0 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }">
+    <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }">
       <p class="card-message">
         <strong>{{ title }}</strong>
         {{ body }}
@@ -38,8 +38,8 @@ export default {
     },
     upvote: Number,
     downvote: Number,
-    isAnonymous: Boolean,
-    updatedAt: Date,
+    isAnonymous: Number,
+    updatedAt: String,
     comments: Array
   },
   computed: {

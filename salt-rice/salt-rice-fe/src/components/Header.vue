@@ -1,6 +1,8 @@
 <template>
   <header>
-    <img src="/images/saltrice.svg" alt="SaltRice logo" class="logo">
+    <router-link to="/" tag="a" style="margin-top: 6px; padding: 0;">
+      <img src="/images/saltrice.svg" alt="SaltRice logo" class="logo">
+    </router-link>
     <nav>
       <a class="hide-desktop" @click="toggleMobileNav">
         <img src="/images/ham.png" alt="toogle menu" class="menu" style="cursor: pointer;">
