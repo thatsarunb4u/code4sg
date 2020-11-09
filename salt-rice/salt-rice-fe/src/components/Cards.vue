@@ -3,16 +3,17 @@
     <ul>
       <li v-for="card in cards" :key="card.postID">
         <card
-          :postID="card.postID"
-          :title="card.title"
-          :body="card.body"
-          :categoryID="card.categoryID"
-          :author="card.author"
-          :upvote="card.upvote"
-          :downvote="card.downvote"
-          :is-anonymous="card.isAnonymous"
-          :updated-at="card.updatedAt"
-          :comments="card.comments"
+            :postID="card.postID"
+            :title="card.title"
+            :body="card.body"
+            :categoryID="card.categoryID"
+            :authorID="card.authorID"
+            :authorNickname="card.authorNickname"
+            :upVote="card.upVote"
+            :downVote="card.downVote"
+            :is-anonymous="card.isAnonymous"
+            :updated-at="card.updatedAt"
+            :commentCount="card.commentCount"
         />
       </li>
     </ul>

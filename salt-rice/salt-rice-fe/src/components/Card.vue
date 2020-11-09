@@ -3,10 +3,11 @@
     <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }">
       <p class="card-message">
         <strong>{{ title }}</strong>
-        {{ body }}
+        {{ body.length > 300 ? `${body.substring(0, 300)}...` : body }}
       </p>
-      <div class="card-info" v-if="upvote !== 0 && downvote !== 0 && updatedAt && comments && comments.length !== undefined">
-        <p v-if="author && !isAnonymous">Posted by {{ author.nickname }}</p>
+      <div class="card-info">
+        <p v-if="!isAnonymous">Posted by {{ authorNickname }}</p>
+        <p v-else>This post is anonymously posted</p>
         <p>Last updated {{ updatedAtCalender }}</p>
         <p>
           <img src="/images/love.svg" alt="love image" class="love-img">
@@ -14,7 +15,7 @@
         </p>
         <p>
           <img src="/images/message.svg" alt="comment image" class="comment-img">
-          <span class="comment-count">{{ comments.length }} comments</span>
+          <span class="comment-count">{{ commentCount }} comments</span>
         </p>
       </div>
     </div>
@@ -31,20 +32,17 @@ export default {
     title: String,
     body: String,
     categoryID: Number,
-    author: {
-      userID: Number,
-      UUID: String,
-      nickname: String
-    },
-    upvote: Number,
-    downvote: Number,
+    authorID: Number,
+    authorNickname: String,
+    upVote: Number,
+    downVote: Number,
     isAnonymous: Number,
     updatedAt: String,
-    comments: Array
+    commentCount: Number
   },
   computed: {
     likes() {
-      return this.upvote - this.downvote;
+      return this.upVote - this.downVote;
     },
     updatedAtCalender() {
       return moment(this.updatedAt).fromNow();
