@@ -2,7 +2,7 @@
   <div>
     <div class="author">
       <img src="/images/iconfinder_1_avatar_2754574.svg" alt="" />
-      <div>
+      <div style="width: 100%;">
         <p>{{ comment.author.nickname }}</p>
         <p>{{ comment.body }}</p>
         <div class="post-actions">
@@ -20,7 +20,7 @@
             </div>
             <div style="float: right; margin-top: 5px;">
               <button @click="cancel" type="button" class="cancel-button" style="margin-right: 20px;">Cancel</button>
-              <button @click="reply" type="button" class="submit-button">Submit</button>
+              <button @click="reply" type="button" class="submit-button">Reply</button>
             </div>
           </div>
         </div>
@@ -52,7 +52,7 @@ export default {
   data() {
     return {
      isReplying: false,
-     replyComment: ""
+     replyComment: `@${this.comment.author.nickname} `
     };
   },
   methods: {
@@ -63,7 +63,12 @@ export default {
       return 0;
     },
     reply() {
-      return 0;
+      this.$emit("reply", this.formatReply(this.replyComment));
+      this.cancel();
+    },
+    formatReply(reply) {
+      // find every @mention and format to <@userID>
+      return reply;
     },
     cancel() {
       this.isReplying = false;

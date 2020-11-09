@@ -32,10 +32,10 @@
         </div>
         <div style="float: right;">
           <button @click="cancel" type="button" class="cancel-button" style="margin-right: 20px;">Cancel</button>
-          <button @click="reply" type="button" class="submit-button">Submit</button>
+          <button @click="reply" type="button" class="submit-button">Comment</button>
         </div>
       </div>
-      <comments :comments="comments.comments"/>
+      <comments :comments="comments.comments" @reply="(replyComment) => { this.comment = replyComment; this.reply(); }"/>
       <div style="margin-top: 30px;" class="more container">
         <a @click="loadMore" class="more-label">More comments</a>
       </div>

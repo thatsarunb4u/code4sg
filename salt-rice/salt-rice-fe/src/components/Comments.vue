@@ -1,6 +1,11 @@
 <template>
   <div>
-    <Comment v-for="comment in comments" :key="comment.commentID" :comment="comment" />
+    <Comment
+        v-for="comment in comments"
+        :key="comment.commentID"
+        :comment="comment"
+        @reply="(e) => $emit('reply', e)"
+    />
   </div>
 </template>
 
