@@ -1,22 +1,18 @@
 <template>
-  <div class="cards" style="margin: 0 5em;">
-    <ul>
-      <li v-for="card in cards" :key="card.postID">
-        <card
-            :postID="card.postID"
-            :title="card.title"
-            :body="card.body"
-            :categoryID="card.categoryID"
-            :authorID="card.authorID"
-            :authorNickname="card.authorNickname"
-            :upVote="card.upVote"
-            :downVote="card.downVote"
-            :is-anonymous="card.isAnonymous"
-            :updated-at="card.updatedAt"
-            :commentCount="card.commentCount"
-        />
-      </li>
-    </ul>
+  <div class="cards" style="margin: 3rem 5em;">
+    <card v-for="card in cards" :key="card.postID"
+          :postID="card.postID"
+          :title="card.title"
+          :body="card.body"
+          :categoryID="card.categoryID"
+          :authorID="card.authorID"
+          :authorNickname="card.authorNickname"
+          :upVote="card.upVote"
+          :downVote="card.downVote"
+          :is-anonymous="card.isAnonymous"
+          :updated-at="card.updatedAt"
+          :commentCount="card.commentCount"
+    />
   </div>
 </template>
 
@@ -35,50 +31,28 @@ export default {
 </script>
 
 <style scoped>
-ul {
-  -webkit-column-count: 1;
-  list-style-type: none;
-  column-count: 1;
+.cards {
+  display: grid;
+  grid-gap: 1rem;
   padding: 0;
-  margin: 7% 0;
-}
-
-ul li {
-  border: 1px solid #707070;
-  border-radius: 27px;
-  margin: 7% 0;
-  background-color: #ffc529;
-  height: auto;
-  width: 100%;
 }
 
 @media (min-width: 650px) {
-  ul {
-    display: block;
-    -webkit-column-count: 2;
-    column-count: 2;
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
     margin: calc(7% - 2%) 0;
-  }
-
-  ul li {
-    display: inline-block;
-    margin: calc(7% - 4%) 0;
   }
 }
 
-@media (min-width: 1024px) {
-  ul {
-    display: block;
-    -webkit-column-count: 3;
-    column-count: 3;
+@media (min-width: 900px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (min-width: 1200px) {
-  ul {
-    display: block;
-    -webkit-column-count: 4;
-    column-count: 4;
+  .cards {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 </style>

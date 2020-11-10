@@ -3,27 +3,27 @@
     <section style="padding-top: 6vw;">
       <h3>Need to <span class="font-yellow">discuss on something</span>?</h3>
       <p class="subhead">Find Right Person to Advice</p>
-      <div class="container"><a href="#card" class="cta bold">Lai, Lets Talk</a></div>
-      <img src="/images/banner.png" alt="">
+      <div class="container"><a class="cta bold" href="#card">Lai, Lets Talk</a></div>
+      <img alt="" src="/images/banner.png">
     </section>
-    <div class="card container" id="card">
+    <div id="card" class="card container">
       <div class="filter">
         <div class="search-filter">
-          <p class="search-label bold">Search posts</p>
+          <label for="search"><p class="search-label bold">Search posts</p></label>
           <div class="search-container">
-            <input v-model.lazy="searchQuery" type="text" placeholder="Search by title and tags">
+            <input v-model.lazy="searchQuery" placeholder="Search by title and tags" type="text" id="search">
           </div>
         </div>
         <div class="category-filter">
           <p class="category-label bold">Category</p>
           <div class="category-container">
-            <a class="relationship-category" @click="changeCategory(0)">Relationship</a>
-            <a class="social-category" @click="changeCategory(1)">Social</a>
+            <a class="relationship-category" @click="changeCategory(1)">Relationship</a>
+            <a class="social-category" @click="changeCategory(2)">Social</a>
           </div>
         </div>
       </div>
-      <Cards :cards="resultQuery" />
-      <div class="more"><a @click="loadMore" class="more-label">More comments</a></div>
+      <Cards :cards="resultQuery"/>
+      <div class="more"><a class="more-label" @click="loadMore">More comments</a></div>
     </div>
   </div>
 </template>
@@ -38,6 +38,8 @@ export default {
   },
   data() {
     return {
+      loading: true,
+      error: false,
       searchQuery: "",
       category: null,
       page: 0,
@@ -56,39 +58,42 @@ export default {
   },
   computed: {
     resultQuery() {
-      // todo: Send search request to server instead of filtering dummy data
-      if (!this.searchQuery && this.category === null) return this.cards;
-
-      return this.cards.filter(({ title, body, author, categoryID }) =>
-          (this.searchQuery.length && title.includes(this.searchQuery)) ||
-          (this.searchQuery.length &&body.includes(this.searchQuery)) ||
-          (this.searchQuery.length &&(author && author.nickname.includes(this.searchQuery))) ||
-          (categoryID === this.category)
-      );
+      if (this.category === null) return this.cards;
+      return this.cards.filter(({ categoryID }) => categoryID === this.category);
     }
   },
-  beforeCreate() {
-    // simulate getting posts from api
-    setTimeout(() => this.cards.push(
-        ...Array(8).fill().map((value, postID) => ({
-          postID,
-          "title": "test",
-          "body": "more test",
-          "categoryID": Math.floor(Math.random () * 2),
-          "author": {
-            "userID": 1,
-            "UUID": "3754394705",
-            "nickname": "Username"
-          },
-          "upvote": 12,
-          "downvote": 2,
-          "isAnonymous": Math.random() > .4,
-          "updatedAt": new Date(),
-          "comments": []
-      }))
-    ));
+  watch: {
+    async searchQuery(query) {
+      try {
+        this.loading = true;
+        const response = await this.$http.get(query ? `/post/bytagortitle/${query}` : "/post");
+
+        this.cards = response.data;
+        this.loading = false;
+        if (response.data.errno) this.error = true;
+
+        this.cards.filter(({ categoryID }) => categoryID === this.category);
+      } catch (err) {
+        console.error(err);
+        // show 500 error
+      }
+    }
+  },
+  async beforeCreate() {
+    try {
+      const response = await this.$http.get("/post");
+
+      this.cards = response.data;
+      this.loading = false;
+
+      if (response.data.errno) this.error = true;
+      // show 500 error
+    } catch (err) {
+      console.error(err);
+      // show 500 error
+    }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -134,7 +139,7 @@ section .cta {
 }
 
 .more {
-  padding-top: calc(7%/ 2);
+  padding-top: calc(7% / 2);
 }
 
 .card {

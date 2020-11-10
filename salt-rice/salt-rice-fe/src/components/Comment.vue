@@ -57,10 +57,12 @@ export default {
   },
   methods: {
     upVote() {
-      return 0;
+      // simulate upvoting
+      this.comment.upVote++;
     },
     downVote() {
-      return 0;
+      // simulate upvoting
+      this.comment.downVote++;
     },
     reply() {
       this.$emit("reply", this.formatReply(this.replyComment));

@@ -1,6 +1,6 @@
 <template>
-  <router-link tag="a" :to="{ name: 'Post', params: { id: postID }}">
-    <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }">
+  <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a">
+    <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }" class="card">
       <p class="card-message">
         <strong>{{ title }}</strong>
         {{ body.length > 300 ? `${body.substring(0, 300)}...` : body }}
@@ -10,11 +10,11 @@
         <p v-else>This post is anonymously posted</p>
         <p>Last updated {{ updatedAtCalender }}</p>
         <p>
-          <img src="/images/love.svg" alt="love image" class="love-img">
+          <img alt="love image" class="love-img" src="/images/love.svg">
           <span class="like-count">{{ this.likes }} likes</span>
         </p>
         <p>
-          <img src="/images/message.svg" alt="comment image" class="comment-img">
+          <img alt="comment image" class="comment-img" src="/images/message.svg">
           <span class="comment-count">{{ commentCount }} comments</span>
         </p>
       </div>
@@ -48,13 +48,22 @@ export default {
       return moment(this.updatedAt).fromNow();
     }
   }
-}
+};
 </script>
 
 <style scoped>
 a {
   text-decoration: none;
   color: inherit;
+}
+
+.card {
+  border: 1px solid #707070;
+  border-radius: 27px;
+  margin: 7% 0;
+  background-color: #ffc529;
+  height: auto;
+  width: 100%;
 }
 
 .card-message {

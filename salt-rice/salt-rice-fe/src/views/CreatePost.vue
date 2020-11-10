@@ -4,40 +4,40 @@
     <form @submit="submit">
       <label for="title">Title</label>
       <input
-          type="text"
           id="title"
+          v-model="title"
+          autocomplete="off"
           name="title"
           placeholder="Enter Post's title.."
-          autocomplete="off"
-          v-model="title"
           required
+          type="text"
       />
       <label for="message">Message</label>
       <textarea
           id="message"
-          cols="30"
-          rows="10"
-          placeholder="Enter your message here.."
-          autocomplete="off"
           v-model="message"
+          autocomplete="off"
+          cols="30"
+          placeholder="Enter your message here.."
           required
+          rows="10"
           style="resize: vertical;"
       ></textarea>
       <label for="category">Category</label>
-      <select name="category" id="category" v-model="category">
-        <option  v-for="category in categories" :key="category">{{ category }}</option>
+      <select id="category" v-model="category" name="category">
+        <option v-for="category in categories" :key="category">{{ category }}</option>
       </select>
       <label for="tags">Tags</label>
       <input
-          type="text"
           id="tags"
-          name="tags"
-          autocomplete="off"
-          placeholder="Enter tags followed by space..."
           ref="tagInput"
+          autocomplete="off"
+          name="tags"
+          placeholder="Enter tags followed by space..."
+          type="text"
           @input="(e) => {addTag(e.target.value, e); recommendTag(e.target.value);}"
       />
-      <div class="tag-suggestion" v-if="tagSuggestions.length">
+      <div v-if="tagSuggestions.length" class="tag-suggestion">
         <ul>
           <li
               v-for="suggestion in tagSuggestions"
@@ -48,14 +48,16 @@
           </li>
         </ul>
       </div>
-      <button @click="e => e.preventDefault()" class="tag-button" v-for="tag in tags" :key="tag">
+      <label for="anonymous">Post anonymously</label>
+      <input id="anonymous" v-model="isAnonymous" type="checkbox"/>
+      <button v-for="tag in tags" :key="tag" class="tag-button" @click="e => e.preventDefault()">
         #{{ tag }}
         <span @click="removeTag(tag)">x</span>
       </button>
       <div class="button-group">
-        <router-link tag="button" to="/" type="button" class="cancel-button" style="float: left;">Cancel</router-link>
-        <button type="button" class="draft-button" @click="draft">Save as draft</button>
-        <button type="submit" class="submit-button">Post</button>
+        <router-link class="cancel-button" style="float: left;" tag="button" to="/" type="button">Cancel</router-link>
+        <button class="draft-button" type="button" @click="draft">Save as draft</button>
+        <button class="submit-button" type="submit">Post</button>
       </div>
     </form>
   </div>
@@ -72,7 +74,8 @@ export default {
       category: "Relationship",
       timeoutTag: null,
       tagSuggestions: [],
-      tags: []
+      tags: [],
+      isAnonymous: false
     };
   },
   methods: {
@@ -85,12 +88,12 @@ export default {
         if (!this.category) return;
 
         this.addTag(this.$refs.tagInput.value);
-        const response  = await this.$http.post("/post", {
+        const response = await this.$http.post("/post", {
           title: this.title,
           body: this.message,
           categoryID: 1, // category will be dynamic once I get all categories from server
           authorID: 1, // authentication have not been implemented yet, just putting 1 for now
-          isAnonymous: false,
+          isAnonymous: this.isAnonymous,
           tags: this.tags.map((tagName) => ({ tagName }))
         });
 
@@ -107,7 +110,7 @@ export default {
     addTag(tag) {
       const value = tag.split(/,|\s/)[0];
 
-      if (!(tag[tag.length -  1] === "," || tag[tag.length -  1] === " ")) return;
+      if (!(tag[tag.length - 1] === "," || tag[tag.length - 1] === " ")) return;
       if (!value) return;
 
       this.$refs.tagInput.value = "";
@@ -132,21 +135,21 @@ export default {
         } catch (err) {
           console.error(err);
         }
-      }, 500)
+      }, 500);
     }
   },
   computed: {
     categories() {
       // get categories from server
-      return ["Relationship", "Social"]
+      return ["Relationship", "Social"];
     }
   }
-}
+};
 </script>
 
 <style scoped>
 div {
-  padding: 0 2em calc(1.5em* 2) 2em;
+  padding: 0 2em calc(1.5em * 2) 2em;
   text-align: justify;
 }
 
@@ -178,14 +181,19 @@ input::placeholder, textarea::placeholder {
   font-size: 16px;
 }
 
+input[type=checkbox] {
+  height: 20px;
+  width: 20px;
+  margin-left: 10px;
+}
+
 .tag-suggestion {
   padding: 10px;
-  box-shadow:
-      0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-      0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-      0 12.5px 10px rgba(0, 0, 0, 0.06),
-      0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-      0 41.8px 33.4px rgba(0, 0, 0, 0.086);
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+  0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+  0 12.5px 10px rgba(0, 0, 0, 0.06),
+  0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+  0 41.8px 33.4px rgba(0, 0, 0, 0.086);
   min-height: 90px;
   background: white;
   position: relative;

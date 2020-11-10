@@ -5,39 +5,40 @@
       <p>{{ post.body }}</p>
       <div class="post-actions">
         <span class="underline" @click="upVote">
-          <img src="/images/like.svg" alt="Likes" /> {{ postUpVotes }}
+          <img alt="Likes" src="/images/like.svg"/> {{ postUpVotes }}
         </span>
         <span class="underline" @click="downVote">
-          <img src="/images/dislike.svg" alt="Dislikes" /> {{ postDownVotes }}
+          <img alt="Dislikes" src="/images/dislike.svg"/> {{ postDownVotes }}
         </span>
         <span @click="copyLink">
-          <img src="/images/share.svg" alt="Dislikes" /> SHARE
+          <img alt="Dislikes" src="/images/share.svg"/> SHARE
         </span>
       </div>
     </article>
     <div>
       <p>Last updated {{ updatedAtCalendar }}</p>
       <p>Posted by
-        <router-link class="font-yellow" tag="a" :to="`/user/${author.userID}`">{{ author.nickname }}</router-link>
+        <router-link :to="`/user/${author.userID}`" class="font-yellow" tag="a">{{ author.nickname }}</router-link>
       </p>
     </div>
     <section>
       <div style="margin-bottom: 50px;">
         <div class="new-comment">
           <div>
-            <img src="/images/iconfinder_1_avatar_2754574.svg" alt="" />
+            <img alt="" src="/images/iconfinder_1_avatar_2754574.svg"/>
             <p>Nick name</p>
           </div>
-          <textarea id="textarea" placeholder="Add your comment" v-model="comment" />
+          <textarea id="textarea" v-model="comment" placeholder="Add your comment"/>
         </div>
         <div style="float: right;">
-          <button @click="cancel" type="button" class="cancel-button" style="margin-right: 20px;">Cancel</button>
-          <button @click="reply" type="button" class="submit-button">Comment</button>
+          <button class="cancel-button" style="margin-right: 20px;" type="button" @click="cancel">Cancel</button>
+          <button class="submit-button" type="button" @click="reply">Comment</button>
         </div>
       </div>
-      <comments :comments="comments.comments" @reply="(replyComment) => { this.comment = replyComment; this.reply(); }"/>
-      <div style="margin-top: 30px;" class="more container">
-        <a @click="loadMore" class="more-label">More comments</a>
+      <comments :comments="comments.comments"
+                @reply="(replyComment) => { this.comment = replyComment; this.reply(); }"/>
+      <div class="more container" style="margin-top: 30px;">
+        <a class="more-label" @click="loadMore">More comments</a>
       </div>
     </section>
   </div>
@@ -143,22 +144,22 @@ export default {
       // simulate getting data from server
       setTimeout(() => this.comments.comments.push(
           ...Array(25).fill().map((value, commentID) => ({
-            commentID,
-            body: "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." +
-                " Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. " +
-                "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. " +
-                "Vogel Quax zwickt Johnys Pferd Bim. Sylvia wagt quick den Jux bei",
-            postID: this.post.postID,
-            author: this.author,
-            upVote: 0,
-            downVote: 0,
-            isActive: true,
-            isFlagged: false,
-            isAnonymous: false,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          })
-        )
+                commentID,
+                body: "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." +
+                    " Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. " +
+                    "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. " +
+                    "Vogel Quax zwickt Johnys Pferd Bim. Sylvia wagt quick den Jux bei",
+                postID: this.post.postID,
+                author: this.author,
+                upVote: 0,
+                downVote: 0,
+                isActive: true,
+                isFlagged: false,
+                isAnonymous: false,
+                createdAt: new Date(),
+                updatedAt: new Date()
+              })
+          )
       ), 200);
     }
   },
@@ -187,7 +188,7 @@ export default {
       // todo: put up 500 page error
     }
   }
-}
+};
 </script>
 
 <style scoped>
