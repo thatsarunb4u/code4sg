@@ -15,6 +15,7 @@ let searchPostsByTagOrTitle = async (queryString) => {
   let postsByTitleArr = await searchPostsByTitleInDB(queryString)
   let postsByTagArr = await searchPostsByTagInDB(queryString)
 
+  //TODO: to remove duplicates based on postID
   return postsByTitleArr.concat(postsByTagArr)
   
 }
@@ -37,10 +38,14 @@ let searchPostsByUserID = async (userID) => {
 let create = async (input_json) => {
   try {
     let createPostResponse = await createPostInDB(input_json)
-    let createTagResponse = await createTagInDBIfNotExists(input_json.tags)
-    console.log(createTagResponse)
-    let createPostTagResponse = await createPostTagInDB(createPostResponse.insertId, input_json.tags)
-    console.log(createPostTagResponse)
+
+    if (input_json.tags != undefined && input_json.tags.length > 0 ){
+      let createTagResponse = await createTagInDBIfNotExists(input_json.tags)
+      console.log(createTagResponse)
+      let createPostTagResponse = await createPostTagInDB(createPostResponse.insertId, input_json.tags)
+      console.log(createPostTagResponse)
+    }
+    
 
     return createPostResponse
 
