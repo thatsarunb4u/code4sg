@@ -46,9 +46,16 @@
 <script>
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
-import fetch from "node-fetch";
-
 dayjs.extend(calendar)
+
+async function getPostData(postID) {
+  const post = await (await fetch(`${process.env.VUE_APP_BASE_API}/post/bypostid/${postID}`)).json();
+  const author = await (await fetch(`${process.env.VUE_APP_BASE_API}/user/byID/${post.authorID}`)).json();
+
+  // put 500 page error when true
+  if (post.errno || author.errno) return new Error(post.errno || author.errno);
+  return { post, author };
+}
 
 export default {
   name: "Post",
@@ -86,23 +93,14 @@ export default {
     };
   },
   methods: {
-    async getPostData() {
-      const post = await (await fetch(`${process.env.VUE_APP_BASE_API}/post/bypostid/${this.$route.params.id}`)).json();
-      const author = await (await fetch(`${process.env.VUE_APP_BASE_API}/user/byID/${post.authorID}`)).json();
-
-      // put 500 page error when true
-      if (post.errno || author.errno) this.error = true;
-
-      this.post = { ...post, tags: ["covid", "covid-19"] };
-      this.author = author;
-
-      return [post, author];
-    },
     async upVote() {
       try {
         this.post.upVote++;
         await fetch(`${process.env.VUE_APP_BASE_API}/post/${this.post.postID}/upvote`);
-        await this.getPostData();
+        const { post, author } = await getPostData(this.$route.params.id);
+
+        this.post = post;
+        this.author = author;
       } catch (err) {
         console.error(err);
       }
@@ -111,7 +109,10 @@ export default {
       try {
         this.post.downVote++;
         await fetch(`${process.env.VUE_APP_BASE_API}/post/${this.post.postID}/downvote`);
-        await this.getPostData();
+        const { post, author } = await getPostData(this.$route.params.id);
+
+        this.post = post;
+        this.author = author;
       } catch (err) {
         console.error(err);
       }
@@ -178,15 +179,20 @@ export default {
       return this.post.downVote;
     }
   },
-  async created() {
+  async beforeRouteEnter(to, from, next) {
     /**
      * todo: get comments from server
      */
     try {
-      await this.getPostData();
-      this.isLoading = false;
+      const { post, author } = await getPostData(to.params.id);
 
-      // todo: if post ID is missing, put up 404 page error
+      next((vm) => {
+        vm.post = post;
+        vm.author = author;
+        vm.isLoading = false;
+
+        // todo: if post ID is missing, put up 404 page error
+      })
     } catch (err) {
       console.error(err);
       // todo: put up 500 page error

@@ -29,8 +29,6 @@
 </template>
 
 <script>
-import fetch from "node-fetch";
-
 export default {
   name: "Index",
   components: {
@@ -66,7 +64,7 @@ export default {
     async searchQuery(query) {
       try {
         this.loading = true;
-        const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/${query ? `/post/bytagortitle/${query}` : "/post"}`)).json();
+        const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/${query ? `post/bytagortitle/${query}` : "post"}`)).json();
 
         this.cards = Object.freeze(response);
         this.loading = false;
@@ -77,15 +75,17 @@ export default {
       }
     }
   },
-  async beforeCreate() {
+  async beforeRouteEnter(to, from ,next) {
     try {
       const response =  await (await fetch(`${process.env.VUE_APP_BASE_API}/post`)).json();
 
-      this.cards = Object.freeze(response);
-      this.loading = false;
+      next((vm) => {
+        vm.cards = Object.freeze(response);
+        vm.loading = false;
 
-      if (response.errno) this.error = true;
-      // show 500 error
+        if (response.errno) vm.error = true;
+        // show 500 error
+      })
     } catch (err) {
       console.error(err);
       // show 500 error
