@@ -23,7 +23,7 @@
         </div>
       </div>
       <Cards :cards="resultQuery"/>
-      <div class="more"><a class="more-label" @click="loadMore">More comments</a></div>
+      <div class="more"><a class="more-label" @click="loadMore">More posts</a></div>
     </div>
   </div>
 </template>
@@ -136,10 +136,6 @@ section .cta {
 
 .card .cards {
   margin: 7% 2em;
-}
-
-.more {
-  padding-top: calc(7% / 2);
 }
 
 .card {

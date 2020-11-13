@@ -3,6 +3,7 @@
     <article>
       <h1>{{ post.title }}</h1>
       <p>{{ post.body }}</p>
+      <div v-for="tag in post.tags" :key="tag" class="tag-button">#{{ tag }}</div>
       <div class="post-actions">
         <span class="underline" @click="upVote">
           <img alt="Likes" src="/images/like.svg"/> {{ postUpVotes }}
@@ -16,6 +17,7 @@
       </div>
     </article>
     <div>
+      <p>Category: Relationship</p>
       <p>Last updated {{ updatedAtCalendar }}</p>
       <p>Posted by
         <router-link :to="`/user/${author.userID}`" class="font-yellow" tag="a">{{ author.nickname }}</router-link>
@@ -37,7 +39,7 @@
       </div>
       <comments :comments="comments.comments"
                 @reply="(replyComment) => { this.comment = replyComment; this.reply(); }"/>
-      <div class="more container" style="margin-top: 30px;">
+      <div class="more container" style="margin: 30px 0;">
         <a class="more-label" @click="loadMore">More comments</a>
       </div>
     </section>
@@ -68,7 +70,8 @@ export default {
         isFlagged: false,
         isActive: true,
         createdAt: null,
-        updatedAt: null
+        updatedAt: null,
+        tags: []
       },
       author: {
         userID: null,
@@ -88,7 +91,7 @@ export default {
       // put 500 page error when true
       if (post.data.errno || author.data.errno) this.error = true;
 
-      this.post = post.data;
+      this.post = { ...post.data, tags: ["covid", "covid-19"] };
       this.author = author.data;
 
       return [post, author];
@@ -251,6 +254,10 @@ textarea {
 .submit-button {
   background-color: #707070;
   color: #fff;
+}
+
+.tag-button {
+  margin-bottom: 1rem;
 }
 
 @media (max-width: 576px) {

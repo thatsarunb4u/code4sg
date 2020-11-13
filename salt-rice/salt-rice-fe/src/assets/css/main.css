@@ -35,6 +35,10 @@ body {
   display: block;
 }
 
+.more {
+  padding-top: calc(7% / 2);
+}
+
 .more-label {
   text-decoration: none;
   color: #000000;
