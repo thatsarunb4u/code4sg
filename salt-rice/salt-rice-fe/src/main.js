@@ -5,6 +5,7 @@ import App from "./App.vue";
 import store from "./store";
 import router from "./router";
 import "./assets/css/main.css";
+import "./registerServiceWoker";
 
 Vue.use(VueAxios, axios.create({ baseURL: process.env.VUE_APP_BASE_API }));
 Vue.config.productionTip = false;
