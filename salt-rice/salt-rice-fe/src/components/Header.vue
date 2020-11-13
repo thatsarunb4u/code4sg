@@ -10,6 +10,7 @@
       <ul :class="`show-desktop ${mobileNav ? 'hide-mobile' : ''}`" style="margin-top: 0.2rem; padding-bottom: 0; margin-bottom: 0;">
         <li class="exit-btn" @click="toggleMobileNav"><img src="/images/exit.svg" alt=""></li>
         <li><router-link to="/" exact active-class="bold">Home</router-link></li>
+        <li><router-link to="/post" exact active-class="bold">Create post</router-link></li>
         <li><router-link to="/login" exact active-class="bold">Login</router-link></li>
       </ul>
     </nav>

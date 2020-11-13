@@ -17,15 +17,13 @@
 </template>
 
 <script>
-import Card from "./Card.vue";
-
 export default {
   name: "Cards",
   props: {
     cards: Array
   },
   components: {
-    Card
+    Card: () => import("./Card.vue")
   }
 };
 </script>

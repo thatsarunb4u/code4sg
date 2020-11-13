@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a">
+  <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a" v-once>
     <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }" class="card">
       <div class="card-message">
         <p><strong>{{ title.length > 75 ? `${title.substring(0, 75)}...` : title }}</strong></p>

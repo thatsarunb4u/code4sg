@@ -37,7 +37,7 @@
           type="text"
           @input="(e) => {addTag(e.target.value, e); recommendTag(e.target.value);}"
       />
-      <div v-if="tagSuggestions.length" class="tag-suggestion">
+      <div v-show="tagSuggestions.length" class="tag-suggestion">
         <ul>
           <li
               v-for="suggestion in tagSuggestions"
@@ -133,7 +133,7 @@ export default {
 
           // put 500 page error when true
           if (response.data.errno) this.error = true;
-          this.tagSuggestions = response.data;
+          this.tagSuggestions = Object.freeze(response.data);
         } catch (err) {
           console.error(err);
         }

@@ -11,9 +11,6 @@
         <span class="underline" @click="downVote">
           <img alt="Dislikes" src="/images/dislike.svg"/> {{ postDownVotes }}
         </span>
-        <span @click="copyLink">
-          <img alt="Dislikes" src="/images/share.svg"/> SHARE
-        </span>
       </div>
     </article>
     <div>
@@ -48,11 +45,12 @@
 
 <script>
 import moment from "moment";
-import Comments from "../components/Comments.vue";
 
 export default {
   name: "Post",
-  components: { Comments },
+  components: {
+    Comments: () => import("../components/Comments.vue")
+  },
   data() {
     return {
       isLoading: true,
@@ -118,7 +116,7 @@ export default {
       if (!this.comment) return;
 
       // simulate posting data to server
-      this.comments.comments.push({
+      this.comments.comments = Object.freeze([...this.comments.comments, {
         commentID: this.comments.comments.length - 1,
         body: this.comment,
         postID: this.post.postID,
@@ -130,7 +128,7 @@ export default {
         isAnonymous: false,
         createdAt: new Date(),
         updatedAt: new Date()
-      });
+      }]);
 
       // clear posting comment data
       this.cancel();
@@ -138,32 +136,31 @@ export default {
     cancel() {
       this.comment = "";
     },
-    copyLink() {
-      navigator.clipboard.writeText(document.location.href);
-    },
     loadMore() {
       this.comments.page++;
 
       // simulate getting data from server
-      setTimeout(() => this.comments.comments.push(
-          ...Array(25).fill().map((value, commentID) => ({
-                commentID,
-                body: "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." +
-                    " Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. " +
-                    "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. " +
-                    "Vogel Quax zwickt Johnys Pferd Bim. Sylvia wagt quick den Jux bei",
-                postID: this.post.postID,
-                author: this.author,
-                upVote: 0,
-                downVote: 0,
-                isActive: true,
-                isFlagged: false,
-                isAnonymous: false,
-                createdAt: new Date(),
-                updatedAt: new Date()
-              })
-          )
-      ), 200);
+      setTimeout(() => {
+        this.comments.comments = Object.freeze([
+            ...this.comments.comments,
+            ...Array(25).fill().map((value, commentID) => ({
+              commentID,
+              body: "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." +
+                  " Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. " +
+                  "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. " +
+                  "Vogel Quax zwickt Johnys Pferd Bim. Sylvia wagt quick den Jux bei",
+              postID: this.post.postID,
+              author: this.author,
+              upVote: 0,
+              downVote: 0,
+              isActive: true,
+              isFlagged: false,
+              isAnonymous: false,
+              createdAt: new Date(),
+              updatedAt: new Date()
+            })
+          )]);
+      }, 200);
     }
   },
   computed: {
