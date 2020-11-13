@@ -1,10 +1,10 @@
 <template>
   <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a">
     <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }" class="card">
-      <p class="card-message">
-        <strong>{{ title }}</strong>
-        {{ body.length > 300 ? `${body.substring(0, 300)}...` : body }}
-      </p>
+      <div class="card-message">
+        <p><strong>{{ title.length > 75 ? `${title.substring(0, 75)}...` : title }}</strong></p>
+        <p>{{ body.length > 300 ? `${body.substring(0, 300)}...` : body }}</p>
+      </div>
       <div class="card-info">
         <p v-if="!isAnonymous">Posted by {{ authorNickname }}</p>
         <p v-else>This post is anonymously posted</p>
@@ -67,8 +67,9 @@ a {
 }
 
 .card-message {
-  padding: 2em;
+  padding: 0.5rem;
   margin: 0;
+  min-height: 200px;
 }
 
 .card-info {

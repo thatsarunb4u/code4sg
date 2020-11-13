@@ -1,5 +1,5 @@
 <template>
-  <div class="cards" style="margin: 3rem 5em;">
+  <div class="cards">
     <card v-for="card in cards" :key="card.postID"
           :postID="card.postID"
           :title="card.title"
@@ -34,13 +34,14 @@ export default {
 .cards {
   display: grid;
   grid-gap: 1rem;
+  margin: 1em 2rem;
   padding: 0;
 }
 
 @media (min-width: 650px) {
   .cards {
     grid-template-columns: repeat(2, 1fr);
-    margin: calc(7% - 2%) 0;
+    margin: 3rem 5em;
   }
 }
 

@@ -48,12 +48,14 @@
           </li>
         </ul>
       </div>
-      <label for="anonymous">Post anonymously</label>
-      <input id="anonymous" v-model="isAnonymous" type="checkbox"/>
       <button v-for="tag in tags" :key="tag" class="tag-button" @click="e => e.preventDefault()">
         #{{ tag }}
         <span @click="removeTag(tag)">x</span>
       </button>
+      <label style="display: block; margin-top: 5px;">
+        Post anonymously
+        <input v-model="isAnonymous" type="checkbox"/>
+      </label>
       <div class="button-group">
         <router-link class="cancel-button" style="float: left;" tag="button" to="/" type="button">Cancel</router-link>
         <button class="draft-button" type="button" @click="draft">Save as draft</button>
