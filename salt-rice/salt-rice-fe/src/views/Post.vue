@@ -44,7 +44,11 @@
 </template>
 
 <script>
-import moment from "moment";
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
+import fetch from "node-fetch";
+
+dayjs.extend(calendar)
 
 export default {
   name: "Post",
@@ -83,21 +87,21 @@ export default {
   },
   methods: {
     async getPostData() {
-      const post = await this.$http.get(`/post/bypostid/${this.$route.params.id}`);
-      const author = await this.$http.get(`/user/byID/${post.data.authorID}`);
+      const post = await (await fetch(`${process.env.VUE_APP_BASE_API}/post/bypostid/${this.$route.params.id}`)).json();
+      const author = await (await fetch(`${process.env.VUE_APP_BASE_API}/user/byID/${post.authorID}`)).json();
 
       // put 500 page error when true
-      if (post.data.errno || author.data.errno) this.error = true;
+      if (post.errno || author.errno) this.error = true;
 
-      this.post = { ...post.data, tags: ["covid", "covid-19"] };
-      this.author = author.data;
+      this.post = { ...post, tags: ["covid", "covid-19"] };
+      this.author = author;
 
       return [post, author];
     },
     async upVote() {
       try {
         this.post.upVote++;
-        await this.$http.get(`/post/${this.post.postID}/upvote`);
+        await fetch(`${process.env.VUE_APP_BASE_API}/post/${this.post.postID}/upvote`);
         await this.getPostData();
       } catch (err) {
         console.error(err);
@@ -106,7 +110,7 @@ export default {
     async downVote() {
       try {
         this.post.downVote++;
-        await this.$http.get(`/post/${this.post.postID}/downvote`);
+        await fetch(`${process.env.VUE_APP_BASE_API}/post/${this.post.postID}/downvote`);
         await this.getPostData();
       } catch (err) {
         console.error(err);
@@ -165,7 +169,7 @@ export default {
   },
   computed: {
     updatedAtCalendar() {
-      return moment(this.post.updatedAt).fromNow();
+      return dayjs().calendar(dayjs(this.updatedAt));
     },
     postUpVotes() {
       return this.post.upVote;

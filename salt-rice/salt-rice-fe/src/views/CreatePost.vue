@@ -90,18 +90,22 @@ export default {
         if (!this.category) return;
 
         this.addTag(this.$refs.tagInput.value);
-        const response = await this.$http.post("/post", {
-          title: this.title,
-          body: this.message,
-          categoryID: 1, // category will be dynamic once I get all categories from server
-          authorID: 1, // authentication have not been implemented yet, just putting 1 for now
-          isAnonymous: this.isAnonymous,
-          tags: this.tags.map((tagName) => ({ tagName }))
-        });
+        const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/post`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json"},
+          body: JSON.stringify({
+            title: this.title,
+            body: this.message,
+            categoryID: 1, // category will be dynamic once I get all categories from server
+            authorID: 1, // authentication have not been implemented yet, just putting 1 for now
+            isAnonymous: this.isAnonymous,
+            tags: this.tags.map((tagName) => ({ tagName }))
+          })
+        })).json();
 
         // put 500 page error when true
-        if (response.data.errno) this.error = true;
-        else await this.$router.push(`/post/${response.data.insertId}`);
+        if (response.errno) this.error = true;
+        else await this.$router.push(`/post/${response.insertId}`);
       } catch (err) {
         console.error(err);
       }
@@ -129,11 +133,11 @@ export default {
       clearTimeout(this.timeoutTag);
       this.timeoutTag = setTimeout(async () => {
         try {
-          const response = await this.$http.get(`/tag/byname/${value}`);
+          const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/tag/byname/${value}`)).json();
 
           // put 500 page error when true
-          if (response.data.errno) this.error = true;
-          this.tagSuggestions = Object.freeze(response.data);
+          if (response.errno) this.error = true;
+          this.tagSuggestions = Object.freeze(response);
         } catch (err) {
           console.error(err);
         }

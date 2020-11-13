@@ -23,7 +23,9 @@
 </template>
 
 <script>
-import moment from "moment";
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
+dayjs.extend(calendar)
 
 export default {
   name: "Card",
@@ -45,7 +47,7 @@ export default {
       return this.upVote - this.downVote;
     },
     updatedAtCalender() {
-      return moment(this.updatedAt).fromNow();
+      return dayjs().calendar(dayjs(this.updatedAt));
     }
   }
 };
