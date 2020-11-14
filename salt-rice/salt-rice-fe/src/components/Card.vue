@@ -1,24 +1,45 @@
 <template>
-  <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a" v-once>
-    <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff' }" class="card">
-      <div class="card-message">
-        <p><strong>{{ title.length > 75 ? `${title.substring(0, 75)}...` : title }}</strong></p>
-        <p>{{ body.length > 300 ? `${body.substring(0, 300)}...` : body }}</p>
+  <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a">
+    <pu-skeleton-theme :color="categoryID === 1 ? '#fffae1' : undefined" :highlight="categoryID === 1 ? '#ffc529' : undefined">
+      <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff' }" class="card">
+        <div class="card-message">
+            <p><strong>
+              <template v-if="loading">
+                <pu-skeleton />
+                <pu-skeleton width="30%"/>
+              </template>
+              <template v-else>{{ title.length > 75 ? `${title.substring(0, 75)}...` : title }}</template>
+            </strong></p>
+            <p>
+              <pu-skeleton v-if="loading" :count="6"/>
+              <template v-else>{{ body.length > 300 ? `${body.substring(0, 300)}...` : body }}</template>
+            </p>
+        </div>
+        <div class="card-info">
+          <p>
+            <template v-if="loading"><pu-skeleton /></template>
+            <template v-else>
+              <template v-if="isAnonymous">This post is anonymously posted</template>
+              <template v-else>Posted by {{ authorNickname }}</template>
+            </template>
+          </p>
+          <p>
+            <template v-if="loading"><pu-skeleton /></template>
+            <template v-else>Last updated {{ updatedAtCalender }}</template>
+          </p>
+          <p>
+            <img alt="love image" class="love-img" src="/images/love.svg">
+            <pu-skeleton v-if="loading" width="15%" style="margin-left: 20px;"/>
+            <span v-else class="like-count">{{ this.likes }} likes</span>
+          </p>
+          <p>
+            <img alt="comment image" class="comment-img" src="/images/message.svg">
+            <pu-skeleton v-if="loading" width="20%" style="margin-left: 20px;" />
+            <span v-else class="comment-count">{{ commentCount }} comments</span>
+          </p>
+        </div>
       </div>
-      <div class="card-info">
-        <p v-if="!isAnonymous">Posted by {{ authorNickname }}</p>
-        <p v-else>This post is anonymously posted</p>
-        <p>Last updated {{ updatedAtCalender }}</p>
-        <p>
-          <img alt="love image" class="love-img" src="/images/love.svg">
-          <span class="like-count">{{ this.likes }} likes</span>
-        </p>
-        <p>
-          <img alt="comment image" class="comment-img" src="/images/message.svg">
-          <span class="comment-count">{{ commentCount }} comments</span>
-        </p>
-      </div>
-    </div>
+    </pu-skeleton-theme>
   </router-link>
 </template>
 
@@ -29,6 +50,10 @@ dayjs.extend(calendar)
 
 export default {
   name: "Card",
+  components: {
+    PuSkeleton: () => import("vue-loading-skeleton/src/skeleton.vue"),
+    PuSkeletonTheme: () => import("vue-loading-skeleton/src/skeleton-theme.vue")
+  },
   props: {
     postID: Number,
     title: String,
@@ -40,7 +65,8 @@ export default {
     downVote: Number,
     isAnonymous: Number,
     updatedAt: String,
-    commentCount: Number
+    commentCount: Number,
+    loading: Boolean
   },
   computed: {
     likes() {
@@ -48,6 +74,11 @@ export default {
     },
     updatedAtCalender() {
       return dayjs().calendar(dayjs(this.updatedAt));
+    }
+  },
+  watch: {
+    title(title) {
+      console.log(title);
     }
   }
 };
