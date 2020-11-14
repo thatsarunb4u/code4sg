@@ -3,57 +3,25 @@
     <router-link to="/" tag="a" style="margin-top: 6px; padding: 0;">
       <img src="/images/saltrice.svg" alt="SaltRice logo" class="logo">
     </router-link>
-    <nav style="display: flex;align-items: center">
-      <div class="icon-login">
-        <a href="#" class="hide-desktop">
-          <img src="images/iconfinder_1_avatar_2754574.svg" alt="toogle user-icon" class="usericon-menu"
-               id="user-icon-mobile">
-        </a>
-        <a class="hide-desktop" @click="toggleMobileNav">
-          <img src="/images/ham.png" alt="toogle menu" class="menu" style="cursor: pointer;">
-        </a>
-      </div>
-
-      <ul :class="`show-desktop ${mobileNav ? 'hide-mobile' : ''}`"
-          style="display: flex; align-items: center; margin: 0">
-
+    <nav>
+      <a class="hide-desktop" @click="toggleMobileNav">
+        <img src="/images/ham.png" alt="toogle menu" class="menu" style="cursor: pointer;">
+      </a>
+      <ul :class="`show-desktop ${mobileNav ? 'hide-mobile' : ''}`" style="margin-top: 0.2rem; padding-bottom: 0; margin-bottom: 0;">
         <li class="exit-btn" @click="toggleMobileNav"><img src="/images/exit.svg" alt=""></li>
-
-        <li>
-          <router-link to="/" exact active-class="bold">Home</router-link>
-        </li>
-
-        <li @click="show = !show">
-          <a class="hide-mobile" href="#" style="display: flex;align-items: center;line-height: 0">
-            <div class="inline-flex"><img
-                src="images/iconfinder_1_avatar_2754574.svg"
-                alt="toogle user-icon"
-                class="usericon-menu" id="user-icon-desktop">
-            </div>
-            <div class="usericon-label">My Account</div>
-          </a>
-
-        </li>
-
+        <li><router-link to="/" exact active-class="bold">Home</router-link></li>
+        <li><router-link to="/login" exact active-class="bold">Login</router-link></li>
       </ul>
-
     </nav>
-    <popup v-if="show"></popup>
   </header>
-
-
 </template>
 
 <script>
-import Popup from "@/components/popup";
-
 export default {
   name: "Header",
-  components: {Popup},
   data() {
     return {
-      mobileNav: false,
-      show: false
+      mobileNav: false
     };
   },
   methods: {
@@ -65,8 +33,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 ul {
   list-style-type: none;
 }
@@ -108,7 +74,8 @@ header nav ul li a {
   color: #fff;
   text-decoration: none;
   display: block;
-  padding: 0.3em 1.5em;
+  width: 100%;
+  padding: 1em 2em;
   background: #31373b;
 }
 
@@ -128,15 +95,6 @@ header nav ul li.exit-btn img {
   cursor: pointer;
 }
 
-header .usericon-menu {
-  width: 25px;
-}
-
-header .usericon-label {
-  padding: 0.1em 0 0 0.5em;
-}
-
-
 @media (min-width: 650px) {
   header nav ul {
     width: 40%;
@@ -145,7 +103,7 @@ header .usericon-label {
 
 @media (min-width: 1024px) {
   header {
-    padding: 1em 5em;
+    padding: 0.8em 5em;
   }
 
   header .logo {
@@ -182,5 +140,4 @@ header .usericon-label {
     padding: 0;
   }
 }
-
 </style>

@@ -11,9 +11,6 @@
         <span class="underline" @click="downVote">
           <img alt="Dislikes" src="/images/dislike.svg"/> {{ postDownVotes }}
         </span>
-        <span @click="copyLink">
-          <img alt="Dislikes" src="/images/share.svg"/> SHARE
-        </span>
       </div>
     </article>
     <div>
@@ -47,12 +44,24 @@
 </template>
 
 <script>
-import moment from "moment";
-import Comments from "../components/Comments.vue";
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
+dayjs.extend(calendar)
+
+async function getPostData(postID) {
+  const post = await (await fetch(`${process.env.VUE_APP_BASE_API}/post/bypostid/${postID}`)).json();
+  const author = await (await fetch(`${process.env.VUE_APP_BASE_API}/user/byID/${post.authorID}`)).json();
+
+  // put 500 page error when true
+  if (post.errno || author.errno) return new Error(post.errno || author.errno);
+  return { post, author };
+}
 
 export default {
   name: "Post",
-  components: { Comments },
+  components: {
+    Comments: () => import("../components/Comments.vue")
+  },
   data() {
     return {
       isLoading: true,
@@ -84,23 +93,14 @@ export default {
     };
   },
   methods: {
-    async getPostData() {
-      const post = await this.$http.get(`/post/bypostid/${this.$route.params.id}`);
-      const author = await this.$http.get(`/user/byID/${post.data.authorID}`);
-
-      // put 500 page error when true
-      if (post.data.errno || author.data.errno) this.error = true;
-
-      this.post = { ...post.data, tags: ["covid", "covid-19"] };
-      this.author = author.data;
-
-      return [post, author];
-    },
     async upVote() {
       try {
         this.post.upVote++;
-        await this.$http.get(`/post/${this.post.postID}/upvote`);
-        await this.getPostData();
+        await fetch(`${process.env.VUE_APP_BASE_API}/post/${this.post.postID}/upvote`);
+        const { post, author } = await getPostData(this.$route.params.id);
+
+        this.post = post;
+        this.author = author;
       } catch (err) {
         console.error(err);
       }
@@ -108,8 +108,11 @@ export default {
     async downVote() {
       try {
         this.post.downVote++;
-        await this.$http.get(`/post/${this.post.postID}/downvote`);
-        await this.getPostData();
+        await fetch(`${process.env.VUE_APP_BASE_API}/post/${this.post.postID}/downvote`);
+        const { post, author } = await getPostData(this.$route.params.id);
+
+        this.post = post;
+        this.author = author;
       } catch (err) {
         console.error(err);
       }
@@ -118,7 +121,7 @@ export default {
       if (!this.comment) return;
 
       // simulate posting data to server
-      this.comments.comments.push({
+      this.comments.comments = Object.freeze([...this.comments.comments, {
         commentID: this.comments.comments.length - 1,
         body: this.comment,
         postID: this.post.postID,
@@ -130,7 +133,7 @@ export default {
         isAnonymous: false,
         createdAt: new Date(),
         updatedAt: new Date()
-      });
+      }]);
 
       // clear posting comment data
       this.cancel();
@@ -138,37 +141,36 @@ export default {
     cancel() {
       this.comment = "";
     },
-    copyLink() {
-      navigator.clipboard.writeText(document.location.href);
-    },
     loadMore() {
       this.comments.page++;
 
       // simulate getting data from server
-      setTimeout(() => this.comments.comments.push(
-          ...Array(25).fill().map((value, commentID) => ({
-                commentID,
-                body: "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." +
-                    " Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. " +
-                    "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. " +
-                    "Vogel Quax zwickt Johnys Pferd Bim. Sylvia wagt quick den Jux bei",
-                postID: this.post.postID,
-                author: this.author,
-                upVote: 0,
-                downVote: 0,
-                isActive: true,
-                isFlagged: false,
-                isAnonymous: false,
-                createdAt: new Date(),
-                updatedAt: new Date()
-              })
-          )
-      ), 200);
+      setTimeout(() => {
+        this.comments.comments = Object.freeze([
+            ...this.comments.comments,
+            ...Array(25).fill().map((value, commentID) => ({
+              commentID,
+              body: "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." +
+                  " Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. " +
+                  "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. " +
+                  "Vogel Quax zwickt Johnys Pferd Bim. Sylvia wagt quick den Jux bei",
+              postID: this.post.postID,
+              author: this.author,
+              upVote: 0,
+              downVote: 0,
+              isActive: true,
+              isFlagged: false,
+              isAnonymous: false,
+              createdAt: new Date(),
+              updatedAt: new Date()
+            })
+          )]);
+      }, 200);
     }
   },
   computed: {
     updatedAtCalendar() {
-      return moment(this.post.updatedAt).fromNow();
+      return dayjs().calendar(dayjs(this.updatedAt));
     },
     postUpVotes() {
       return this.post.upVote;
@@ -177,15 +179,20 @@ export default {
       return this.post.downVote;
     }
   },
-  async created() {
+  async beforeRouteEnter(to, from, next) {
     /**
      * todo: get comments from server
      */
     try {
-      await this.getPostData();
-      this.isLoading = false;
+      const { post, author } = await getPostData(to.params.id);
 
-      // todo: if post ID is missing, put up 404 page error
+      next((vm) => {
+        vm.post = post;
+        vm.author = author;
+        vm.isLoading = false;
+
+        // todo: if post ID is missing, put up 404 page error
+      })
     } catch (err) {
       console.error(err);
       // todo: put up 500 page error

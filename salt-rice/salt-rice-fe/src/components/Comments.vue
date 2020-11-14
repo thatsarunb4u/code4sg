@@ -10,15 +10,13 @@
 </template>
 
 <script>
-import Comment from "./Comment.vue";
-
 export default {
   name: "Comments",
   props: {
     comments: Array
   },
   components: {
-    Comment
+    Comment: () => import("./Comment.vue")
   }
 }
 </script>

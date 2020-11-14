@@ -1,9 +1,9 @@
 <template>
   <div>
-    <section style="padding-top: 6vw;">
+    <section style="padding-top: 6vw;" v-once>
       <h3>Need to <span class="font-yellow">discuss on something</span>?</h3>
       <p class="subhead">Find Right Person to Advice</p>
-      <div class="container"><a class="cta bold" href="#card">Lai, Lets Talk</a></div>
+      <div class="container"><router-link to="/post" class="cta bold">Lai, Lets Talk</router-link></div>
       <img alt="" src="/images/banner.png">
     </section>
     <div id="card" class="card container">
@@ -29,12 +29,10 @@
 </template>
 
 <script>
-import Cards from "../components/Cards.vue";
-
 export default {
   name: "Index",
   components: {
-    Cards
+    Cards: () => import("../components/Cards.vue")
   },
   data() {
     return {
@@ -53,7 +51,7 @@ export default {
     },
     loadMore() {
       // todo: pagination
-      this.cards = [...this.cards, ...this.cards];
+      this.cards = Object.freeze([...this.cards, ...this.cards]);
     }
   },
   computed: {
@@ -66,28 +64,28 @@ export default {
     async searchQuery(query) {
       try {
         this.loading = true;
-        const response = await this.$http.get(query ? `/post/bytagortitle/${query}` : "/post");
+        const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/${query ? `post/bytagortitle/${query}` : "post"}`)).json();
 
-        this.cards = response.data;
+        this.cards = Object.freeze(response);
         this.loading = false;
-        if (response.data.errno) this.error = true;
-
-        this.cards.filter(({ categoryID }) => categoryID === this.category);
+        if (response.errno) this.error = true;
       } catch (err) {
         console.error(err);
         // show 500 error
       }
     }
   },
-  async beforeCreate() {
+  async beforeRouteEnter(to, from ,next) {
     try {
-      const response = await this.$http.get("/post");
+      const response =  await (await fetch(`${process.env.VUE_APP_BASE_API}/post`)).json();
 
-      this.cards = response.data;
-      this.loading = false;
+      next((vm) => {
+        vm.cards = Object.freeze(response);
+        vm.loading = false;
 
-      if (response.data.errno) this.error = true;
-      // show 500 error
+        if (response.errno) vm.error = true;
+        // show 500 error
+      })
     } catch (err) {
       console.error(err);
       // show 500 error

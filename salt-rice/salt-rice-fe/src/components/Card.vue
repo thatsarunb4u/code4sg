@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a">
+  <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a" v-once>
     <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }" class="card">
       <div class="card-message">
         <p><strong>{{ title.length > 75 ? `${title.substring(0, 75)}...` : title }}</strong></p>
@@ -23,7 +23,9 @@
 </template>
 
 <script>
-import moment from "moment";
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
+dayjs.extend(calendar)
 
 export default {
   name: "Card",
@@ -45,7 +47,7 @@ export default {
       return this.upVote - this.downVote;
     },
     updatedAtCalender() {
-      return moment(this.updatedAt).fromNow();
+      return dayjs().calendar(dayjs(this.updatedAt));
     }
   }
 };

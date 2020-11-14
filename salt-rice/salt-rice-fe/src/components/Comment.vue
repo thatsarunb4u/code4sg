@@ -13,7 +13,7 @@
             <img src="/images/dislike.svg" alt="Dislikes" /> {{ comment.downVote }}
           </span>
           <button @click="isReplying = !isReplying" type="button">REPLY</button>
-          <div v-if="isReplying">
+          <div v-show="isReplying">
             <div class="new-reply">
               <img src="/images/iconfinder_1_avatar_2754574.svg" alt="" />
               <input id="textarea" placeholder="Reply to this comment" v-model="replyComment" />
@@ -74,7 +74,7 @@ export default {
     },
     cancel() {
       this.isReplying = false;
-      this.replyComment = "";
+      this.replyComment = `@${this.comment.author.nickname} `;
     }
   }
 }
