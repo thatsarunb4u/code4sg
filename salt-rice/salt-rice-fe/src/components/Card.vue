@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a">
+  <router-link :to="{ name: 'Post', params: { id: postID || 1 }}" tag="a" :disable="loading">
     <pu-skeleton-theme :color="categoryID === 1 ? '#fffae1' : undefined" :highlight="categoryID === 1 ? '#ffc529' : undefined">
       <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff' }" class="card">
         <div class="card-message">
