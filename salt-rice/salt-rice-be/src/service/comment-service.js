@@ -10,7 +10,7 @@ let createComment = async (input_json) => {
     try {
     
       conn = await dbConnPool.getConnection();
-      const resp = await conn.query("INSERT into comment (commentID, body, postID, authorID, isAnonymous) VALUES (?, ?, ?, ?, ?)", [input_json['commentID'], input_json['body'], input_json['postID'], input_json['authorID'], input_json['isAnonymous']]);
+      const resp = await conn.query("INSERT into comment (body, postID, authorID, isAnonymous) VALUES ( ?, ?, ?, ?)", [ input_json['body'], input_json['postID'], input_json['authorID'], input_json['isAnonymous']]);
       console.log(resp);
       return resp;
     } catch (err) {

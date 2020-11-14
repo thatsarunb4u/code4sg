@@ -15,8 +15,8 @@ let searchPostsByTagOrTitle = async (queryString) => {
   let postsByTitleArr = await searchPostsByTitleInDB(queryString)
   let postsByTagArr = await searchPostsByTagInDB(queryString)
 
-  //TODO: to remove duplicates based on postID
-  return postsByTitleArr.concat(postsByTagArr)
+  let uniqueSet = new Set(postsByTitleArr.concat(postsByTagArr))
+  return Array.from(uniqueSet)
   
 }
 
@@ -25,7 +25,7 @@ let searchPostsByUserID = async (userID) => {
   try {
   
     conn = await dbConnPool.getConnection();
-    const resp = await conn.query("select * from post where authorID="+userID);
+    const resp = await conn.query("SELECT *, COUNT(c.postID) from post p left outer join user u ON p.authorID = u.userID LEFT OUTER JOIN comment c ON c.postID = p.postID WHERE p.authorID="+userID+ " GROUP BY p.postID");
     console.log(resp);
     return resp;
   } catch (err) {
