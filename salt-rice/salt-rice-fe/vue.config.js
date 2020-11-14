@@ -6,7 +6,7 @@ const zopfli = require("@gfx/zopfli");
 
 module.exports = {
     configureWebpack: {
-        plugins: [
+        plugins: process.env.NODE_ENV === "production" ? [
             new DuplicatePackageCheckerPlugin(),
             new BundleAnalyzerPlugin(),
             new CompressionPlugin({
@@ -33,6 +33,6 @@ module.exports = {
                 },
                 minRatio: Number.MAX_SAFE_INTEGER
             }),
-        ]
+        ] : []
     }
 }

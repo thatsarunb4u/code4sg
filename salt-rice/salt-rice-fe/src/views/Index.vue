@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <Cards :cards="resultQuery"/>
+      <Cards :cards="resultQuery" :loading="loading" />
       <div class="more"><a class="more-label" @click="loadMore">More posts</a></div>
     </div>
   </div>
@@ -80,8 +80,10 @@ export default {
       const response =  await (await fetch(`${process.env.VUE_APP_BASE_API}/post`)).json();
 
       next((vm) => {
-        vm.cards = Object.freeze(response);
-        vm.loading = false;
+        setTimeout(() => {
+          vm.cards = Object.freeze(response);
+          vm.loading = false;
+        }, 1000);
 
         if (response.errno) vm.error = true;
         // show 500 error

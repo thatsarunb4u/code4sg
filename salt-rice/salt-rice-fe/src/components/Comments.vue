@@ -1,9 +1,10 @@
 <template>
   <div>
     <Comment
-        v-for="comment in comments"
+        v-for="comment in computedComments"
         :key="comment.commentID"
         :comment="comment"
+        :loading="loading"
         @reply="(e) => $emit('reply', e)"
     />
   </div>
@@ -13,10 +14,23 @@
 export default {
   name: "Comments",
   props: {
-    comments: Array
+    comments: Array,
+    loading: Boolean,
+    loadedComments: {
+      type: Number,
+      default: 20
+    }
   },
   components: {
     Comment: () => import("./Comment.vue")
+  },
+  computed: {
+    computedComments() {
+      if (!this.loading) return this.comments;
+      return Array(this.loadedComments).fill().map((v, commentID) => ({
+        commentID, author: { nickname: null, userID: null }
+      }));
+    }
   }
 }
 </script>
