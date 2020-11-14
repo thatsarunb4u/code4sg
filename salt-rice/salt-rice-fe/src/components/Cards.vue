@@ -1,6 +1,6 @@
 <template>
   <div class="cards">
-    <card v-for="card in cards" :key="card.postID"
+    <card v-for="card in computedCards" :key="card.postID"
           :postID="card.postID"
           :title="card.title"
           :body="card.body"
@@ -12,6 +12,7 @@
           :is-anonymous="card.isAnonymous"
           :updated-at="card.updatedAt"
           :commentCount="card.commentCount"
+          :loading="loading"
     />
   </div>
 </template>
@@ -20,10 +21,21 @@
 export default {
   name: "Cards",
   props: {
-    cards: Array
+    cards: Array,
+    loading: Boolean,
+    loadingCards: {
+      type: Number,
+      default: 8
+    }
   },
   components: {
     Card: () => import("./Card.vue")
+  },
+  computed: {
+    computedCards() {
+      if (!this.loading) return this.cards;
+      return Array(this.loadingCards).fill().map(() => ({ categoryID: Math.floor(Math.random() * 2)}));
+    }
   }
 };
 </script>

@@ -1,23 +1,37 @@
 <template>
   <div class="post">
     <article>
-      <h1>{{ post.title }}</h1>
-      <p>{{ post.body }}</p>
+      <h1><skeleton>{{ post.title }}</skeleton></h1>
+      <p><skeleton :count="30">{{ post.body }}</skeleton></p>
       <div v-for="tag in post.tags" :key="tag" class="tag-button">#{{ tag }}</div>
       <div class="post-actions">
         <span class="underline" @click="upVote">
-          <img alt="Likes" src="/images/like.svg"/> {{ postUpVotes }}
+          <img alt="Likes" src="/images/like.svg"/>
+          <skeleton v-if="loading" width="5%" />
+          <template v-else>{{ postUpVotes }}</template>
         </span>
         <span class="underline" @click="downVote">
-          <img alt="Dislikes" src="/images/dislike.svg"/> {{ postDownVotes }}
+          <img alt="Dislikes" src="/images/dislike.svg"/>
+          <skeleton v-if="loading" width="5%" />
+          <template v-else>{{ postDownVotes }}</template>
         </span>
       </div>
     </article>
     <div>
-      <p>Category: Relationship</p>
-      <p>Last updated {{ updatedAtCalendar }}</p>
-      <p>Posted by
-        <router-link :to="`/user/${author.userID}`" class="font-yellow" tag="a">{{ author.nickname }}</router-link>
+      <p>
+        <skeleton v-if="loading" width="20%" />
+        <template v-else>Category: Relationship</template>
+      </p>
+      <p>
+        <skeleton v-if="loading" width="25%"/>
+        <template v-else>Last updated {{ updatedAtCalendar }}</template>
+      </p>
+      <p>
+        <skeleton v-if="loading" width="15%" />
+        <template v-else>
+          Posted by
+          <router-link :to="`/user/${author.userID}`" class="font-yellow" tag="a">{{ author.nickname }}</router-link>
+        </template>
       </p>
     </div>
     <section>
@@ -34,8 +48,11 @@
           <button class="submit-button" type="button" @click="reply">Comment</button>
         </div>
       </div>
-      <comments :comments="comments.comments"
-                @reply="(replyComment) => { this.comment = replyComment; this.reply(); }"/>
+      <comments
+          :comments="comments.comments"
+          :loading="loading"
+          @reply="(replyComment) => { this.comment = replyComment; this.reply(); }"
+      />
       <div class="more container" style="margin: 30px 0;">
         <a class="more-label" @click="loadMore">More comments</a>
       </div>
@@ -49,22 +66,23 @@ import calendar from "dayjs/plugin/calendar";
 dayjs.extend(calendar)
 
 async function getPostData(postID) {
-  const post = await (await fetch(`${process.env.VUE_APP_BASE_API}/post/bypostid/${postID}`)).json();
-  const author = await (await fetch(`${process.env.VUE_APP_BASE_API}/user/byID/${post.authorID}`)).json();
+    const post = await (await fetch(`${process.env.VUE_APP_BASE_API}/post/bypostid/${postID}`)).json();
+    const author = await (await fetch(`${process.env.VUE_APP_BASE_API}/user/byID/${post.authorID}`)).json();
 
-  // put 500 page error when true
-  if (post.errno || author.errno) return new Error(post.errno || author.errno);
-  return { post, author };
+    // put 500 page error when true
+    if (post.errno || author.errno) return new Error(post.errno || author.errno);
+    return { post, author };
 }
 
 export default {
   name: "Post",
   components: {
-    Comments: () => import("../components/Comments.vue")
+    Comments: () => import("../components/Comments.vue"),
+    Skeleton: () => import("vue-loading-skeleton/src/skeleton.vue")
   },
   data() {
     return {
-      isLoading: true,
+      loading: true,
       error: false,
       comment: "",
       post: {
@@ -187,9 +205,11 @@ export default {
       const { post, author } = await getPostData(to.params.id);
 
       next((vm) => {
-        vm.post = post;
-        vm.author = author;
-        vm.isLoading = false;
+        setTimeout(() => {
+          vm.post = post;
+          vm.author = author;
+          vm.loading = false;
+        }, 1000)
 
         // todo: if post ID is missing, put up 404 page error
       })

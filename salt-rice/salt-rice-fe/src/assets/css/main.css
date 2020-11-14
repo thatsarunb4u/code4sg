@@ -101,6 +101,11 @@ body {
   color: #fff;
 }
 
+span:nth-child(6n).pu-skeleton {
+  width: 80%;
+  margin-bottom: 20px;
+}
+
 @media (min-width: 1024px) {
   body section h3, body section .subhead {
     font-size: calc(12pt + 8pt);

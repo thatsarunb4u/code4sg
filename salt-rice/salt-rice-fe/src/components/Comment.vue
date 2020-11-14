@@ -1,18 +1,22 @@
 <template>
   <div>
     <div class="author">
-      <img src="/images/iconfinder_1_avatar_2754574.svg" alt="" />
+      <skeleton v-if="loading" circle class="author-image" />
+      <img v-else src="/images/iconfinder_1_avatar_2754574.svg" alt="" class="author-image" />
       <div style="width: 100%;">
-        <p>{{ comment.author.nickname }}</p>
-        <p>{{ comment.body }}</p>
+        <p><skeleton>{{ comment.author.nickname }}</skeleton></p>
+        <p><skeleton :count="6">{{ comment.body }}</skeleton></p>
         <div class="post-actions">
           <span class="underline" @click="upVote">
-            <img src="/images/like.svg" alt="Likes" /> {{ comment.upVote }}
+            <img src="/images/like.svg" alt="Likes" />
+            <skeleton width="5%"> {{ comment.upVote }}</skeleton>
           </span>
           <span class="underline" @click="downVote">
-            <img src="/images/dislike.svg" alt="Dislikes" /> {{ comment.downVote }}
+            <img src="/images/dislike.svg" alt="Dislikes" />
+            <skeleton width="5%"> {{ comment.downVote }}</skeleton>
           </span>
-          <button @click="isReplying = !isReplying" type="button">REPLY</button>
+          <skeleton v-if="loading" width="5%" />
+          <button v-else @click="isReplying = !isReplying" type="button">REPLY</button>
           <div v-show="isReplying">
             <div class="new-reply">
               <img src="/images/iconfinder_1_avatar_2754574.svg" alt="" />
@@ -47,12 +51,16 @@ export default {
         nickname: String,
         userID: String
       }
-    }
+    },
+    loading: Boolean
+  },
+  components: {
+    Skeleton: () => import("vue-loading-skeleton/src/skeleton.vue")
   },
   data() {
     return {
      isReplying: false,
-     replyComment: `@${this.comment.author.nickname} `
+     replyComment: `@${this.comment.author?.nickname} `
     };
   },
   methods: {
@@ -86,7 +94,7 @@ export default {
   margin-top: 10px;
 }
 
-.author > img {
+.author-image {
   margin-right: 1em;
   vertical-align: middle;
   width: 50px;
