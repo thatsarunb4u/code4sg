@@ -17,13 +17,13 @@ let searchPostsByTagOrTitle = async (queryString) => {
 
   let uniqueSet = new Set(postsByTitleArr.concat(postsByTagArr))
   return Array.from(uniqueSet)
-  
+
 }
 
 let searchPostsByUserID = async (userID) => {
   let conn;
   try {
-  
+
     conn = await dbConnPool.getConnection();
     const resp = await conn.query("SELECT *, COUNT(c.postID) from post p left outer join user u ON p.authorID = u.userID LEFT OUTER JOIN comment c ON c.postID = p.postID WHERE p.authorID="+userID+ " GROUP BY p.postID");
     console.log(resp);
@@ -45,14 +45,14 @@ let create = async (input_json) => {
       let createPostTagResponse = await createPostTagInDB(createPostResponse.insertId, input_json.tags)
       console.log(createPostTagResponse)
     }
-    
+
 
     return createPostResponse
 
   } catch (err) {
     throw err;
   } finally {
-    
+
   }
 
 }
@@ -60,7 +60,7 @@ let create = async (input_json) => {
 let upvote = async (postID) => {
   let conn;
   try {
-  
+
     conn = await dbConnPool.getConnection();
     const tmp = await conn.query("select upvote from post where postID="+postID);
     const current_counter = tmp[0].upvote;
@@ -77,7 +77,7 @@ let upvote = async (postID) => {
 let downvote = async (postID) => {
   let conn;
   try {
-  
+
     conn = await dbConnPool.getConnection();
     const tmp = await conn.query("select downvote from post where postID="+postID);
     const current_counter = tmp[0].downvote;
@@ -94,7 +94,7 @@ let downvote = async (postID) => {
 let flag = async (postID) => {
   let conn;
   try {
-  
+
     conn = await dbConnPool.getConnection();
     const resp = await conn.query("UPDATE post set isFlagged=1 where postID="+postID);
     console.log(resp);
@@ -110,10 +110,9 @@ let flag = async (postID) => {
 let getByPostID = async (postID) => {
     let conn;
     try {
-  
       conn = await dbConnPool.getConnection();
       const postRecords = await conn.query("SELECT * from post where postID="+postID);
-      const commentRecords = await conn.query("SELECT * from comment where postID="+postID);
+      const commentRecords = await conn.query("SELECT c.*, u.nickname as authorNickname FROM comment c INNER JOIN user u ON c.authorID = u.userID WHERE c.postID="+postID);
       const tagRecords = await conn.query("SELECT t.* from posttag pt inner join tag t on pt.tagID = t.tagID where pt.postID="+postID);
 
       delete(commentRecords.meta)

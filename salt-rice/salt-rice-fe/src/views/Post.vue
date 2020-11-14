@@ -3,7 +3,7 @@
     <article>
       <h1><skeleton>{{ post.title }}</skeleton></h1>
       <p><skeleton :count="30">{{ post.body }}</skeleton></p>
-      <div v-for="tag in post.tags" :key="tag" class="tag-button">#{{ tag }}</div>
+      <div v-for="tag in post.tags" :key="tag.tagID" class="tag-button">#{{ tag.tagName }}</div>
       <div class="post-actions">
         <span class="underline" @click="upVote">
           <img alt="Likes" src="/images/like.svg"/>
@@ -49,7 +49,7 @@
         </div>
       </div>
       <comments
-          :comments="comments.comments"
+          :comments="post.comments"
           :loading="loading"
           @reply="(replyComment) => { this.comment = replyComment; this.reply(); }"
       />
@@ -98,16 +98,13 @@ export default {
         isActive: true,
         createdAt: null,
         updatedAt: null,
-        tags: []
+        tags: [],
+        comments: []
       },
       author: {
         userID: null,
         nickname: null,
       },
-      comments: {
-        page: 0,
-        comments: []
-      }
     };
   },
   methods: {
@@ -135,55 +132,47 @@ export default {
         console.error(err);
       }
     },
-    reply() {
+    async reply() {
       if (!this.comment) return;
 
-      // simulate posting data to server
-      this.comments.comments = Object.freeze([...this.comments.comments, {
-        commentID: this.comments.comments.length - 1,
+      this.post.comments.push({
+        authorID: 1,
+        authorNickname: "User", // both should be variables when authentication is implemented
         body: this.comment,
-        postID: this.post.postID,
-        author: this.author,
-        upVote: 0,
-        downVote: 0,
-        isActive: true,
-        isFlagged: false,
-        isAnonymous: false,
+        commentID: this.post.comments.length + 1,
         createdAt: new Date(),
+        downVote: 0,
+        isActive: 1,
+        isFlagged: 0,
+        postID: this.post.postID,
+        upVote: 0,
         updatedAt: new Date()
-      }]);
+      })
+
+      await fetch(`${process.env.VUE_APP_BASE_API}/post/comment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          body: this.comment,
+          postID: this.post.postID,
+          authorID: 1,
+          isAnonymous: false
+        })
+      });
 
       // clear posting comment data
       this.cancel();
+
+      const { post, author } = await getPostData(this.$route.params.id);
+
+      this.post = post;
+      this.author = author;
     },
     cancel() {
       this.comment = "";
     },
     loadMore() {
-      this.comments.page++;
-
-      // simulate getting data from server
-      setTimeout(() => {
-        this.comments.comments = Object.freeze([
-            ...this.comments.comments,
-            ...Array(25).fill().map((value, commentID) => ({
-              commentID,
-              body: "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." +
-                  " Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. " +
-                  "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. " +
-                  "Vogel Quax zwickt Johnys Pferd Bim. Sylvia wagt quick den Jux bei",
-              postID: this.post.postID,
-              author: this.author,
-              upVote: 0,
-              downVote: 0,
-              isActive: true,
-              isFlagged: false,
-              isAnonymous: false,
-              createdAt: new Date(),
-              updatedAt: new Date()
-            })
-          )]);
-      }, 200);
+      // pagination for comment
     }
   },
   computed: {
@@ -198,9 +187,6 @@ export default {
     }
   },
   async beforeRouteEnter(to, from, next) {
-    /**
-     * todo: get comments from server
-     */
     try {
       const { post, author } = await getPostData(to.params.id);
 

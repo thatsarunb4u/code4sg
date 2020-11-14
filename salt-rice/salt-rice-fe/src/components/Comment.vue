@@ -4,7 +4,7 @@
       <skeleton v-if="loading" circle class="author-image" />
       <img v-else src="/images/iconfinder_1_avatar_2754574.svg" alt="" class="author-image" />
       <div style="width: 100%;">
-        <p><skeleton>{{ comment.author.nickname }}</skeleton></p>
+        <p><skeleton>{{ comment.authorNickname }}</skeleton></p>
         <p><skeleton :count="6">{{ comment.body }}</skeleton></p>
         <div class="post-actions">
           <span class="underline" @click="upVote">
@@ -20,7 +20,7 @@
           <div v-show="isReplying">
             <div class="new-reply">
               <img src="/images/iconfinder_1_avatar_2754574.svg" alt="" />
-              <input id="textarea" placeholder="Reply to this comment" v-model="replyComment" />
+              <input placeholder="Reply to this comment" v-model="replyComment" />
             </div>
             <div style="float: right; margin-top: 5px;">
               <button @click="cancel" type="button" class="cancel-button" style="margin-right: 20px;">Cancel</button>
@@ -47,10 +47,7 @@ export default {
       isAnonymous: Number,
       createdAt: String,
       updatedAt: String,
-      author: {
-        nickname: String,
-        userID: String
-      }
+      authorNickname: String,
     },
     loading: Boolean
   },
@@ -60,7 +57,7 @@ export default {
   data() {
     return {
      isReplying: false,
-     replyComment: `@${this.comment.author?.nickname} `
+     replyComment: `@${this.comment.authorNickname} `
     };
   },
   methods: {
@@ -82,7 +79,7 @@ export default {
     },
     cancel() {
       this.isReplying = false;
-      this.replyComment = `@${this.comment.author.nickname} `;
+      this.replyComment = `@${this.comment.authorNickname} `;
     }
   }
 }

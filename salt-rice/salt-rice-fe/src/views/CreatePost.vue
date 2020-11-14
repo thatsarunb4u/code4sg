@@ -96,7 +96,7 @@ export default {
           body: JSON.stringify({
             title: this.title,
             body: this.message,
-            categoryID: 1, // category will be dynamic once I get all categories from server
+            categoryID: this.category === "Relationship" ? 1 : 2, // category will be dynamic once I get all categories from server
             authorID: 1, // authentication have not been implemented yet, just putting 1 for now
             isAnonymous: this.isAnonymous,
             tags: this.tags.map((tagName) => ({ tagName }))
