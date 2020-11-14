@@ -2,7 +2,6 @@ import Router from 'express';
 import {createComment, searchComments, flagComment, deleteComment} from '../service/comment-service';
 
 import {create, searchPostsByTagOrTitle, searchPostsByUserID, getByPostID, upvote, downvote, deletePost, flag, getPosts} from '../service/post-service';
-import {createComment, searchComments, flagComment, deleteComment} from '../service/comment-service';
 
 const router = Router();
 

@@ -3,7 +3,7 @@
 //delete
 //flag
 
-import {dbConnPool} from './db-client'
+import {dbConnPool} from '../repo/db-client'
 
 let createComment = async (input_json) => {
     let conn;
