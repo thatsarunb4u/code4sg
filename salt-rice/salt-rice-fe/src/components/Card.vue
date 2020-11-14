@@ -1,6 +1,6 @@
 <template>
   <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a" v-once>
-    <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }" class="card">
+    <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff' }" class="card">
       <div class="card-message">
         <p><strong>{{ title.length > 75 ? `${title.substring(0, 75)}...` : title }}</strong></p>
         <p>{{ body.length > 300 ? `${body.substring(0, 300)}...` : body }}</p>
@@ -61,7 +61,7 @@ a {
 
 .card {
   border: 1px solid #707070;
-  border-radius: 27px;
+  border-radius: 5px;
   margin: 7% 0;
   background-color: #ffc529;
   height: auto;
