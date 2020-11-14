@@ -112,8 +112,18 @@ let getByPostID = async (postID) => {
     try {
   
       conn = await dbConnPool.getConnection();
-      const rows = await conn.query("SELECT * from post where postID="+postID);
-      return rows[0]
+      const postRecords = await conn.query("SELECT * from post where postID="+postID);
+      const commentRecords = await conn.query("SELECT * from comment where postID="+postID);
+      const tagRecords = await conn.query("SELECT t.* from posttag pt inner join tag t on pt.tagID = t.tagID where pt.postID="+postID);
+
+      delete(commentRecords.meta)
+      delete(tagRecords.meta)
+
+      let postRecord = postRecords[0]
+      postRecord.comments = commentRecords
+      postRecord.tags = tagRecords
+
+      return postRecord
     } catch (err) {
       throw err;
     } finally {
