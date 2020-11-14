@@ -1,12 +1,7 @@
-import Vuex from 'vuex';
-import Vue from 'vue';
-import customers from './modules/customers';
+import Vuex from "vuex";
+import Vue from "vue";
 
 Vue.use(Vuex);
 
 //Create Store
-export default new Vuex.Store({
-    modules: {
-        customers
-    }
-});
+export default new Vuex.Store({});

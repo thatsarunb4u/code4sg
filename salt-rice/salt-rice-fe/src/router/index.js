@@ -6,7 +6,15 @@ Vue.use(VueRouter);
 const routes = [{
     "path": "/",
     "name": "Index",
-    "component": () => import("../views/Index.vue")
+    "component": () => import(/* webpackChunkName: "connected" */ "@/views/Index.vue")
+}, {
+    "path": "/post",
+    "name": "CreatePost",
+    "component": () => import(/* webpackChunkName: "connected" */ "@/views/CreatePost.vue")
+}, {
+    "path": "/post/:id",
+    "name": "Post",
+    "component": () => import(/* webpackChunkName: "connected" */ "@/views/Post.vue")
 }];
 
 const router = new VueRouter({

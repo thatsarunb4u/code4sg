@@ -1,0 +1,115 @@
+$colors: (
+    white: #fff,
+    beidge: #fffae1,
+    yellow: #ffc529,
+    grey: #707070,
+    black: #000000,
+    gray-transparent: rgb(36, 41, 44),
+    gray-transparent2: rgb(49, 55, 59),
+    gray-transparent3: rgb(65, 73, 78),
+);
+
+@function color($color-name) {
+    @return map-get($colors, $color-name);
+}
+
+$side-spaces: (
+    mobile: 2em,
+    pc: 5em,
+);
+
+@function side-space($space-name) {
+    @return map-get($side-spaces, $space-name);
+}
+
+$border-radius: 5px;
+$font-size: 12pt;
+$between-distance: 1.5em;
+$icon-size: 1.3em;
+
+body {
+    section#create-postSection {
+        padding: 0 side-space(mobile) calc(#{$between-distance}* 2) side-space(mobile);
+        text-align: justify;
+
+        @include layout(tablet) {
+            right: side-space(mobile);
+            padding: 1.2em 0.9em 1.2em 1.2em;
+            font-size: calc(#{$font-size} + 1pt);
+            margin-top: 2%;
+        }
+
+        @include layout(pc) {
+            right: side-space(pc)-1.2em;
+            padding: 1.2em 0.9em 1.2em 1.2em;
+            font-size: calc(#{$font-size} + 4pt);
+            margin-top: 5%;
+        }
+    }
+    
+}
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+textarea, select{
+    @extend input[type=text];
+}
+
+label {
+    font-weight: 900;
+    font-size: medium;
+}
+
+form {
+    padding-top: 5%;
+}
+
+.button-group{
+    padding-top: 5%;
+    text-align: end;
+}
+
+    .action-buttons {
+        padding: 0.5em;
+        text-decoration: none;
+        border: none;
+        border-radius: $border-radius;
+        font-size: $font-size;
+        font-family: "Montserrat", sans-serif;
+        display: inline-block;
+    }
+
+    .small-buttons {
+        /* padding: 0.5em; */
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        font-size: small;
+        font-family: "Montserrat", sans-serif;
+        display: inline-block;
+    }
+    
+    .cancel-button{
+        @extend .action-buttons;
+        background-color: color(white);
+        color: color(gray);
+    }
+    .submit-button{
+        @extend .action-buttons;
+        background-color: color(yellow);
+        color: color(white);
+    }
+
+    .tag-button {
+        @extend .small-buttons;
+        background-color: palevioletred;
+    }
+

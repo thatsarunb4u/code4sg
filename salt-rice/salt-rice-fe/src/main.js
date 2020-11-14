@@ -1,11 +1,12 @@
-import Vue from 'vue'
-import Axios from 'axios'
-import App from './App.vue'
-import store from './store'
+import Vue from "vue";
+import App from "./App.vue";
+import store from "./store";
 import router from "./router";
 import "./assets/css/main.css";
+import "./assets/css/snackbar.css";
+import './registerServiceWorker';
 
-Vue.prototype.$http_client = Axios
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.config.performance = process.env.NODE_ENV !== "production";
 
-new Vue({ store, render: h => h(App), router }).$mount('#app')
+new Vue({ store, render: h => h(App), router }).$mount("#app");

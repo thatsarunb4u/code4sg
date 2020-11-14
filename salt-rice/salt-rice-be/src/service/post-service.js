@@ -6,7 +6,19 @@
 //downvote
 //flag
 //delete (for admin)
-import {dbConnPool} from '../repo/db-client'
+import {dbConnPool} from '../repo/db-client';
+import {searchPostsByTitleInDB, searchPostsByTagInDB, createPostInDB} from '../repo/post-repo';
+import { createTagInDBIfNotExists, createPostTagInDB } from '../repo/tag-repo';
+
+
+let searchPostsByTagOrTitle = async (queryString) => {
+  let postsByTitleArr = await searchPostsByTitleInDB(queryString)
+  let postsByTagArr = await searchPostsByTagInDB(queryString)
+
+  //TODO: to remove duplicates based on postID
+  return postsByTitleArr.concat(postsByTagArr)
+  
+}
 
 let searchPostsByUserID = async (userID) => {
   let conn;
@@ -24,18 +36,25 @@ let searchPostsByUserID = async (userID) => {
 }
 
 let create = async (input_json) => {
-  let conn;
   try {
-  
-    conn = await dbConnPool.getConnection();
-    const resp = await conn.query("INSERT into post (postID, title, body, categoryID, authorID, isAnonymous) VALUES (?, ?, ?, ?, ?, ?)", [input_json['postID'], input_json['title'],input_json['body'], input_json['categoryID'], input_json['authorID'], input_json['isAnonymous']]);
-    console.log(resp);
-    return resp;
+    let createPostResponse = await createPostInDB(input_json)
+
+    if (input_json.tags != undefined && input_json.tags.length > 0 ){
+      let createTagResponse = await createTagInDBIfNotExists(input_json.tags)
+      console.log(createTagResponse)
+      let createPostTagResponse = await createPostTagInDB(createPostResponse.insertId, input_json.tags)
+      console.log(createPostTagResponse)
+    }
+    
+
+    return createPostResponse
+
   } catch (err) {
     throw err;
   } finally {
-    if (conn) conn.release(); //release to pool
+    
   }
+
 }
 
 let upvote = async (postID) => {
@@ -129,5 +148,5 @@ let getByPostID = async (postID) => {
   }
 
 export {
-    getByPostID, create, searchPostsByUserID, upvote, downvote, deletePost, flag, getPosts
+  searchPostsByTagOrTitle, getByPostID, create, searchPostsByUserID, upvote, downvote, deletePost, flag, getPosts
 }

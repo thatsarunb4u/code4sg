@@ -1,59 +1,77 @@
 <template>
-  <div>
-    <p class="card-message">
-      <strong>{{ title }}</strong>
-      {{ body }}
-    </p>
-    <div class="card-info" v-if="upvote !== 0 && downvote !== 0 && updatedAt && comments && comments.length !== undefined">
-      <p v-if="author && !isAnonymous">Posted by {{ author.nickname }}</p>
-      <p>Last updated {{ updatedAtCalender }}</p>
-      <p>
-        <img src="/images/love.svg" alt="love image" class="love-img">
-        <span class="like-count">{{ this.likes }} likes</span>
-      </p>
-      <p>
-        <img src="/images/message.svg" alt="comment image" class="comment-img">
-        <span class="comment-count">{{ comments.length }} comments</span>
-      </p>
+  <router-link :to="{ name: 'Post', params: { id: postID }}" tag="a" v-once>
+    <div :style="{ [categoryID === 1 ? '' : 'backgroundColor']: '#fff', borderRadius: '27px' }" class="card">
+      <div class="card-message">
+        <p><strong>{{ title.length > 75 ? `${title.substring(0, 75)}...` : title }}</strong></p>
+        <p>{{ body.length > 300 ? `${body.substring(0, 300)}...` : body }}</p>
+      </div>
+      <div class="card-info">
+        <p v-if="!isAnonymous">Posted by {{ authorNickname }}</p>
+        <p v-else>This post is anonymously posted</p>
+        <p>Last updated {{ updatedAtCalender }}</p>
+        <p>
+          <img alt="love image" class="love-img" src="/images/love.svg">
+          <span class="like-count">{{ this.likes }} likes</span>
+        </p>
+        <p>
+          <img alt="comment image" class="comment-img" src="/images/message.svg">
+          <span class="comment-count">{{ commentCount }} comments</span>
+        </p>
+      </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
-import moment from "moment";
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
+dayjs.extend(calendar)
 
 export default {
   name: "Card",
   props: {
+    postID: Number,
     title: String,
     body: String,
     categoryID: Number,
-    author: {
-      userID: Number,
-      UUID: String,
-      nickname: String
-    },
-    upvote: Number,
-    downvote: Number,
-    isAnonymous: Boolean,
-    updatedAt: Date,
-    comments: Array
+    authorID: Number,
+    authorNickname: String,
+    upVote: Number,
+    downVote: Number,
+    isAnonymous: Number,
+    updatedAt: String,
+    commentCount: Number
   },
   computed: {
     likes() {
-      return this.upvote - this.downvote;
+      return this.upVote - this.downVote;
     },
     updatedAtCalender() {
-      return moment(this.updatedAt).fromNow();
+      return dayjs().calendar(dayjs(this.updatedAt));
     }
   }
-}
+};
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  border: 1px solid #707070;
+  border-radius: 27px;
+  margin: 7% 0;
+  background-color: #ffc529;
+  height: auto;
+  width: 100%;
+}
+
 .card-message {
-  padding: 2em;
+  padding: 0.5rem;
   margin: 0;
+  min-height: 200px;
 }
 
 .card-info {

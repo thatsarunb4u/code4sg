@@ -1,4 +1,4 @@
-<template>
+<template functional>
   <footer class="container">
     <a href="http://saltrice.com" class="footer-link">© 2020 saltrice. All Rights Reserved. http://saltrice.com</a>
   </footer>

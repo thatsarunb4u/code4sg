@@ -12,10 +12,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.raw());
 
 app.use(bodyParser.json())
+app.use(cors());
 
 app.use('/post', routes.posts);
 app.use('/user', routes.users);
-app.use(cors());
+app.use('/tag', routes.tags);
+
 
 app.listen(process.env.PORT, () => {
     console.log("SaltRice backend server started at port 3000...");

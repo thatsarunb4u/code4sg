@@ -1,5 +1,7 @@
 import Router from 'express';
-import {create, searchPostsByUserID, getByPostID, upvote, downvote, deletePost, flag, getPosts} from '../service/post-service';
+import {createComment, searchComments, flagComment, deleteComment} from '../service/comment-service';
+
+import {create, searchPostsByTagOrTitle, searchPostsByUserID, getByPostID, upvote, downvote, deletePost, flag, getPosts} from '../service/post-service';
 import {createComment, searchComments, flagComment, deleteComment} from '../service/comment-service';
 
 const router = Router();
@@ -26,8 +28,21 @@ router.get('/byuserid/:userId', (req,res) => {
     });
 });
 
+
 router.get('/comment/bycommentid/:commentId', (req,res) => {
     let response = searchComments(req.params.commentId);
+    response.then((result) => {
+        console.log(result);
+        res.send(result);
+    }).catch((err) => {
+        console.log(err)
+        res.send(err);
+    });
+});
+
+router.get('/bytagortitle/:querystr', (req,res) => {
+    let response = searchPostsByTagOrTitle(req.params.querystr);
+
     response.then((result) => {
         console.log(result);
         res.send(result);

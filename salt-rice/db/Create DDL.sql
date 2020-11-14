@@ -60,9 +60,9 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`commentID`),
-  KEY `comment_user_fk` (`authorID`),
+  KEY `comment_author_fk` (`authorID`),
   KEY `post_comment_fk` (`postID`),
-  CONSTRAINT `comment_user_fk` FOREIGN KEY (`authorID`) REFERENCES `user` (`userID`),
+  CONSTRAINT `comment_author_fk` FOREIGN KEY (`authorID`) REFERENCES `user` (`userID`),
   CONSTRAINT `post_comment_fk` FOREIGN KEY (`postID`) REFERENCES `post` (`postID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
 
 -- Dumping structure for table saltrice.post
 CREATE TABLE IF NOT EXISTS `post` (
-  `postID` int(10) unsigned NOT NULL,
+  `postID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` tinytext NOT NULL DEFAULT '',
   `body` mediumtext NOT NULL DEFAULT '',
   `categoryID` int(10) unsigned NOT NULL DEFAULT 0,
@@ -100,8 +100,8 @@ CREATE TABLE IF NOT EXISTS `posttag` (
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`postTagID`),
-  KEY `post_fk` (`postID`),
   KEY `tag_fk` (`tagID`),
+  KEY `post_fk` (`postID`),
   CONSTRAINT `post_fk` FOREIGN KEY (`postID`) REFERENCES `post` (`postID`),
   CONSTRAINT `tag_fk` FOREIGN KEY (`tagID`) REFERENCES `tag` (`tagID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `tag` (
 
 -- Dumping structure for table saltrice.user
 CREATE TABLE IF NOT EXISTS `user` (
-  `userID` int(10) unsigned NOT NULL DEFAULT 0,
+  `userID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` tinytext NOT NULL,
   `nickname` tinytext DEFAULT NULL,
   `score` float DEFAULT NULL,
@@ -132,8 +132,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `isBlacklisted` tinyint(1) unsigned DEFAULT 0,
   `createdAt` datetime DEFAULT current_timestamp(),
   `updatedAt` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`userID`),
+  UNIQUE KEY `UUID` (`UUID`) USING HASH
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 

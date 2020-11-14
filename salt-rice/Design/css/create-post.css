@@ -1,0 +1,64 @@
+body section#create-postSection {
+  padding: 0 2em calc(1.5em* 2) 2em;
+  text-align: justify;
+}
+
+input[type=text], textarea, select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+label {
+  font-weight: 900;
+  font-size: medium;
+}
+
+form {
+  padding-top: 5%;
+}
+
+.button-group {
+  padding-top: 5%;
+  text-align: end;
+}
+
+.action-buttons, .cancel-button, .submit-button {
+  padding: 0.5em;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  font-size: 12pt;
+  font-family: "Montserrat", sans-serif;
+  display: inline-block;
+}
+
+.small-buttons, .tag-button {
+  /* padding: 0.5em; */
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  font-size: small;
+  font-family: "Montserrat", sans-serif;
+  display: inline-block;
+}
+
+.cancel-button {
+  background-color: #fff;
+  color: #707070;
+}
+
+.submit-button {
+  background-color: #ffc529;
+  color: #fff;
+}
+
+.tag-button {
+  background-color: palevioletred;
+}
+/*# sourceMappingURL=create-post.css.map */

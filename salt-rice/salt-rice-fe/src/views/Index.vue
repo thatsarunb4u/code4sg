@@ -1,49 +1,43 @@
 <template>
   <div>
-    <section style="padding-top: 6vw;">
+    <section style="padding-top: 6vw;" v-once>
       <h3>Need to <span class="font-yellow">discuss on something</span>?</h3>
       <p class="subhead">Find Right Person to Advice</p>
-      <div class="container"><a href="#card" class="cta bold">Lai, Lets Talk</a></div>
-      <img src="/images/banner.png" alt="">
+      <div class="container"><router-link to="/post" class="cta bold">Lai, Lets Talk</router-link></div>
+      <img alt="" src="/images/banner.png">
     </section>
-    <div class="card container" id="card">
+    <div id="card" class="card container">
       <div class="filter">
         <div class="search-filter">
-          <p class="search-label bold">Search</p>
+          <label for="search"><p class="search-label bold">Search posts</p></label>
           <div class="search-container">
-            <input v-model.lazy="searchQuery" type="text" placeholder="How to...">
+            <input v-model.lazy="searchQuery" placeholder="Search by title and tags" type="text" id="search">
           </div>
         </div>
         <div class="category-filter">
           <p class="category-label bold">Category</p>
           <div class="category-container">
-            <a
-                :class="`relationship-category${category === 0 ? ' active' : ''}`"
-                @click="changeCategory(0)"
-            >Relationship</a>
-            <a
-                :class="`social-category${category === 1 ? ' active' : ''}`"
-                @click="changeCategory(1)"
-            >Social</a>
+            <a class="relationship-category" @click="changeCategory(1)">Relationship</a>
+            <a class="social-category" @click="changeCategory(2)">Social</a>
           </div>
         </div>
       </div>
-      <Cards :cards="resultQuery" />
-      <div class="more"><a @click="loadMore" class="more-label">More</a></div>
+      <Cards :cards="resultQuery"/>
+      <div class="more"><a class="more-label" @click="loadMore">More posts</a></div>
     </div>
   </div>
 </template>
 
 <script>
-import Cards from "../components/Cards.vue";
-
 export default {
   name: "Index",
   components: {
-    Cards
+    Cards: () => import("../components/Cards.vue")
   },
   data() {
     return {
+      loading: true,
+      error: false,
       searchQuery: "",
       category: null,
       page: 0,
@@ -57,129 +51,47 @@ export default {
     },
     loadMore() {
       // todo: pagination
-      this.cards = [...this.cards, ...this.cards];
+      this.cards = Object.freeze([...this.cards, ...this.cards]);
     }
   },
   computed: {
     resultQuery() {
-      // todo: Send search request to server instead of filtering dummy data
-      if (!this.searchQuery && this.category === null) return this.cards;
-
-      return this.cards.filter(({ title, body, author, categoryID }) =>
-          (this.searchQuery.length && title.includes(this.searchQuery)) ||
-          (this.searchQuery.length &&body.includes(this.searchQuery)) ||
-          (this.searchQuery.length &&(author && author.nickname.includes(this.searchQuery))) ||
-          (categoryID === this.category)
-      );
+      if (this.category === null) return this.cards;
+      return this.cards.filter(({ categoryID }) => categoryID === this.category);
     }
   },
-  beforeCreate() {
-    // simulate getting posts from api
-    setTimeout(() => this.cards.push({
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    }, {
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    },{
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    },{
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    },{
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    },{
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    },{
-      "title": "test",
-      "body": "more test",
-      "categoryID": 0,
-      "author": {
-        "userID": 1,
-        "UUID": "meow",
-        "nickname": "Username"
-      },
-      "upvote": 12,
-      "downvote": 2,
-      "isAnonymous": false,
-      "updatedAt": new Date(),
-      "comments": []
-    }, {
-      "title": "test",
-      "body": "more test",
-      "categoryID": 1
-    }), 200);
+  watch: {
+    async searchQuery(query) {
+      try {
+        this.loading = true;
+        const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/${query ? `post/bytagortitle/${query}` : "post"}`)).json();
+
+        this.cards = Object.freeze(response);
+        this.loading = false;
+        if (response.errno) this.error = true;
+      } catch (err) {
+        console.error(err);
+        // show 500 error
+      }
+    }
+  },
+  async beforeRouteEnter(to, from ,next) {
+    try {
+      const response =  await (await fetch(`${process.env.VUE_APP_BASE_API}/post`)).json();
+
+      next((vm) => {
+        vm.cards = Object.freeze(response);
+        vm.loading = false;
+
+        if (response.errno) vm.error = true;
+        // show 500 error
+      })
+    } catch (err) {
+      console.error(err);
+      // show 500 error
+    }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -208,31 +120,27 @@ section img {
   left: 0;
 }
 
+section .cta {
+  background: #ffc529;
+  padding: 1.3em 0.7em 1.3em 1.3em;
+  text-decoration: none;
+  z-index: 1;
+  color: black;
+  -webkit-clip-path: polygon(7% 19%, 100% 8%, 100% 83%, 59% 82%, 51% 100%, 42% 83%, 0 83%);
+  clip-path: polygon(7% 19%, 100% 8%, 100% 83%, 59% 82%, 51% 100%, 42% 83%, 0 83%);
+  position: absolute;
+  right: 35%;
+}
+
 .card .cards {
   margin: 7% 2em;
-}
-
-.more {
-  padding-top: calc(7%/ 2);
-}
-
-.more-label {
-  text-decoration: none;
-  color: #000000;
-  border: 1px solid #ffc529;
-  padding: 0.5em 2.5em;
-  border-radius: 5px;
-}
-
-.card .more .more-label:hover {
-  border: 3px solid #ffc529;
 }
 
 .card {
   width: 100%;
   margin: 7% auto;
   background-size: 30%;
-  background-position: 0 30%, 100% 100%;
+  background-position: 0 30%, 100% 62%;
   background-repeat: no-repeat, no-repeat;
   height: 100%;
   background-image: url("/images/yellow.png"), url("/images/green.png");
@@ -252,14 +160,14 @@ section img {
 .search-container input {
   padding: 0.5em 1em;
   border: 1px solid #707070;
-  border-radius: 5px 0 0 5px;
+  border-radius: 27px;
   font-size: 12pt;
 }
 
 .search-container button {
   padding: 0.5em 1em;
   border: 1px solid #707070;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 27px 27px 0;
   font-size: 12pt;
   background-color: #000000;
   color: #fff;
@@ -280,57 +188,18 @@ section img {
   border: 1px solid #707070;
 }
 
-.relationship-category.active, .social-category.active {
+.relationship-category {
   background: #ffc529;
-  border-radius: 5px 0 0 5px;
+  border-radius: 27px 0 0 27px;
 }
 
 .card .filter .category-container .social-category {
   background: #fff;
-  border-radius: 0 5px 5px 0;
-}
-
-.card .filter .category-container .search-container {
-  margin: 7% auto;
+  border-radius: 0 27px 27px 0;
 }
 
 .card {
   margin: calc(7% - 4%) auto;
-}
-
-.filter {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: reverse;
-  -ms-flex-direction: row-reverse;
-  flex-direction: row-reverse;
-  width: 100%;
-}
-
-.filter .search-filter, .filter .category-filter {
-  width: 50%;
-}
-
-.filter .category-filter .category-label {
-  text-align: left;
-  padding-left: 5em;
-}
-
-.filter .category-filter .category-container {
-  width: 100%;
-  text-align: left;
-  padding-left: 5em;
-}
-
-.filter .search-filter .search-label {
-  padding-right: 5em;
-}
-
-.filter .search-filter .search-container {
-  text-align: right;
-  padding-right: 5em;
 }
 
 @media (min-width: 650px) {
@@ -346,6 +215,61 @@ section img {
     width: 65%;
     margin-top: -15%;
     margin-left: -35%;
+  }
+
+  section .cta {
+    right: 2em;
+    padding: 1.2em 0.9em 1.2em 1.2em;
+    font-size: calc(12pt + 1pt);
+    margin-top: 2%;
+  }
+}
+
+@media (min-width: 1024px) {
+  section .cta {
+    right: 3.8em;
+    padding: 1.2em 0.9em 1.2em 1.2em;
+    font-size: calc(12pt + 4pt);
+    margin-top: 5%;
+  }
+
+  section h3, section .subhead {
+    font-size: calc(12pt + 8pt);
+  }
+
+  .filter {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    width: 100%;
+  }
+
+  .search-filter, .category-filter {
+    width: 50%;
+  }
+
+  .filter .category-filter .category-label {
+    text-align: left;
+    padding-left: 5em;
+  }
+
+  .category-container {
+    width: 100%;
+    text-align: left;
+    padding-left: 5em;
+  }
+
+  .filter .search-filter .search-label {
+    padding-right: 5em;
+  }
+
+  .search-container {
+    text-align: right;
+    padding-right: 5em;
   }
 }
 </style>
