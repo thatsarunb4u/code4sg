@@ -134,7 +134,7 @@ let getByPostID = async (postID) => {
     let conn;
     try {
       conn = await dbConnPool.getConnection();
-      const rows = await conn.query("SELECT * from post");
+      const rows = await conn.query("SELECT p.*, COUNT(c.postID) as commentCount, u.nickname from post p left outer join user u ON p.authorID = u.userID LEFT OUTER JOIN comment c ON c.postID = p.postID GROUP BY p.postID");
       return rows
     } catch (err) {
       throw err;

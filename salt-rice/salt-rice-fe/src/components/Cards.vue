@@ -6,7 +6,7 @@
           :body="card.body"
           :categoryID="card.categoryID"
           :authorID="card.authorID"
-          :authorNickname="card.authorNickname"
+          :authorNickname="card.nickname"
           :upVote="card.upVote"
           :downVote="card.downVote"
           :is-anonymous="card.isAnonymous"
