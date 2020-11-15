@@ -78,7 +78,7 @@ svg.star {
   margin-left: 1em;
 }
 
-header .edit-profile {
+.edit-profile {
   position: absolute;
   background-color: #fff;
   width: 155px;
@@ -87,7 +87,57 @@ header .edit-profile {
   border: 1px solid #000000;
   padding: 2em;
   text-align: center;
+  z-index: 10;
 }
 
+
+@media (min-width: 1024px) {
+  .edit-profile {
+    right: 7%;
+    top: 69px;
+  }
+}
+
+.edit-profile .head {
+  display: inline-block;
+  margin-bottom: 1em;
+}
+
+.edit-profile .head #icon-pen-picture {
+  width: 25px;
+  position: absolute;
+  top: 4em;
+  right: 4em;
+}
+
+.border {
+  border-bottom: 1px solid #000000;
+}
+
+.inline-flex {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.edit-profile .body .nickname {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.edit-profile .body .nickname #icon-pen-nickname {
+  width: 25px;
+  height: 22px;
+  margin: 1em 0.5em;
+}
+
+.edit-profile .body #rating_value {
+  margin-left: 0.5em;
+}
+
+.margin-top {
+  margin-top: 1em;
+}
 
 </style>

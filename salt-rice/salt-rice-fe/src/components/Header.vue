@@ -21,7 +21,7 @@
 
         <li><router-link to="/" exact active-class="bold">Home</router-link></li>
         <li><router-link to="/post" exact active-class="bold">Create post</router-link></li>
-        <li><router-link to="/login" exact active-class="bold">Login</router-link></li>
+        <!-- <li><router-link to="/login" exact active-class="bold">Login</router-link></li> -->
 
         <li @click="show = !show">
           <a class="hide-mobile" href="#" style="display: flex;align-items: center;line-height: 0">
