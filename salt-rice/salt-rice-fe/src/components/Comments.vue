@@ -6,6 +6,7 @@
         :comment="comment"
         :loading="loading"
         @reply="(e) => $emit('reply', e)"
+        @delete="deleteComment"
     />
   </div>
 </template>
@@ -30,6 +31,11 @@ export default {
       return Array(this.loadedComments).fill().map((v, commentID) => ({
         commentID, authorNickname: null
       }));
+    }
+  },
+  methods: {
+    deleteComment(comment) {
+      this.$delete(this.comments, this.comments.findIndex(({ commentID }) => commentID === comment.commentID));
     }
   }
 }

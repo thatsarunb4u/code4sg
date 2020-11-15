@@ -15,6 +15,8 @@
             <img src="/images/dislike.svg" alt="Dislikes" />
             <skeleton width="5%"> {{ comment.downVote }}</skeleton>
           </span>
+          <span @click="deleteComment"><img alt="Delete post" src="/images/trash.svg" /></span>
+          <span @click="flag"><img alt="Flag post" src="/images/flag.svg" /></span>
           <skeleton v-if="loading" width="5%" />
           <button v-else @click="isReplying = !isReplying" type="button">REPLY</button>
           <div v-show="isReplying">
@@ -48,6 +50,8 @@ export default {
       createdAt: String,
       updatedAt: String,
       authorNickname: String,
+      authorID: Number,
+      commentID: Number
     },
     loading: Boolean
   },
@@ -80,6 +84,17 @@ export default {
     cancel() {
       this.isReplying = false;
       this.replyComment = `@${this.comment.authorNickname} `;
+    },
+    async deleteComment() {
+      await fetch(
+          `${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}`,
+          { method: "DELETE" }
+      );
+
+      this.$emit("delete", this.comment);
+    },
+    async flag() {
+      await fetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/flag`);
     }
   }
 }
