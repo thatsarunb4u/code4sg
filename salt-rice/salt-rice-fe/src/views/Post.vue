@@ -15,6 +15,8 @@
           <skeleton v-if="loading" width="5%" />
           <template v-else>{{ postDownVotes }}</template>
         </span>
+        <span @click="deletePost"><img alt="Delete post" src="/images/trash.svg" /></span>
+        <span @click="flag"><img alt="Flag post" src="/images/flag.svg" /></span>
       </div>
     </article>
     <div>
@@ -171,8 +173,17 @@ export default {
     cancel() {
       this.comment = "";
     },
-    loadMore() {
+    async loadMore() {
       // pagination for comment
+    },
+    async deletePost() {
+      // todo: Modal that verifies the user intention
+      // todo: user authorization token
+      await fetch(`${process.env.VUE_APP_BASE_API}/post/${this.post.postID}`, { method: "DELETE" });
+      await this.$router.push("/");
+    },
+    async flag() {
+      await fetch(`${process.env.VUE_APP_BASE_API}/post/${this.post.postID}/flag`);
     }
   },
   computed: {
