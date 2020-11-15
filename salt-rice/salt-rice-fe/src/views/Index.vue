@@ -17,8 +17,8 @@
         <div class="category-filter">
           <p class="category-label bold">Category</p>
           <div class="category-container">
-            <select name="" id="" @change="changeCategory($event)">
-              <option value="0">-Select-</option>
+            <select @change="changeCategory($event)">
+              <option value="0">All</option>
               <option value="1">Reflections</option>
               <option value="2">Family-Children</option>
               <option value="3">Growing Old</option>
@@ -29,8 +29,6 @@
               <option value="8">Past time/Passion</option>
               <option value="9">Professional Work/Occupation</option>
             </select>
-            <!-- <a class="relationship-category" @click="changeCategory(1)">Relationship</a>
-            <a class="social-category" @click="changeCategory(2)">Social</a> -->
           </div>
         </div>
       </div>
@@ -51,17 +49,14 @@ export default {
       loading: true,
       error: false,
       searchQuery: "",
-      category: null,
+      category: 0,
       page: 0,
       cards: []
     };
   },
   methods: {
     changeCategory(event) {
-      let newCategory = event.target.value
-      console.log("Selected Category:"+newCategory)
-      if (this.category === newCategory) return this.category = null;
-      return this.category = newCategory;
+      this.category = parseInt(event.target.value);
     },
     loadMore() {
       // todo: pagination
@@ -70,9 +65,8 @@ export default {
   },
   computed: {
     resultQuery() {
-      console.log(this.category)
-      if (this.category === null) return this.cards;
-      return this.cards.filter(({ categoryID }) => categoryID == this.category);
+      if (!this.category) return this.cards;
+      return this.cards.filter(({ categoryID }) => categoryID === this.category);
     }
   },
   watch: {
@@ -195,7 +189,7 @@ section .cta {
   display: -ms-inline-flexbox;
   display: inline-flex;
   cursor: pointer;
-  
+
 }
 
 select{

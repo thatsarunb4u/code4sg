@@ -73,7 +73,7 @@ export default {
       error: false,
       title: "",
       message: "",
-      category: "Relationship",
+      category: 1,
       timeoutTag: null,
       tagSuggestions: [],
       tags: [],
@@ -148,7 +148,7 @@ export default {
     categories() {
       // get categories from server
       return [
-        {"categoryId": 1, "categoryName": "Reflections"}, 
+        {"categoryId": 1, "categoryName": "Reflections"},
         {"categoryId": 2, "categoryName": "Family-Children"},
         {"categoryId": 3, "categoryName": "Growing Old"},
         {"categoryId": 4, "categoryName": "Health"},
@@ -157,7 +157,7 @@ export default {
         {"categoryId": 7, "categoryName": "Food Recipes"},
         {"categoryId": 8, "categoryName": "Past time/Passion"},
         {"categoryId": 9, "categoryName": "Professional Work/Occupation"}
-        ];
+      ];
     }
   }
 };
