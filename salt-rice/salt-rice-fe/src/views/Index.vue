@@ -17,8 +17,20 @@
         <div class="category-filter">
           <p class="category-label bold">Category</p>
           <div class="category-container">
-            <a class="relationship-category" @click="changeCategory(1)">Relationship</a>
-            <a class="social-category" @click="changeCategory(2)">Social</a>
+            <select name="" id="" @change="changeCategory($event)">
+              <option value="0">-Select-</option>
+              <option value="1">Reflections</option>
+              <option value="2">Family-Children</option>
+              <option value="3">Growing Old</option>
+              <option value="4">Health</option>
+              <option value="5">Mental Health</option>
+              <option value="6">Dating</option>
+              <option value="7">Food Recipes</option>
+              <option value="8">Past time/Passion</option>
+              <option value="9">Professional Work/Occupation</option>
+            </select>
+            <!-- <a class="relationship-category" @click="changeCategory(1)">Relationship</a>
+            <a class="social-category" @click="changeCategory(2)">Social</a> -->
           </div>
         </div>
       </div>
@@ -45,7 +57,9 @@ export default {
     };
   },
   methods: {
-    changeCategory(newCategory) {
+    changeCategory(event) {
+      let newCategory = event.target.value
+      console.log("Selected Category:"+newCategory)
       if (this.category === newCategory) return this.category = null;
       return this.category = newCategory;
     },
@@ -56,8 +70,9 @@ export default {
   },
   computed: {
     resultQuery() {
+      console.log(this.category)
       if (this.category === null) return this.cards;
-      return this.cards.filter(({ categoryID }) => categoryID === this.category);
+      return this.cards.filter(({ categoryID }) => categoryID == this.category);
     }
   },
   watch: {
@@ -180,6 +195,18 @@ section .cta {
   display: -ms-inline-flexbox;
   display: inline-flex;
   cursor: pointer;
+  
+}
+
+select{
+  padding: 12px 20px;
+  margin: 8px 0 20px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font: 1em/1.25em Arial, Montserrat, sans-serif;
 }
 
 .relationship-category, .social-category {

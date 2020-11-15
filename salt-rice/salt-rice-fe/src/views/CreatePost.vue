@@ -25,7 +25,7 @@
       ></textarea>
       <label for="category">Category</label>
       <select id="category" v-model="category" name="category">
-        <option v-for="category in categories" :key="category">{{ category }}</option>
+        <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">{{ category.categoryName }}</option>
       </select>
       <label for="tags">Tags</label>
       <input
@@ -96,7 +96,7 @@ export default {
           body: JSON.stringify({
             title: this.title,
             body: this.message,
-            categoryID: this.category === "Relationship" ? 1 : 2, // category will be dynamic once I get all categories from server
+            categoryID: Number(this.category), // category will be dynamic once I get all categories from server
             authorID: 1, // authentication have not been implemented yet, just putting 1 for now
             isAnonymous: this.isAnonymous,
             tags: this.tags.map((tagName) => ({ tagName }))
@@ -147,7 +147,17 @@ export default {
   computed: {
     categories() {
       // get categories from server
-      return ["Relationship", "Social"];
+      return [
+        {"categoryId": 1, "categoryName": "Reflections"}, 
+        {"categoryId": 2, "categoryName": "Family-Children"},
+        {"categoryId": 3, "categoryName": "Growing Old"},
+        {"categoryId": 4, "categoryName": "Health"},
+        {"categoryId": 5, "categoryName": "Mental Health"},
+        {"categoryId": 6, "categoryName": "Dating"},
+        {"categoryId": 7, "categoryName": "Food Recipes"},
+        {"categoryId": 8, "categoryName": "Past time/Passion"},
+        {"categoryId": 9, "categoryName": "Professional Work/Occupation"}
+        ];
     }
   }
 };

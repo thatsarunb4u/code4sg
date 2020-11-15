@@ -5,7 +5,7 @@ let searchPostsByTagInDB = async (inpText) => {
   try {
   
     conn = await dbConnPool.getConnection();
-    const resp = await conn.query("SELECT p.*, t.tagID, t.tagName, COUNT(c.postID) as commentCount, u.nickname FROM tag t INNER JOIN posttag pt ON t.tagID = pt.tagID INNER JOIN post p ON pt.postID = p.postID left outer join user u ON p.authorID = u.userID LEFT OUTER JOIN comment c ON c.postID = p.postID WHERE t.tagName LIKE '%"+inpText+"%' AND t.isActive = TRUE AND p.isActive = TRUE AND p.isFlagged = FALSE GROUP BY p.postID");
+    const resp = await conn.query("SELECT p.*, t.tagID, t.tagName, COUNT(c.postID) as commentCount, u.nickname FROM tag t INNER JOIN posttag pt ON t.tagID = pt.tagID INNER JOIN post p ON pt.postID = p.postID left outer join user u ON p.authorID = u.userID LEFT OUTER JOIN comment c ON c.postID = p.postID WHERE lower(t.tagName) LIKE '%"+inpText+"%' AND t.isActive = TRUE AND p.isActive = TRUE AND p.isFlagged = FALSE GROUP BY p.postID");
     console.log(resp);
     return resp;
   } catch (err) {
@@ -21,7 +21,7 @@ let searchPostsByTitleInDB = async (inpText) => {
   try {
   
     conn = await dbConnPool.getConnection();
-    const resp = await conn.query("SELECT p.*, t.tagID, t.tagName, COUNT(c.postID) as commentCount, u.nickname FROM post p INNER JOIN posttag pt ON pt.postID = p.postID INNER JOIN tag t ON t.tagID = pt.tagID left outer join user u ON p.authorID = u.userID LEFT OUTER JOIN comment c ON c.postID = p.postID WHERE p.title LIKE '%"+inpText+"%' AND t.isActive = TRUE AND p.isActive = TRUE AND p.isFlagged = FALSE GROUP BY p.postID");
+    const resp = await conn.query("SELECT p.*, t.tagID, t.tagName, COUNT(c.postID) as commentCount, u.nickname FROM post p LEFT OUTER JOIN posttag pt ON pt.postID = p.postID LEFT OUTER JOIN tag t ON t.tagID = pt.tagID left outer join user u ON p.authorID = u.userID LEFT OUTER JOIN comment c ON c.postID = p.postID WHERE lower(p.title) LIKE '%"+inpText+"%' AND p.isActive = TRUE AND p.isFlagged = FALSE GROUP BY p.postID");
     console.log(resp);
     return resp;
   } catch (err) {
