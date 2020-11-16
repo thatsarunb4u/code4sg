@@ -189,12 +189,6 @@ section .cta {
   font-size: 12pt;
 }
 
-.category-container {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
 select {
   padding: 12px 20px;
   margin: 8px 0 20px;
@@ -291,7 +285,6 @@ select {
   }
 
   .category-container {
-    width: 100%;
     text-align: left;
     padding-left: 5em;
   }

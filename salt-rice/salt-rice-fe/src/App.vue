@@ -4,7 +4,7 @@
       <span>An update is available.</span>
       <button class="submit-button" @click="refreshApp">Update</button>
     </div>
-    <Header />
+<!--    <Header />-->
     <router-view />
     <Footer />
   </div>
@@ -16,7 +16,7 @@ import update from "@/mixins/update";
 export default {
   name: "App",
   components: {
-    Header: () => import("@/components/Header.vue"),
+    // Header: () => import("@/components/Header.vue"),
     Footer: () => import("@/components/Footer.vue")
   },
   mixins: [update]
