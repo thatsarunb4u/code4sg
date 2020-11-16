@@ -14,10 +14,24 @@
             <input v-model.lazy="searchQuery" placeholder="Search by title and tags" type="text" id="search">
           </div>
         </div>
+        <div class="sort-filter">
+          <div @click="sort('trending')">
+            <img src="http://localhost:8080/images/trending.svg" alt="" />
+            <span>Trending</span>
+          </div>
+          <div @click="sort('advise')">
+            <img src="http://localhost:8080/images/question-answer.svg" alt="" />
+            <span>Needs advise</span>
+          </div>
+          <div @click="sort('recent')">
+            <img src="http://localhost:8080/images/new.svg" alt="" />
+            <span>Recent posts</span>
+          </div>
+        </div>
         <div class="category-filter">
-          <p class="category-label bold">Category</p>
+          <label for="post-categories"><p class="category-label bold">Category</p></label>
           <div class="category-container">
-            <select @change="changeCategory($event)">
+            <select id="post-categories" @change="changeCategory($event)">
               <option value="0">All</option>
               <option value="1">Reflections</option>
               <option value="2">Family-Children</option>
@@ -61,6 +75,11 @@ export default {
     loadMore() {
       // todo: pagination
       this.cards = Object.freeze([...this.cards, ...this.cards]);
+    },
+    sort(method) {
+      // todo: request to server
+      console.log(method);
+      return 0;
     }
   },
   computed: {
@@ -162,37 +181,21 @@ section .cta {
   padding-right: 2em;
 }
 
-.search-container form {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
 .search-container input {
-  padding: 0.5em 1em;
+  padding: 12px 20px;
+  margin: 8px 0 20px;
   border: 1px solid #707070;
   border-radius: 27px;
   font-size: 12pt;
-}
-
-.search-container button {
-  padding: 0.5em 1em;
-  border: 1px solid #707070;
-  border-radius: 0 27px 27px 0;
-  font-size: 12pt;
-  background-color: #000000;
-  color: #fff;
 }
 
 .category-container {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  cursor: pointer;
-
 }
 
-select{
+select {
   padding: 12px 20px;
   margin: 8px 0 20px;
   display: inline-block;
@@ -203,26 +206,37 @@ select{
   font: 1em/1.25em Arial, Montserrat, sans-serif;
 }
 
-.relationship-category, .social-category {
-  text-decoration: none;
-  z-index: 1;
-  color: black;
-  padding: 0.5em 2.5em;
-  border: 1px solid #707070;
-}
-
-.relationship-category {
-  background: #ffc529;
-  border-radius: 27px 0 0 27px;
-}
-
-.card .filter .category-container .social-category {
-  background: #fff;
-  border-radius: 0 27px 27px 0;
-}
-
 .card {
   margin: calc(7% - 4%) auto;
+}
+
+.sort-filter {
+  background-color: #FFFAE1;
+  border: 1px solid #707070;
+  border-radius: 27px;
+  display: inline-flex;
+  max-height: 60px;
+  align-items: center;
+  align-self: center;
+  margin-top: 35px;
+}
+
+.sort-filter div {
+  display: inline-flex;
+  padding: 10px;
+  line-height: 21px;
+  cursor: pointer;
+}
+
+.sort-filter span {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 5px;
+}
+
+.sort-filter img {
+  height: 20px;
+  width: 20px;
 }
 
 @media (min-width: 650px) {
@@ -269,15 +283,11 @@ select{
     -ms-flex-direction: row-reverse;
     flex-direction: row-reverse;
     width: 100%;
+    justify-content: space-between;
   }
 
   .search-filter, .category-filter {
-    width: 50%;
-  }
-
-  .filter .category-filter .category-label {
-    text-align: left;
-    padding-left: 5em;
+    flex-grow: 2;
   }
 
   .category-container {
@@ -286,12 +296,17 @@ select{
     padding-left: 5em;
   }
 
-  .filter .search-filter .search-label {
-    padding-right: 5em;
+  .filter .category-filter .category-label {
+    text-align: left;
+    padding-left: 5em;
   }
 
   .search-container {
     text-align: right;
+    padding-right: 5em;
+  }
+
+  .filter .search-filter .search-label {
     padding-right: 5em;
   }
 }
