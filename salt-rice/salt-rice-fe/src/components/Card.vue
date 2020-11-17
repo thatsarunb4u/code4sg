@@ -45,8 +45,8 @@
 
 <script>
 import dayjs from "dayjs";
-import calendar from "dayjs/plugin/calendar";
-dayjs.extend(calendar)
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime)
 
 export default {
   name: "Card",
@@ -73,7 +73,7 @@ export default {
       return this.upVote - this.downVote;
     },
     updatedAtCalender() {
-      return dayjs().calendar(dayjs(this.updatedAt));
+      return dayjs().to(new Date(this.updatedAt))
     }
   },
   watch: {
