@@ -10,11 +10,11 @@ const router = Router();
 
 router.get('/', async (req,res) => {
     try {
-        switch(req.query.sort) {
+        switch(req.query.sort?.toLowerCase()) {
             case "trending":
                 res.send(await getTrendingPosts()).end();
                 break;
-            case "advice":
+            case "advise":
                 res.send(await getNeedsAdvicePosts()).end();
                 break;
             case "recent":
