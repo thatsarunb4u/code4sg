@@ -76,10 +76,17 @@ export default {
       // todo: pagination
       this.cards = Object.freeze([...this.cards, ...this.cards]);
     },
-    sort(method) {
-      // todo: request to server
-      console.log(method);
-      return 0;
+    async sort(method) {
+      try {
+        this.loading = true;
+        const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/post?sort=${method}`)).json();
+
+        this.cards = Object.freeze(response);
+        this.loading = false;
+        if (response.errno) this.error = true;
+      } catch (err) {
+        console.error(err);
+      }
     }
   },
   computed: {
