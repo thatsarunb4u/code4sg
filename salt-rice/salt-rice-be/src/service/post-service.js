@@ -176,6 +176,28 @@ let getByPostID = async (postID) => {
       if (conn) conn.release();
     }
   };
+
+let getNeedsAdvicePosts = async () => {
+  let conn;
+  try {
+    conn = await dbConnPool.getConnection();
+    return await conn.query(`
+      SELECT post.*
+      FROM post
+      LEFT OUTER JOIN (
+          SELECT *, COUNT(comment.commentID) as commentCount
+          FROM comment
+          GROUP BY comment.postID
+      ) comment ON post.postID = comment.postID
+      WHERE commentCount IS NULL;
+    `);
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) conn.release();
+  }
+};
+
 export {
   searchPostsByTagOrTitle, getByPostID, create, searchPostsByUserID, upvote, downvote, deletePost, flag, getPosts,
   getTrendingPosts, getNeedsAdvicePosts, getMostRecentPosts
