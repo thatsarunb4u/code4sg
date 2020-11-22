@@ -1,19 +1,23 @@
 import Router from 'express';
 import {createComment, searchComments, flagComment, deleteComment, upvoteComment, downvoteComment} from '../service/comment-service';
 
-import {create, searchPostsByTagOrTitle, searchPostsByUserID, getByPostID, upvote, downvote, deletePost, flag, getPosts} from '../service/post-service';
 
 const router = Router();
 
-router.get('/', (req,res) => {
-    let response = getPosts();
-    response.then((result) => {
-        console.log(result);
-        res.send(result);
-    }).catch((err) => {
-        console.log(err)
-        res.send(err);
-    });
+router.get('/', async (req,res) => {
+    try {
+        switch(req.query.sort) {
+            case "trending":
+                res.send(await getTrendingPosts()).end();
+                break;
+            default:
+                res.send(await getPosts()).end();
+                break;
+        }
+    } catch (err) {
+        console.error(err);
+        res.send(err).end();
+    }
 });
 
 router.get('/byuserid/:userId', (req,res) => {
