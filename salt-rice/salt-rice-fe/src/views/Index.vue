@@ -15,15 +15,15 @@
           </div>
         </div>
         <div class="sort-filter">
-          <div @click="sort('trending')">
+          <div :class="{ 'active': currentSort === 'trending' }" @click="sort('trending')">
             <img src="http://localhost:8080/images/trending.svg" alt="" />
             <span>Trending</span>
           </div>
-          <div @click="sort('advise')">
+          <div :class="{ 'active': currentSort === 'advise' }" @click="sort('advise')">
             <img src="http://localhost:8080/images/question-answer.svg" alt="" />
             <span>Needs advise</span>
           </div>
-          <div @click="sort('recent')">
+          <div :class="{ 'active': currentSort === 'recent' }" @click="sort('recent')">
             <img src="http://localhost:8080/images/new.svg" alt="" />
             <span>Recent posts</span>
           </div>
@@ -64,6 +64,7 @@ export default {
       error: false,
       searchQuery: "",
       category: 0,
+      currentSort: "",
       page: 0,
       cards: []
     };
@@ -79,11 +80,14 @@ export default {
     async sort(method) {
       try {
         this.loading = true;
+        this.currentSort = method;
         const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/post?sort=${method}`)).json();
 
-        this.cards = Object.freeze(response);
-        this.loading = false;
-        if (response.errno) this.error = true;
+        setTimeout(async () => {
+          this.cards = Object.freeze(response);
+          this.loading = false;
+          if (response.errno) this.error = true;
+        }, 500)
       } catch (err) {
         console.error(err);
       }
@@ -101,9 +105,12 @@ export default {
         this.loading = true;
         const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/${query ? `post/bytagortitle/${query}` : "post"}`)).json();
 
-        this.cards = Object.freeze(response);
-        this.loading = false;
-        if (response.errno) this.error = true;
+        setTimeout(async () => {
+
+          this.cards = Object.freeze(response);
+          this.loading = false;
+          if (response.errno) this.error = true;
+        }, 500)
       } catch (err) {
         console.error(err);
         // show 500 error
@@ -220,6 +227,7 @@ select {
   align-items: center;
   align-self: center;
   margin-top: 35px;
+  padding: 2px 20px 2px 20px;
 }
 
 .sort-filter div {
@@ -227,6 +235,16 @@ select {
   padding: 10px;
   line-height: 21px;
   cursor: pointer;
+}
+
+.sort-filter div:hover {
+  background-color: #d26b17;
+  border-radius: 25px;
+}
+
+.sort-filter div.active {
+  background-color: #ffc529;
+  border-radius: 25px;
 }
 
 .sort-filter span {
