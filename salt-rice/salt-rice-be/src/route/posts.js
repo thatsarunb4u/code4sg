@@ -1,6 +1,10 @@
 import Router from 'express';
 import {createComment, searchComments, flagComment, deleteComment, upvoteComment, downvoteComment} from '../service/comment-service';
 
+import {
+    create, searchPostsByTagOrTitle, searchPostsByUserID, getByPostID, upvote, downvote, deletePost, flag, getPosts,
+    getTrendingPosts, getNeedsAdvicePosts, getMostRecentPosts
+} from '../service/post-service';
 
 const router = Router();
 
@@ -9,6 +13,12 @@ router.get('/', async (req,res) => {
         switch(req.query.sort) {
             case "trending":
                 res.send(await getTrendingPosts()).end();
+                break;
+            case "advice":
+                res.send(await getNeedsAdvicePosts()).end();
+                break;
+            case "recent":
+                res.send(await getMostRecentPosts()).end();
                 break;
             default:
                 res.send(await getPosts()).end();

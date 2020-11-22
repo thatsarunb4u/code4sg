@@ -198,6 +198,18 @@ let getNeedsAdvicePosts = async () => {
   }
 };
 
+let getMostRecentPosts = async () => {
+  let conn;
+  try {
+    conn = await dbConnPool.getConnection();
+    return await conn.query("SELECT * FROM post ORDER BY createdAt DESC;");
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) conn.release();
+  }
+};
+
 export {
   searchPostsByTagOrTitle, getByPostID, create, searchPostsByUserID, upvote, downvote, deletePost, flag, getPosts,
   getTrendingPosts, getNeedsAdvicePosts, getMostRecentPosts
