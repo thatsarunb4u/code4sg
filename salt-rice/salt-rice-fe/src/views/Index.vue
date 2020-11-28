@@ -176,35 +176,6 @@ export default {
 }
 
 /* Start of filter Style */
-.filter {
-  @include layout(tablet) {
-    display: flex;
-    flex-direction: row-reverse;
-    width: 100%;
-
-    .search-filter,
-    .category-filter {
-      width: 50%;
-    }
-
-    .category-filter {
-      .category-label {
-        text-align: left;
-        padding-left: side-space(mobile);
-      }
-
-      .category-container {
-        width: 100%;
-        text-align: left;
-        padding-left: side-space(mobile);
-
-        select{
-          cursor: pointer;
-        }
-      }
-    }
-}
-
 .sort-filter {
   background-color: #FFFAE1;
   border: 1px solid #707070;
@@ -244,6 +215,38 @@ export default {
   height: 20px;
   width: 20px;
 }
+.filter {
+
+  
+
+  @include layout(tablet) {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+
+    .search-filter,
+    .category-filter {
+      width: 50%;
+    }
+
+    .category-filter {
+      .category-label {
+        text-align: left;
+        padding-left: side-space(mobile);
+      }
+
+      .category-container {
+        width: 100%;
+        text-align: left;
+        padding-left: side-space(mobile);
+
+        select{
+          cursor: pointer;
+        }
+      }
+    }
+}
+
     .search-filter {
       .search-label {
         text-align: right;
@@ -255,6 +258,8 @@ export default {
         padding-right: side-space(mobile);
       }
     }
+
+    
   }
 
   @include layout(pc) {
