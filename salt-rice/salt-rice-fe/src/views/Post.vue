@@ -197,9 +197,8 @@
 
 <script>
 import dayjs from "dayjs";
-import calendar from "dayjs/plugin/calendar";
-
-dayjs.extend(calendar);
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime)
 
 async function getPostData(postID) {
   const post = await (
@@ -334,7 +333,7 @@ export default {
   },
   computed: {
     updatedAtCalendar() {
-      return dayjs().calendar(dayjs(this.updatedAt));
+      return dayjs().to(new Date(this.post.updatedAt))
     },
     postUpVotes() {
       return this.post.upVote;

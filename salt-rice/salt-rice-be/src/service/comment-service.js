@@ -8,7 +8,7 @@ import {dbConnPool} from '../repo/db-client'
 let createComment = async (input_json) => {
     let conn;
     try {
-    
+
       conn = await dbConnPool.getConnection();
       const resp = await conn.query("INSERT into comment (body, postID, authorID, isAnonymous) VALUES ( ?, ?, ?, ?)", [ input_json['body'], input_json['postID'], input_json['authorID'], input_json['isAnonymous']]);
       console.log(resp);
@@ -23,7 +23,7 @@ let createComment = async (input_json) => {
   let searchComments = async (commentID) => {
     let conn;
     try {
-    
+
       conn = await dbConnPool.getConnection();
       const resp = await conn.query("select * from comment where commentID="+commentID);
       console.log(resp);
@@ -38,7 +38,7 @@ let createComment = async (input_json) => {
   let flagComment = async (commentID) => {
     let conn;
     try {
-    
+
       conn = await dbConnPool.getConnection();
       const resp = await conn.query("UPDATE comment set isFlagged=1 where commentID="+commentID);
       console.log(resp);
@@ -63,6 +63,33 @@ let createComment = async (input_json) => {
     }
   }
 
-  export {
-      createComment, searchComments, flagComment, deleteComment
+let upvoteComment = async (commentID) => {
+  let conn;
+  try {
+    conn = await dbConnPool.getConnection();
+    const resp = await conn.query("UPDATE comment SET upVote = upVote + 1 WHERE commentID = "+commentID);
+    return resp;
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) conn.release(); //release to pool
   }
+};
+
+let downvoteComment = async (commentID) => {
+  let conn;
+  try {
+    conn = await dbConnPool.getConnection();
+    const resp = await conn.query("UPDATE comment SET downVote = downVote + 1 WHERE commentID = "+commentID);
+    return resp;
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) conn.release(); //release to pool
+  }
+};
+
+export {
+  createComment, searchComments, flagComment, deleteComment,
+  upvoteComment, downvoteComment
+}

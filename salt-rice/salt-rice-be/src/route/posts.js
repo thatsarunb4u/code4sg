@@ -1,19 +1,33 @@
 import Router from 'express';
-import {createComment, searchComments, flagComment, deleteComment} from '../service/comment-service';
+import {createComment, searchComments, flagComment, deleteComment, upvoteComment, downvoteComment} from '../service/comment-service';
 
-import {create, searchPostsByTagOrTitle, searchPostsByUserID, getByPostID, upvote, downvote, deletePost, flag, getPosts} from '../service/post-service';
+import {
+    create, searchPostsByTagOrTitle, searchPostsByUserID, getByPostID, upvote, downvote, deletePost, flag, getPosts,
+    getTrendingPosts, getNeedsAdvicePosts, getMostRecentPosts
+} from '../service/post-service';
 
 const router = Router();
 
-router.get('/', (req,res) => {
-    let response = getPosts();
-    response.then((result) => {
-        console.log(result);
-        res.send(result);
-    }).catch((err) => {
-        console.log(err)
-        res.send(err);
-    });
+router.get('/', async (req,res) => {
+    try {
+        switch(req.query.sort?.toLowerCase()) {
+            case "trending":
+                res.send(await getTrendingPosts()).end();
+                break;
+            case "advise":
+                res.send(await getNeedsAdvicePosts()).end();
+                break;
+            case "recent":
+                res.send(await getMostRecentPosts()).end();
+                break;
+            default:
+                res.send(await getPosts()).end();
+                break;
+        }
+    } catch (err) {
+        console.error(err);
+        res.send(err).end();
+    }
 });
 
 router.get('/byuserid/:userId', (req,res) => {
@@ -161,4 +175,26 @@ router.delete('/comment/:commentId', (req,res) => {
     });
 });
 
-export default router;  
+router.get("/comment/:commentId/upvote", (req, res) => {
+    let response = upvoteComment(req.params.commentId);
+
+    response
+      .then((result) => res.send(result).end())
+      .catch((err) => {
+          console.log(err);
+          res.send(err).end();
+      });
+});
+
+router.get("/comment/:commentId/downvote", (req, res) => {
+    let response = downvoteComment(req.params.commentId);
+
+    response
+      .then((result) => res.send(result).end())
+      .catch((err) => {
+          console.log(err);
+          res.send(err).end();
+      });
+})
+
+export default router;

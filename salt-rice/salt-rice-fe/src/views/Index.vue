@@ -16,6 +16,21 @@
               />
             </div>
           </div>
+          </div>
+        <div class="sort-filter">
+          <div :class="{ 'active': currentSort === 'trending' }" @click="sort('trending')">
+            <img src="http://localhost:8080/images/trending.svg" alt="" />
+            <span>Trending</span>
+          </div>
+          <div :class="{ 'active': currentSort === 'advise' }" @click="sort('advise')">
+            <img src="http://localhost:8080/images/question-answer.svg" alt="" />
+            <span>Needs advise</span>
+          </div>
+          <div :class="{ 'active': currentSort === 'recent' }" @click="sort('recent')">
+            <img src="http://localhost:8080/images/new.svg" alt="" />
+            <span>Recent posts</span>
+          </div>
+        </div>
           <div class="category-filter">
             <p class="category-label bold">Category</p>
             <div class="category-container">
@@ -32,7 +47,6 @@
                 <option value="9">Professional Work/Occupation</option>
               </select>
             </div>
-          </div>
         </div>
         <!-- End of Filter Component -->
       </div>
@@ -60,6 +74,7 @@ export default {
       error: false,
       searchQuery: "",
       category: 0,
+      currentSort: "",
       page: 0,
       cards: [],
     };
@@ -72,6 +87,21 @@ export default {
       // todo: pagination
       this.cards = Object.freeze([...this.cards, ...this.cards]);
     },
+    async sort(method) {
+      try {
+        this.loading = true;
+        this.currentSort = method;
+        const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/post?sort=${method}`)).json();
+
+        setTimeout(async () => {
+          this.cards = Object.freeze(response);
+          this.loading = false;
+          if (response.errno) this.error = true;
+        }, 500)
+      } catch (err) {
+        console.error(err);
+      }
+    }
   },
   computed: {
     resultQuery() {
@@ -93,9 +123,12 @@ export default {
           )
         ).json();
 
-        this.cards = Object.freeze(response);
-        this.loading = false;
-        if (response.errno) this.error = true;
+        setTimeout(async () => {
+
+          this.cards = Object.freeze(response);
+          this.loading = false;
+          if (response.errno) this.error = true;
+        }, 500)
       } catch (err) {
         console.error(err);
         // show 500 error
@@ -170,7 +203,47 @@ export default {
         }
       }
     }
+}
 
+.sort-filter {
+  background-color: #FFFAE1;
+  border: 1px solid #707070;
+  border-radius: 27px;
+  display: inline-flex;
+  max-height: 60px;
+  align-items: center;
+  align-self: center;
+  margin-top: 35px;
+  padding: 2px 20px 2px 20px;
+}
+
+.sort-filter div {
+  display: inline-flex;
+  padding: 10px;
+  line-height: 21px;
+  cursor: pointer;
+}
+
+.sort-filter div:hover {
+  background-color: #d26b17;
+  border-radius: 25px;
+}
+
+.sort-filter div.active {
+  background-color: #ffc529;
+  border-radius: 25px;
+}
+
+.sort-filter span {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 5px;
+}
+
+.sort-filter img {
+  height: 20px;
+  width: 20px;
+}
     .search-filter {
       .search-label {
         text-align: right;
@@ -210,7 +283,9 @@ export default {
   .search-filter,
   .category-filter {
     width: 100%;
+    justify-content: space-between;
   }
+
 
   .search-label,
   .category-label {
@@ -241,7 +316,6 @@ export default {
       content: "";
       width: 16em;
     }
-  }
 }
 
 /* End of filter Style */

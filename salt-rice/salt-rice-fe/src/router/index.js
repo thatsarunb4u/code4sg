@@ -24,7 +24,15 @@ const routes = [{
 const router = new VueRouter({
     "mode": "history",
     "base": process.env.BASE_URL,
-    routes
+    routes,
+    scrollBehavior(to, from) {
+        if (to.name === "Index" && from.name === "Post") return {
+            selector: ".card",
+            offset: { x: 0, y: 20 }
+        }
+
+        return { x: 0, y: 0 };
+    }
 });
 
 export default router;

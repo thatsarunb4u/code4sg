@@ -215,13 +215,13 @@ export default {
     };
   },
   methods: {
-    upVote() {
-      // simulate upvoting
+    async upVote() {
       this.comment.upVote++;
+      await fetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/upvote`);
     },
-    downVote() {
-      // simulate upvoting
+    async downVote() {
       this.comment.downVote++;
+      await fetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/downvote`);
     },
     reply() {
       this.$emit("reply", this.formatReply(this.replyComment));
