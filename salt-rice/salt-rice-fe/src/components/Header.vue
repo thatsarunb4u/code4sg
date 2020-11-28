@@ -1,182 +1,354 @@
 <template>
   <header>
-    <router-link to="/" tag="a" style="margin-top: 6px; padding: 0;">
-      <img src="/images/saltrice.svg" alt="SaltRice logo" class="logo">
+    <router-link to="/" tag="a">
+      <img src="/images/saltrice.svg" alt="SaltRice logo" class="logo" />
     </router-link>
-    <nav style="display: flex;align-items: center">
+    <nav>
       <div class="icon-login">
-        <a href="#" class="hide-desktop">
-          <img src="images/iconfinder_1_avatar_2754574.svg" alt="toogle user-icon" class="usericon-menu"
-               id="user-icon-mobile">
+        <a
+          @click="showEditProfile = !showEditProfile"
+          href="#"
+          class="hide-desktop"
+        >
+          <img
+            src="@/assets/images/iconfinder_1_avatar_2754574.svg"
+            alt="toogle user-icon"
+            class="usericon-menu"
+            id="user-icon-mobile"
+          />
         </a>
-        <a class="hide-desktop" @click="toggleMobileNav">
-          <img src="/images/ham.png" alt="toogle menu" class="menu" style="cursor: pointer;">
+        <a href="#" class="hide-desktop">
+          <img
+            src="@/assets/images/ham.png"
+            alt="toogle menu"
+            class="menu"
+            id="menu"
+            @click="showMenu = !showMenu"
+          />
         </a>
       </div>
-
-      <ul :class="`show-desktop ${mobileNav ? 'hide-mobile' : ''}`"
-          style="display: flex; align-items: center; margin: 0">
-
-        <li class="exit-btn" @click="toggleMobileNav"><img src="/images/exit.svg" alt=""></li>
-
-        <li><router-link to="/" exact active-class="bold">Home</router-link></li>
-        <li><router-link to="/post" exact active-class="bold">Create post</router-link></li>
-        <!-- <li><router-link to="/login" exact active-class="bold">Login</router-link></li> -->
-
-        <li @click="show = !show">
-          <a class="hide-mobile" href="#" style="display: flex;align-items: center;line-height: 0">
-            <div class="inline-flex"><img
-                src="images/iconfinder_1_avatar_2754574.svg"
+      <ul v-bind:class="showMenu ? '' : 'show-desktop'" id="nav">
+        <li
+          @click="showMenu = !showMenu"
+          id="exit"
+          class="exit-btn hide-desktop"
+        >
+          <img src="@/assets/images/exit.svg" alt="" />
+        </li>
+        <li>
+          <router-link to="/" exact active-class="bold">Home</router-link>
+        </li>
+        <li>
+          <router-link to="/post" exact active-class="bold"
+            >Create post</router-link
+          >
+        </li>
+        <li>
+          <a
+            @click="showEditProfile = !showEditProfile"
+            id="editprofile"
+            class="hide-mobile"
+            ><span class="inline-flex"
+              ><img
+                src="@/assets/images/iconfinder_1_avatar_2754574.svg"
                 alt="toogle user-icon"
-                class="usericon-menu" id="user-icon-desktop">
-            </div>
-            <div class="usericon-label">My Account</div>
-          </a>
+                class="usericon-menu"
+                id="user-icon-desktop"
+              /><span class="usericon-label">Username</span></span
+            ></a
+          >
         </li>
       </ul>
-
     </nav>
-    <popup v-if="show"></popup>
+    <div
+      v-bind:class="showEditProfile ? 'show' : ''"
+      class="edit-profile hide"
+      id="editprofile-screen"
+    >
+      <div class="head">
+        <img
+          src="@/assets/images/iconfinder_1_avatar_2754574.svg"
+          alt="toogle user-icon"
+          class="usericon-edit"
+          id="user-icon-edit"
+        />
+
+        <a href="#">
+          <img
+            src="@/assets/images/edit.png"
+            alt="toogle icon-pen"
+            class="icon-pen"
+            id="icon-pen-picture"
+          />
+        </a>
+      </div>
+      <div class="border"></div>
+      <div class="body">
+        <div class="nickname">
+          <p>Nick Name</p>
+          <a href="#"
+            ><img
+              src="@/assets/images/edit.png"
+              alt="toogle icon-pen"
+              class="icon-pen"
+              id="icon-pen-nickname"
+          /></a>
+        </div>
+        <div class="inline-flex">
+          <span>
+            <svg
+              class="star"
+              xmlns="http://www.w3.org/2000/svg"
+              width="15.77"
+              height="15"
+              viewBox="0 0 31.242 29.713"
+            >
+              <path
+                d="M15.621,1.318,20.448,11.1l10.794,1.569L23.431,20.28l1.844,10.75-9.654-5.075L5.967,31.031,7.811,20.28,0,12.668,10.794,11.1Z"
+                transform="translate(0 -1.318)"
+              />
+            </svg>
+            <svg
+              class="star"
+              xmlns="http://www.w3.org/2000/svg"
+              width="15.77"
+              height="15"
+              viewBox="0 0 31.242 29.713"
+            >
+              <path
+                d="M15.621,1.318,20.448,11.1l10.794,1.569L23.431,20.28l1.844,10.75-9.654-5.075L5.967,31.031,7.811,20.28,0,12.668,10.794,11.1Z"
+                transform="translate(0 -1.318)"
+              />
+            </svg>
+            <svg
+              class="star"
+              xmlns="http://www.w3.org/2000/svg"
+              width="15.77"
+              height="15"
+              viewBox="0 0 31.242 29.713"
+            >
+              <path
+                d="M15.621,1.318,20.448,11.1l10.794,1.569L23.431,20.28l1.844,10.75-9.654-5.075L5.967,31.031,7.811,20.28,0,12.668,10.794,11.1Z"
+                transform="translate(0 -1.318)"
+              />
+            </svg>
+            <svg
+              class="star"
+              xmlns="http://www.w3.org/2000/svg"
+              width="15.77"
+              height="15"
+              viewBox="0 0 31.242 29.713"
+            >
+              <path
+                d="M15.621,1.318,20.448,11.1l10.794,1.569L23.431,20.28l1.844,10.75-9.654-5.075L5.967,31.031,7.811,20.28,0,12.668,10.794,11.1Z"
+                transform="translate(0 -1.318)"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15.77"
+              height="15"
+              viewBox="0 0 31.242 29.713"
+            >
+              <path
+                d="M15.621,1.318,20.448,11.1l10.794,1.569L23.431,20.28l1.844,10.75-9.654-5.075L5.967,31.031,7.811,20.28,0,12.668,10.794,11.1Z"
+                transform="translate(0 -1.318)"
+                fill="#ffc529"
+              />
+            </svg>
+          </span>
+          <span id="rating_value">4.98</span>
+        </div>
+        <div class="margin-top">
+          <a href="" class="actionButtonClear"
+            ><span>25 </span><span>Posts</span></a
+          >
+        </div>
+        <div class="margin-top"><span>25 </span><span>Comments</span></div>
+      </div>
+    </div>
   </header>
-
-
 </template>
 
 <script>
-import Popup from "@/components/popup";
-
 export default {
   name: "Header",
-  components: {Popup},
   data() {
     return {
-      mobileNav: false,
-      show: false
+      showMenu: false,
+      showEditProfile: false,
     };
   },
-  methods: {
-    toggleMobileNav() {
-      this.mobileNav = !this.mobileNav;
+};
+</script>
+<style lang="scss">
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: side-space(mobile);
+  z-index: 4;
+  position: sticky;
+  top: 0;
+  background-color: color(beidge);
+
+  @include layout(pc) {
+    padding: 0.8em side-space(pc) 0 side-space(pc);
+  }
+
+  .icon-login {
+    display: flex;
+
+    a {
+      margin-left: 1em;
+    }
+  }
+
+  .usericon-label {
+    padding: 0em 0 0 0.5em;
+  }
+
+  .inline-flex {
+    display: inline-flex;
+  }
+
+  .logo {
+    width: 120px;
+    @include layout(pc) {
+      width: 150px;
+      padding-top: .4em;
+    }
+  }
+
+  .menu {
+    width: 25px;
+    margin-top: 30%;
+  }
+
+  .usericon-menu {
+    width: 25px;
+    margin-top: 15%;
+
+    @include layout(pc) {
+      margin-top: -0.1em;
+    }
+  }
+
+  nav {
+    ul {
+      position: fixed;
+      width: 60%;
+      top: 0;
+      right: 0;
+      text-align: left;
+      background: color(gray-transparent);
+      height: 100%;
+      z-index: 7;
+      padding-top: 3em;
+
+      @include layout(tablet) {
+        width: 40%;
+      }
+
+      @include layout(pc) {
+        position: inherit;
+        width: auto;
+        background: none;
+        height: auto;
+        display: flex;
+        padding-top: 0;
+      }
+
+      li {
+        cursor: pointer;
+        @include layout(pc) {
+          float: left;
+          padding-right: 2em;
+        }
+      }
+
+      li a {
+        color: color(white);
+        text-decoration: none;
+        display: block;
+        width: 100%;
+        padding: 1em 2em;
+        background: color(gray-transparent2);
+
+        @include layout(pc) {
+          color: color(black);
+          background-color: inherit;
+          text-align: right;
+          padding: 1em 2em;
+        }
+
+        &:hover {
+          background-color: color(gray-transparent3);
+
+          @include layout(pc) {
+            background-color: inherit;
+          }
+        }
+      }
+
+      li.exit-btn {
+        margin-bottom: 1em;
+        margin-top: -1.3em;
+        text-align: right;
+        padding: 0 1.4em;
+
+        img {
+          width: 15px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .edit-profile {
+    position: absolute;
+    background-color: color(white);
+    width: 155px;
+    right: margin-top-card-element-responsive(mobile);
+    top: 73px;
+    border: 1px solid color(black);
+    padding: 2em;
+    text-align: center;
+
+    @include layout(tablet) {
+      right: margin-top-card-element-responsive(tablet);
+    }
+
+    @include layout(pc) {
+      right: 5em;
+      top: 69px;
+    }
+
+    .head {
+      display: inline-block;
+      margin-bottom: 1em;
+
+      #icon-pen-picture {
+        width: 25px;
+        position: absolute;
+        top: 4em;
+        right: 4em;
+      }
+    }
+
+    .body {
+      .nickname {
+        display: inline-flex;
+
+        #icon-pen-nickname {
+          width: 25px;
+          height: 22px;
+          margin: 1em 0.5em;
+        }
+      }
+      #rating_value {
+        margin-left: 0.5em;
+      }
     }
   }
 }
-</script>
-
-<style scoped>
-ul {
-  list-style-type: none;
-}
-
-header {
-  background-color: #fffae1;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  padding: 0.8em 2em;
-  z-index: 3;
-}
-
-header .logo {
-  width: 120px;
-}
-
-header .menu {
-  width: 25px;
-  margin-top: 30%;
-}
-
-header nav ul {
-  position: fixed;
-  width: 60%;
-  top: 0;
-  right: 0;
-  text-align: left;
-  background: #24292c;
-  height: 100%;
-  z-index: 7;
-  padding-top: 3em;
-}
-
-header nav ul li a {
-  color: #fff;
-  text-decoration: none;
-  display: block;
-  padding: 0.3em 1.5em;
-  background: #31373b;
-}
-
-header nav ul li a:hover {
-  background-color: #41494e;
-}
-
-header nav ul li.exit-btn {
-  margin-bottom: 1em;
-  margin-top: -1.3em;
-  text-align: right;
-  padding: 0 1.4em;
-}
-
-header nav ul li.exit-btn img {
-  width: 15px;
-  cursor: pointer;
-}
-
-header .usericon-menu {
-  width: 25px;
-}
-
-header .usericon-label {
-  padding: 0.1em 0 0 0.5em;
-}
-
-
-@media (min-width: 650px) {
-  header nav ul {
-    width: 40%;
-  }
-}
-
-@media (min-width: 1024px) {
-  header {
-    padding: 1em 5em;
-  }
-
-  header .logo {
-    width: 150px;
-  }
-
-  header nav ul li {
-    float: left;
-    padding-right: 2em;
-  }
-
-  header nav ul li a {
-    color: #000000;
-    background-color: inherit;
-    text-align: right;
-  }
-
-  header nav ul li a:hover {
-    background-color: inherit;
-  }
-
-  header nav ul li.exit-btn {
-    visibility: hidden;
-  }
-
-  header nav ul {
-    position: inherit;
-    width: auto;
-    background: none;
-    height: auto;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    padding: 0;
-  }
-}
-
 </style>

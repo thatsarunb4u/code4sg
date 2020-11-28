@@ -1,19 +1,23 @@
 <template>
   <div class="cards">
-    <card v-for="card in computedCards" :key="card.postID"
-          :postID="card.postID"
-          :title="card.title"
-          :body="card.body"
-          :categoryID="card.categoryID"
-          :authorID="card.authorID"
-          :authorNickname="card.nickname"
-          :upVote="card.upVote"
-          :downVote="card.downVote"
-          :is-anonymous="card.isAnonymous"
-          :updated-at="card.updatedAt"
-          :commentCount="card.commentCount"
-          :loading="loading"
-    />
+    <ul>
+      <card
+        v-for="card in computedCards"
+        :key="card.postID"
+        :postID="card.postID"
+        :title="card.title"
+        :body="card.body"
+        :categoryID="card.categoryID"
+        :authorID="card.authorID"
+        :authorNickname="card.nickname"
+        :upVote="card.upVote"
+        :downVote="card.downVote"
+        :is-anonymous="card.isAnonymous"
+        :updated-at="card.updatedAt"
+        :commentCount="card.commentCount"
+        :loading="loading"
+      />
+    </ul>
   </div>
 </template>
 
@@ -25,45 +29,42 @@ export default {
     loading: Boolean,
     loadingCards: {
       type: Number,
-      default: 8
-    }
+      default: 8,
+    },
   },
   components: {
-    Card: () => import("./Card.vue")
+    Card: () => import("./Card.vue"),
   },
   computed: {
     computedCards() {
       if (!this.loading) return this.cards;
-      return Array(this.loadingCards).fill().map(() => ({ categoryID: Math.floor(Math.random() * 2)}));
-    }
-  }
+      return Array(this.loadingCards)
+        .fill()
+        .map(() => ({ categoryID: Math.floor(Math.random() * 2) }));
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .cards {
-  display: grid;
-  grid-gap: 1rem;
-  margin: 1em 2rem;
-  padding: 0;
-}
-
-@media (min-width: 650px) {
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-    margin: 3rem 5em;
+  margin: $margin-top-card-elements side-space(mobile);
+  @include layout(pc) {
+    margin: 0 side-space(pc);
   }
-}
-
-@media (min-width: 900px) {
-  .cards {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .cards {
-    grid-template-columns: repeat(4, 1fr);
+  ul {
+    column-count: 1;
+    padding: 0;
+    margin: $margin-top-card-elements 0;
+    @include layout(tablet) {
+      display: block;
+      column-count: 3;
+      margin: calc(#{$margin-top-card-elements} - 2%) 0;
+    }
+    @include layout(pc) {
+      display: block;
+      column-count: 4;
+    }
   }
 }
 </style>

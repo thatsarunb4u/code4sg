@@ -1,12 +1,12 @@
 <template>
   <div>
     <Comment
-        v-for="comment in computedComments"
-        :key="loading ? Math.random() : comment.commentID"
-        :comment="comment"
-        :loading="loading"
-        @reply="(e) => $emit('reply', e)"
-        @delete="deleteComment"
+      v-for="comment in computedComments"
+      :key="loading ? Math.random() : comment.commentID"
+      :comment="comment"
+      :loading="loading"
+      @reply="(e) => $emit('reply', e)"
+      @delete="deleteComment"
     />
   </div>
 </template>
@@ -19,24 +19,32 @@ export default {
     loading: Boolean,
     loadedComments: {
       type: Number,
-      default: 20
-    }
+      default: 20,
+    },
   },
   components: {
-    Comment: () => import("./Comment.vue")
+    Comment: () => import("./Comment.vue"),
   },
   computed: {
     computedComments() {
       if (!this.loading) return this.comments;
-      return Array(this.loadedComments).fill().map((v, commentID) => ({
-        commentID, authorNickname: null
-      }));
-    }
+      return Array(this.loadedComments)
+        .fill()
+        .map((v, commentID) => ({
+          commentID,
+          authorNickname: null,
+        }));
+    },
   },
   methods: {
     deleteComment(comment) {
-      this.$delete(this.comments, this.comments.findIndex(({ commentID }) => commentID === comment.commentID));
-    }
-  }
-}
+      this.$delete(
+        this.comments,
+        this.comments.findIndex(
+          ({ commentID }) => commentID === comment.commentID
+        )
+      );
+    },
+  },
+};
 </script>

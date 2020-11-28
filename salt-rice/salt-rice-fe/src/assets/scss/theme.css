@@ -1,0 +1,177 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,600");
+body,
+html {
+  min-width: 300px;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12pt;
+}
+
+body svg.star {
+  fill: #ffc529;
+  cursor: pointer;
+}
+
+body .hide {
+  display: none;
+}
+
+body .show {
+  display: block;
+}
+
+body .border {
+  border-bottom: 1px solid #000000;
+}
+
+body .margin-right, body .actionButtonClear {
+  margin-right: 1em;
+}
+
+body .margin-top {
+  margin-top: 1em;
+}
+
+body .margin-bottom-layout {
+  margin-bottom: 7%;
+}
+
+@media (min-width: 1024px) {
+  body .margin-bottom-layout {
+    margin-bottom: 2%;
+  }
+}
+
+body ul {
+  list-style-type: none;
+}
+
+body .container {
+  text-align: center;
+}
+
+body .bold {
+  font-weight: bold;
+}
+
+body .more {
+  padding-top: calc(7%/ 2);
+}
+
+body .more .more-label {
+  text-decoration: none;
+  color: #000000;
+  border: 1px solid #ffc529;
+  padding: 0.5em 2.5em;
+  border-radius: 27px;
+}
+
+body .more .more-label:hover {
+  border: 3px solid #ffc529;
+}
+
+body .actionButtonClear {
+  text-decoration: none;
+  color: #000000;
+}
+
+body .actionButtonClear img {
+  margin-right: calc(0.5em * 1.5);
+}
+
+body button {
+  padding: 0.5em 1em 0.5em 1em;
+  text-decoration: none;
+  border: none;
+  border-radius: 27px;
+  font-size: 12pt;
+  font-family: "Montserrat", sans-serif;
+  display: inline-block;
+}
+
+body .submit-button {
+  background-color: #707070;
+  color: #fff;
+}
+
+body .cancel-button {
+  background-color: #c3c3c3;
+  color: #fff;
+}
+
+body .clear-button {
+  background-color: #fff;
+}
+
+body .show-desktop {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  body .show-desktop {
+    display: block;
+    margin: 0 auto 13% auto;
+  }
+}
+
+body .hide-desktop {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  body .hide-desktop {
+    display: none;
+  }
+}
+
+body .hide-mobile {
+  display: none;
+}
+
+@media (min-width: 650px) {
+  body .hide-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  body .hide-mobile {
+    display: block;
+  }
+}
+
+body .show-mobile {
+  display: block;
+}
+
+@media (min-width: 650px) {
+  body .show-mobile {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) {
+  body .show-mobile {
+    display: none;
+  }
+}
+
+body section {
+  padding: 1.8em 2em 0 0;
+}
+
+body footer {
+  background-color: #000000;
+  padding: 2em;
+}
+
+body footer .footer-link {
+  text-decoration: none;
+  color: #fff;
+  font-size: calc(12pt - 2pt);
+}
+/*# sourceMappingURL=theme.css.map */
