@@ -1,24 +1,19 @@
-<template functional>
-  <footer class="container">
-    <a href="http://saltrice.com" class="footer-link">© 2020 saltrice. All Rights Reserved. http://saltrice.com</a>
+<template>
+  <footer>
+    <a href="#" class="footer-link"
+      >© 2020 saltrice. All Rights Reserved. http://saltrice.com</a
+    >
   </footer>
 </template>
 
-<script>
-export default {
-  name: "Footer"
-};
-</script>
-
-<style scoped>
+<style lang="scss">
 footer {
-  background-color: #000000;
-  padding: 2em;
-}
-
-footer .footer-link {
-  text-decoration: none;
-  color: #fff;
-  font-size: calc(12pt - 2pt);
+  background-color: color(black);
+  padding: side-space(mobile);
+  .footer-link {
+    text-decoration: none;
+    color: color(white);
+    font-size: calc(#{$font-size} - 2pt);
+  }
 }
 </style>

@@ -6,7 +6,7 @@
     </div>
     <Header/>
     <router-view/>
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
   name: "App",
   components: {
     Header,
-    Footer
+    Footer,
   },
   mixins: [update]
 };

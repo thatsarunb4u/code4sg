@@ -1,48 +1,58 @@
 <template>
-  <div>
-    <section style="padding-top: 6vw;" v-once>
-      <h3>Need to <span class="font-yellow">discuss on something</span>?</h3>
-      <p class="subhead">Find Right Person to Advice</p>
-      <div class="container"><router-link to="/post" class="cta bold">Lai, Lets Talk</router-link></div>
-      <img alt="" src="/images/banner.png">
-    </section>
-    <div id="card" class="card container">
-      <div class="filter">
-        <div class="search-filter">
-          <label for="search"><p class="search-label bold">Search posts</p></label>
-          <div class="search-container">
-            <input v-model.lazy="searchQuery" placeholder="Search by title and tags" type="text" id="search">
+  <div id="home">
+    <Banner />
+    <div id="card" class="card">
+      <div class="container">
+        <!-- Start of Filter Component -->
+        <div class="filter">
+          <div class="search-filter">
+            <p class="search-label bold">Search</p>
+            <div class="search-container">
+              <input
+                v-model.lazy="searchQuery"
+                placeholder="Search by title and tags"
+                type="text"
+                id="search"
+              />
+            </div>
+          </div>
+          <div class="category-filter">
+            <p class="category-label bold">Category</p>
+            <div class="category-container">
+              <select @change="changeCategory($event)">
+                <option value="0">All</option>
+                <option value="1">Reflections</option>
+                <option value="2">Family-Children</option>
+                <option value="3">Growing Old</option>
+                <option value="4">Health</option>
+                <option value="5">Mental Health</option>
+                <option value="6">Dating</option>
+                <option value="7">Food Recipes</option>
+                <option value="8">Past time/Passion</option>
+                <option value="9">Professional Work/Occupation</option>
+              </select>
+            </div>
           </div>
         </div>
-        <div class="category-filter">
-          <p class="category-label bold">Category</p>
-          <div class="category-container">
-            <select @change="changeCategory($event)">
-              <option value="0">All</option>
-              <option value="1">Reflections</option>
-              <option value="2">Family-Children</option>
-              <option value="3">Growing Old</option>
-              <option value="4">Health</option>
-              <option value="5">Mental Health</option>
-              <option value="6">Dating</option>
-              <option value="7">Food Recipes</option>
-              <option value="8">Past time/Passion</option>
-              <option value="9">Professional Work/Occupation</option>
-            </select>
-          </div>
-        </div>
+        <!-- End of Filter Component -->
       </div>
       <Cards :cards="resultQuery" :loading="loading" />
-      <div class="more"><a class="more-label" @click="loadMore">More posts</a></div>
+      <div class="more">
+        <a class="more-label" @click="loadMore">More posts</a>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Banner from "../components/Banner.vue";
+import Cards from "../components/Cards.vue";
+
 export default {
   name: "Index",
   components: {
-    Cards: () => import("../components/Cards.vue")
+    Cards,
+    Banner,
   },
   data() {
     return {
@@ -51,7 +61,7 @@ export default {
       searchQuery: "",
       category: 0,
       page: 0,
-      cards: []
+      cards: [],
     };
   },
   methods: {
@@ -61,19 +71,27 @@ export default {
     loadMore() {
       // todo: pagination
       this.cards = Object.freeze([...this.cards, ...this.cards]);
-    }
+    },
   },
   computed: {
     resultQuery() {
       if (!this.category) return this.cards;
-      return this.cards.filter(({ categoryID }) => categoryID === this.category);
-    }
+      return this.cards.filter(
+        ({ categoryID }) => categoryID === this.category
+      );
+    },
   },
   watch: {
     async searchQuery(query) {
       try {
         this.loading = true;
-        const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/${query ? `post/bytagortitle/${query}` : "post"}`)).json();
+        const response = await (
+          await fetch(
+            `${process.env.VUE_APP_BASE_API}/${
+              query ? `post/bytagortitle/${query}` : "post"
+            }`
+          )
+        ).json();
 
         this.cards = Object.freeze(response);
         this.loading = false;
@@ -82,11 +100,13 @@ export default {
         console.error(err);
         // show 500 error
       }
-    }
+    },
   },
-  async beforeRouteEnter(to, from ,next) {
+  async beforeRouteEnter(to, from, next) {
     try {
-      const response =  await (await fetch(`${process.env.VUE_APP_BASE_API}/post`)).json();
+      const response = await (
+        await fetch(`${process.env.VUE_APP_BASE_API}/post`)
+      ).json();
 
       next((vm) => {
         setTimeout(() => {
@@ -96,203 +116,133 @@ export default {
 
         if (response.errno) vm.error = true;
         // show 500 error
-      })
+      });
     } catch (err) {
       console.error(err);
       // show 500 error
     }
-  }
+  },
 };
 </script>
 
-<style scoped>
-section {
-  background-size: 100%;
-  background-position: left bottom;
-  height: 100%;
-  background-color: #fffae1;
-  padding: 1.8em 2em 0 0;
-}
-
-section h3, section .subhead {
-  text-align: right;
-  position: relative;
-  z-index: 3;
-}
-
-section .subhead {
-  font-weight: 400;
-}
-
-section img {
-  width: 100%;
-  position: inherit;
-  bottom: 0;
-  left: 0;
-}
-
-section .cta {
-  background: #ffc529;
-  padding: 1.3em 0.7em 1.3em 1.3em;
-  text-decoration: none;
-  z-index: 1;
-  color: black;
-  -webkit-clip-path: polygon(7% 19%, 100% 8%, 100% 83%, 59% 82%, 51% 100%, 42% 83%, 0 83%);
-  clip-path: polygon(7% 19%, 100% 8%, 100% 83%, 59% 82%, 51% 100%, 42% 83%, 0 83%);
-  position: absolute;
-  right: 35%;
-}
-
-.card .cards {
-  margin: 7% 2em;
-}
-
+<style lang="scss">
 .card {
   width: 100%;
-  margin: 7% auto;
+  margin: $margin-top-card-elements auto;
   background-size: 30%;
-  background-position: 0 30%, 100% 62%;
+  background-position: 0 30%, 100% 100%;
   background-repeat: no-repeat, no-repeat;
   height: 100%;
-  background-image: url("/images/yellow.png"), url("/images/green.png");
-}
+  background-image: url("../assets/images/yellow.png"),
+    url("../assets/images/green.png");
+  //padding: 1.8em side-space(mobile) 0 0;
 
-.card .filter .search-label, .card .filter .category-label {
-  text-align: right;
-  padding-right: 2em;
-}
-
-.search-container form {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.search-container input {
-  padding: 0.5em 1em;
-  border: 1px solid #707070;
-  border-radius: 27px;
-  font-size: 12pt;
-}
-
-.search-container button {
-  padding: 0.5em 1em;
-  border: 1px solid #707070;
-  border-radius: 0 27px 27px 0;
-  font-size: 12pt;
-  background-color: #000000;
-  color: #fff;
-}
-
-.category-container {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  cursor: pointer;
-
-}
-
-select{
-  padding: 12px 20px;
-  margin: 8px 0 20px;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  font: 1em/1.25em Arial, Montserrat, sans-serif;
-}
-
-.relationship-category, .social-category {
-  text-decoration: none;
-  z-index: 1;
-  color: black;
-  padding: 0.5em 2.5em;
-  border: 1px solid #707070;
-}
-
-.relationship-category {
-  background: #ffc529;
-  border-radius: 27px 0 0 27px;
-}
-
-.card .filter .category-container .social-category {
-  background: #fff;
-  border-radius: 0 27px 27px 0;
-}
-
-.card {
-  margin: calc(7% - 4%) auto;
-}
-
-@media (min-width: 650px) {
-  section {
-    padding: 1.8em 2em 0 0;
-  }
-
-  section h3 {
-    font-size: calc(12pt + 3pt);
-  }
-
-  section img {
-    width: 65%;
-    margin-top: -15%;
-    margin-left: -35%;
-  }
-
-  section .cta {
-    right: 2em;
-    padding: 1.2em 0.9em 1.2em 1.2em;
-    font-size: calc(12pt + 1pt);
-    margin-top: 2%;
+  @include layout(pc) {
+    margin: calc(#{$margin-top-card-elements} - 4%) auto;
   }
 }
 
-@media (min-width: 1024px) {
-  section .cta {
-    right: 3.8em;
-    padding: 1.2em 0.9em 1.2em 1.2em;
-    font-size: calc(12pt + 4pt);
-    margin-top: 5%;
-  }
-
-  section h3, section .subhead {
-    font-size: calc(12pt + 8pt);
-  }
-
-  .filter {
-    display: -webkit-box;
-    display: -ms-flexbox;
+/* Start of filter Style */
+.filter {
+  @include layout(tablet) {
     display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
-    -ms-flex-direction: row-reverse;
     flex-direction: row-reverse;
     width: 100%;
+
+    .search-filter,
+    .category-filter {
+      width: 50%;
+    }
+
+    .category-filter {
+      .category-label {
+        text-align: left;
+        padding-left: side-space(mobile);
+      }
+
+      .category-container {
+        width: 100%;
+        text-align: left;
+        padding-left: side-space(mobile);
+
+        select{
+          cursor: pointer;
+        }
+      }
+    }
+
+    .search-filter {
+      .search-label {
+        text-align: right;
+        padding-right: side-space(mobile);
+      }
+
+      .search-container {
+        text-align: right;
+        padding-right: side-space(mobile);
+      }
+    }
   }
 
-  .search-filter, .category-filter {
-    width: 50%;
+  @include layout(pc) {
+    .category-filter {
+      .category-label {
+        padding-left: side-space(pc);
+      }
+
+      .category-container {
+        padding-left: side-space(pc);
+      }
+    }
+
+    .search-filter {
+      .search-label {
+        text-align: right;
+        padding-right: side-space(pc);
+      }
+
+      .search-container {
+        padding-right: side-space(pc);
+      }
+    }
   }
 
-  .filter .category-filter .category-label {
-    text-align: left;
-    padding-left: 5em;
-  }
-
-  .category-container {
+  .search-filter,
+  .category-filter {
     width: 100%;
-    text-align: left;
-    padding-left: 5em;
   }
 
-  .filter .search-filter .search-label {
-    padding-right: 5em;
+  .search-label,
+  .category-label {
+    text-align: center;
+    padding-right: side-space(mobile);
   }
 
   .search-container {
-    text-align: right;
-    padding-right: 5em;
+    input {
+      padding: 0.5em 1em;
+      border: 1px solid color(grey);
+      border-radius: $border-radius-button;
+      font-size: $font-size;
+      width: 14em;
+    }
+  }
+
+  .category-container {
+    .search-container {
+      margin: $margin-top-card-elements auto;
+    }
+
+    select {
+      padding: 0.5em 1em;
+      border: 1px solid color(grey);
+      border-radius: $border-radius-button;
+      font-size: $font-size;
+      content: "";
+      width: 16em;
+    }
   }
 }
+
+/* End of filter Style */
 </style>

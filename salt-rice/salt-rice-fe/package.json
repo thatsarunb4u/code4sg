@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "dayjs": "^1.9.6",
+    "node-sass": "^5.0.0",
     "register-service-worker": "^1.7.1",
+    "sass-loader": "^10.1.0",
     "vue": "^2.6.11",
     "vue-loading-skeleton": "^1.1.9",
     "vue-router": "^3.4.8",

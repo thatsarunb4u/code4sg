@@ -34,5 +34,12 @@ module.exports = {
                 minRatio: Number.MAX_SAFE_INTEGER
             }),
         ] : []
+    },
+    css: {
+        loaderOptions: {
+            sass: {
+                additionalData: `@import "@/styles/_variables.scss";`
+            }
+        }
     }
 }

@@ -1,0 +1,264 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,600");
+@import "../../styles/variables";
+
+body,
+html {
+    min-width: 300px;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    font-size: $font-size;
+
+    .width-50{
+        width: 50%;
+    }
+
+    .p-line-height{
+        line-height: 1.5em;
+    }
+
+    .inline-flex{
+        display: inline-flex;
+    }
+
+    .font-yellow {
+        color: color(yellow);
+    }
+
+    .cursor {
+        cursor: pointer;
+    }
+
+    svg.star {
+        fill: color(yellow);
+        cursor: pointer;
+    }
+
+    .hide {
+        display: none;
+    }
+    .show {
+        display: block;
+    }
+
+    .border {
+        border-bottom: 1px solid color(black);
+    }
+
+    .no-margin {
+        margin: 0;
+    }
+
+    .margin-right {
+        margin-right: 1em;
+    }
+
+    .margin-left-responsive {
+        margin-left: 0;
+        @include layout(pc) {
+            margin-left: 0.5em;
+        }
+        @include layout(tablet) {
+            margin-left: 0.5em;
+        }
+    }
+
+    .margin-top {
+        margin-top: 1em;
+    }
+
+    .margin-bottom {
+        margin-bottom: 1em;
+    }
+
+    .margin-bottom-layout {
+        margin-bottom: margin-top-card-element-responsive(mobile);
+
+        @include layout(pc) {
+            margin-bottom: margin-top-card-element-responsive(pc);
+        }
+    }
+
+    ul {
+        list-style-type: none;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .more {
+        padding-top: calc(#{$margin-top-card-elements}/ 2);
+        cursor: pointer;
+
+        .more-label {
+            text-decoration: none;
+            color: color(black);
+            border: 1px solid color(yellow);
+            padding: 0.5em 2.5em;
+            border-radius: $border-radius-button;
+
+            &:hover {
+                border: 3px solid color(yellow);
+            }
+        }
+    }
+
+    .actionButtonClear {
+        @extend .margin-right;
+        text-decoration: none;
+        color: color(black);
+
+        img {
+            margin-right: calc(#{$margin-right-small-icon} * 1.5);
+        }
+    }
+
+    //Changes 11/4
+    button {
+        padding: 0.5em 1em 0.5em 1em;
+        text-decoration: none;
+        border: none;
+        border-radius: $border-radius-button;
+        font-size: $font-size;
+        font-family: "Montserrat", sans-serif;
+        display: inline-block;
+    }
+
+    .submit-button {
+        background-color: color(gray);
+        color: color(white);
+    }
+    .cancel-button {
+        background-color: color(light-grey);
+        color: color(white);
+    }
+    .clear-button {
+        background-color: color(white);
+    }
+
+    .show-desktop {
+        display: none;
+
+        @include layout(pc) {
+            display: block;
+            margin: 0 auto 13% auto;
+        }
+    }
+
+    .hide-desktop {
+        display: block;
+
+        @include layout(pc) {
+            display: none;
+        }
+    }
+
+    .hide-mobile {
+        display: none;
+
+        @include layout(tablet) {
+            display: none;
+        }
+
+        @include layout(pc) {
+            display: block;
+        }
+    }
+
+    .show-mobile {
+        display: block;
+
+        @include layout(tablet) {
+            display: block;
+        }
+
+        @include layout(pc) {
+            display: none;
+        }
+    }
+
+    section {
+        padding: 1.8em side-space(mobile) 0 0;
+    }
+
+    /* Form */
+
+    label {
+        font-weight: 900;
+        font-size: large;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0 20px;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        font: 1em/1.25em Arial, Montserrat, sans-serif;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        font-family: "Montserrat", sans-serif;
+        font-size: 16px;
+    }
+
+    button[type="submit"] {
+        cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+        height: 1em;
+        width: 1em;
+        margin-left: 10px;
+    }
+
+    input[type="radio"] {
+        height: 1em;
+        width: 1em;
+    }
+
+    .tag-suggestion {
+        padding: 10px;
+        box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+            0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+            0 41.8px 33.4px rgba(0, 0, 0, 0.086);
+        min-height: 90px;
+        background: white;
+        position: relative;
+        margin-top: -20.5px;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .tag-suggestion ul {
+        padding-left: 0;
+        list-style-type: none;
+    }
+
+    .tag-suggestion ul li {
+        padding: 5px 15px;
+        cursor: pointer;
+    }
+
+    .tag-suggestion ul li:hover {
+        background-color: #eee;
+    }
+
+    .button-group {
+        padding-top: 5%;
+        text-align: end;
+    }
+}
