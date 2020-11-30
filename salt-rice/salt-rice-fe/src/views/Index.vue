@@ -16,21 +16,6 @@
               />
             </div>
           </div>
-          </div>
-        <div class="sort-filter">
-          <div :class="{ 'active': currentSort === 'trending' }" @click="sort('trending')">
-            <img src="http://localhost:8080/images/trending.svg" alt="" />
-            <span>Trending</span>
-          </div>
-          <div :class="{ 'active': currentSort === 'advise' }" @click="sort('advise')">
-            <img src="http://localhost:8080/images/question-answer.svg" alt="" />
-            <span>Needs advise</span>
-          </div>
-          <div :class="{ 'active': currentSort === 'recent' }" @click="sort('recent')">
-            <img src="http://localhost:8080/images/new.svg" alt="" />
-            <span>Recent posts</span>
-          </div>
-        </div>
           <div class="category-filter">
             <p class="category-label bold">Category</p>
             <div class="category-container">
@@ -47,6 +32,33 @@
                 <option value="9">Professional Work/Occupation</option>
               </select>
             </div>
+          </div>
+        </div>
+        <div class="sort-filter">
+          <div
+            :class="{ active: currentSort === 'trending' }"
+            @click="sort('trending')"
+          >
+            <img src="http://localhost:8080/images/trending.svg" alt="" />
+            <span>Trending</span>
+          </div>
+          <div
+            :class="{ active: currentSort === 'advise' }"
+            @click="sort('advise')"
+          >
+            <img
+              src="http://localhost:8080/images/question-answer.svg"
+              alt=""
+            />
+            <span>Needs advise</span>
+          </div>
+          <div
+            :class="{ active: currentSort === 'recent' }"
+            @click="sort('recent')"
+          >
+            <img src="http://localhost:8080/images/new.svg" alt="" />
+            <span>Recent posts</span>
+          </div>
         </div>
         <!-- End of Filter Component -->
       </div>
@@ -91,17 +103,19 @@ export default {
       try {
         this.loading = true;
         this.currentSort = method;
-        const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/post?sort=${method}`)).json();
+        const response = await (
+          await fetch(`${process.env.VUE_APP_BASE_API}/post?sort=${method}`)
+        ).json();
 
         setTimeout(async () => {
           this.cards = Object.freeze(response);
           this.loading = false;
           if (response.errno) this.error = true;
-        }, 500)
+        }, 500);
       } catch (err) {
         console.error(err);
       }
-    }
+    },
   },
   computed: {
     resultQuery() {
@@ -124,11 +138,10 @@ export default {
         ).json();
 
         setTimeout(async () => {
-
           this.cards = Object.freeze(response);
           this.loading = false;
           if (response.errno) this.error = true;
-        }, 500)
+        }, 500);
       } catch (err) {
         console.error(err);
         // show 500 error
@@ -176,8 +189,110 @@ export default {
 }
 
 /* Start of filter Style */
+.filter {
+  @include layout(tablet) {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+
+    .search-filter,
+    .category-filter {
+      width: 50%;
+    }
+
+    .category-filter {
+      .category-label {
+        text-align: left;
+        padding-left: side-space(mobile);
+      }
+
+      .category-container {
+        width: 100%;
+        text-align: left;
+        padding-left: side-space(mobile);
+
+        select {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .search-filter {
+      .search-label {
+        text-align: right;
+        padding-right: side-space(mobile);
+      }
+
+      .search-container {
+        text-align: right;
+        padding-right: side-space(mobile);
+      }
+    }
+  }
+
+  @include layout(pc) {
+    .category-filter {
+      .category-label {
+        padding-left: side-space(pc);
+      }
+
+      .category-container {
+        padding-left: side-space(pc);
+      }
+    }
+
+    .search-filter {
+      .search-label {
+        text-align: right;
+        padding-right: side-space(pc);
+      }
+
+      .search-container {
+        padding-right: side-space(pc);
+      }
+    }
+  }
+
+  .search-filter,
+  .category-filter {
+    width: 100%;
+  }
+
+  .search-label,
+  .category-label {
+    text-align: center;
+    padding-right: side-space(mobile);
+  }
+
+  .search-container {
+    input {
+      padding: 0.5em 1em;
+      border: 1px solid color(grey);
+      border-radius: $border-radius-button;
+      font-size: $font-size;
+      width: 14em;
+    }
+  }
+
+  .category-container {
+    .search-container {
+      margin: $margin-top-card-elements auto;
+    }
+
+    select {
+      padding: 0.5em 1em;
+      border: 1px solid color(grey);
+      border-radius: $border-radius-button;
+      font-size: $font-size;
+      content: "";
+      width: 16em;
+    }
+  }
+}
+
+/* Felix sort-filter */
 .sort-filter {
-  background-color: #FFFAE1;
+  background-color: #fffae1;
   border: 1px solid #707070;
   border-radius: 27px;
   display: inline-flex;
@@ -214,113 +329,6 @@ export default {
 .sort-filter img {
   height: 20px;
   width: 20px;
-}
-.filter {
-
-  
-
-  @include layout(tablet) {
-    display: flex;
-    flex-direction: row-reverse;
-    width: 100%;
-
-    .search-filter,
-    .category-filter {
-      width: 50%;
-    }
-
-    .category-filter {
-      .category-label {
-        text-align: left;
-        padding-left: side-space(mobile);
-      }
-
-      .category-container {
-        width: 100%;
-        text-align: left;
-        padding-left: side-space(mobile);
-
-        select{
-          cursor: pointer;
-        }
-      }
-    }
-}
-
-    .search-filter {
-      .search-label {
-        text-align: right;
-        padding-right: side-space(mobile);
-      }
-
-      .search-container {
-        text-align: right;
-        padding-right: side-space(mobile);
-      }
-    }
-
-    
-  }
-
-  @include layout(pc) {
-    .category-filter {
-      .category-label {
-        padding-left: side-space(pc);
-      }
-
-      .category-container {
-        padding-left: side-space(pc);
-      }
-    }
-
-    .search-filter {
-      .search-label {
-        text-align: right;
-        padding-right: side-space(pc);
-      }
-
-      .search-container {
-        padding-right: side-space(pc);
-      }
-    }
-  }
-
-  .search-filter,
-  .category-filter {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-
-  .search-label,
-  .category-label {
-    text-align: center;
-    padding-right: side-space(mobile);
-  }
-
-  .search-container {
-    input {
-      padding: 0.5em 1em;
-      border: 1px solid color(grey);
-      border-radius: $border-radius-button;
-      font-size: $font-size;
-      width: 14em;
-    }
-  }
-
-  .category-container {
-    .search-container {
-      margin: $margin-top-card-elements auto;
-    }
-
-    select {
-      padding: 0.5em 1em;
-      border: 1px solid color(grey);
-      border-radius: $border-radius-button;
-      font-size: $font-size;
-      content: "";
-      width: 16em;
-    }
 }
 
 /* End of filter Style */

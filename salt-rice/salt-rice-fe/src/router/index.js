@@ -11,6 +11,10 @@ const routes = [{
     "path": "/post",
     "name": "CreatePost",
     "component": () => import(/* webpackChunkName: "connected" */ "@/views/CreatePost.vue")
+}, {
+    "path": "/userauth",
+    "name": "UserAuthentication",
+    "component": () => import(/* webpackChunkName: "connected" */ "@/views/UserAuth.vue")
 },  {
     "path": "/post/:id",
     "name": "Post",
