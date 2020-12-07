@@ -88,6 +88,8 @@
 </template>
 
 <script>
+import {protectedFetch} from '../mixins/appUtils';
+
 export default {
   name: "CreatePost",
   data() {
@@ -113,9 +115,8 @@ export default {
 
         this.addTag(this.$refs.tagInput.value);
         const response = await (
-          await fetch(`${process.env.VUE_APP_BASE_API}/post`, {
+          await protectedFetch(`${process.env.VUE_APP_BASE_API}/post`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               title: this.title,
               body: this.message,
@@ -161,7 +162,8 @@ export default {
       this.timeoutTag = setTimeout(async () => {
         try {
           const response = await (
-            await fetch(`${process.env.VUE_APP_BASE_API}/tag/byname/${value}`)
+            await protectedFetch(`${process.env.VUE_APP_BASE_API}/tag/byname/${value}`) 
+            
           ).json();
 
           // put 500 page error when true

@@ -6,28 +6,30 @@
       id="authSectionContainer"
     >
       <div class="form-container sign-up-container">
-        <form action="#">
+        <form @submit.prevent="registerComp">
           <h1>Create Account</h1>
-          <span>or use your email for registration</span>
+          <span>Use your mobile for registration</span>
           <label for="name-reg">Name</label>
-          <input type="text" id="name-reg" placeholder="Name" />
-          <label for="phone-reg">Phone-Number</label>
-          <input id="phone-reg" type="number" placeholder="+65 - xxxxxxxx" />
+          <input type="text" v-model="regnickname" id="name-reg" placeholder="Name" />
+          <label for="phone-reg">Mobile-Number</label>
+          <input id="phone-reg" v-model="regmobile" type="number" placeholder="xxxxxxxx" />
           <label for="pass-reg">Password</label>
-          <input id="pass-reg" type="password" placeholder="Password" />
-          <button class="color-white margin-top">Sign Up</button>
+          <input id="pass-reg" v-model="regpassword" type="password" placeholder="Password" />
+          <label for="pass-reg">Confirm Password</label>
+          <input id="pass-reg" v-model="regconfirmPassword" type="password" placeholder="Confirm Password" />
+          <button class="color-white margin-top" type="submit">Sign Up</button>
         </form>
       </div>
       <div class="form-container sign-in-container">
-        <form action="#">
+        <form @submit.prevent="loginComp">
           <h1>Sign in</h1>
           <span>or use your account</span>
           <label for="phone-login">Phone-Number</label>
-          <input id="phone-login" type="number" placeholder="+65 - xxxxxxxx" />
+          <input id="phone-login" v-model="mobile" type="number" placeholder="xxxxxxxx" />
           <label for="pass-login">Password</label>
-          <input id="pass-login" type="password" placeholder="Password" />
+          <input id="pass-login" v-model="password" type="password" placeholder="Password" />
           <a href="#">Forgot your password?</a>
-          <button class="color-white">Sign In</button>
+          <button class="color-white" type="submit">Sign In</button>
         </form>
       </div>
       <div class="overlay-container">
@@ -63,14 +65,101 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+/* import store from '../store'; */
+
 export default {
   name: "UserAuth",
   components: {},
   data() {
     return {
       rightPanelActive: false,
+      mobile: "",
+      password: "",
+      regmobile: "",
+      regpassword: "",
+      regconfirmPassword: "",
+      regnickname: "",
     };
   },
+  methods: {
+    ...mapActions(['register', 'login']),
+    async loginComp() {
+      
+      if (!this.mobile) return;
+      if (!this.password) return;
+
+      let response = await this.login({
+            username: this.mobile,
+            password: this.password,
+          });
+          console.log(response);
+        if (response.status == 200) {
+          //store jwt token here in store.
+          console.log("Token:" + response.access_token);
+          this.$router.push(`/`);
+        }else if(response.status == 401 ) {
+          console.error("Unauthorized")
+        } else {
+          console.error("Error authenticating:" + response)
+        }
+        
+    },
+    async registerComp() {
+      try {
+        
+        if (!this.regmobile) return;
+        if (!this.regpassword) return;
+        if (!this.regconfirmPassword) return;
+        if(!this.regnickname) return;
+
+        if(this.regpassword != this.regconfirmPassword) {
+          return;
+        }
+
+        const response = await this.register(
+          {
+            username: this.regmobile,
+            password: this.regpassword,
+            nickname: this.regnickname,
+          });
+
+        console.log(response)
+        //let jsonResponse = await response.json();
+        if (response.status == 200) {
+          //store jwt token here in store.
+          //console.log("Token:" + jsonResponse.access_token);
+          this.$router.push(`/`);
+        } else {
+          console.error("Error registering in comp")
+        }
+        
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    reset() {
+      this.mobile = "";
+      this.password = "";
+      
+    },
+  },
+  /*  async beforeRouteEnter(to, from, next) {
+    try {
+      if(to.path === '/login'){
+            console.log('target login page:'+store.getters.isLoggedIn);
+            if(store.getters.isLoggedIn){
+                console.log('logged in already');
+                this.$router.push(`/`);
+                return
+            }   
+        }
+        next()
+    } catch (err) {
+      console.error(err);
+      // todo: put up 500 page error
+    }
+  }, */
 };
 </script>
 <style lang="scss">

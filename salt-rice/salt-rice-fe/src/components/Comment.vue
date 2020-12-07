@@ -186,6 +186,9 @@
 </template>
 
 <script>
+import {protectedFetch} from '../mixins/appUtils';
+
+
 export default {
   name: "Comment",
   props: {
@@ -217,11 +220,11 @@ export default {
   methods: {
     async upVote() {
       this.comment.upVote++;
-      await fetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/upvote`);
+      await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/upvote`);
     },
     async downVote() {
       this.comment.downVote++;
-      await fetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/downvote`);
+      await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/downvote`);
     },
     reply() {
       this.$emit("reply", this.formatReply(this.replyComment));
@@ -236,15 +239,16 @@ export default {
       this.replyComment = `@${this.comment.authorNickname} `;
     },
     async deleteComment() {
-      await fetch(
+      await protectedFetch(
         `${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}`,
-        { method: "DELETE" }
+        { method: "DELETE",
+         }
       );
 
       this.$emit("delete", this.comment);
     },
     async flag() {
-      await fetch(
+      await protectedFetch(
         `${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/flag`
       );
     },

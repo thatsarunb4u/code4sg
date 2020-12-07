@@ -1,9 +1,14 @@
 import express from 'express';
 import 'dotenv/config';
 import routes from './route';
-import {testConnection, getTestRecords} from './repo/db-client'
+import {testConnection, getTestRecords} from './repo/db-client';
+import {authenticate, registerUser} from './service/auth-service';
+import {getUserInfoByUsername} from './service/user-service';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import {validateToken} from './middleware/auth';
+import jwt from 'jsonwebtoken';
+import {secret} from './config/app-config';
 
 
 const app = express();
@@ -14,6 +19,7 @@ app.use(bodyParser.raw());
 app.use(bodyParser.json())
 app.use(cors());
 
+app.use(validateToken);
 app.use('/post', routes.posts);
 app.use('/user', routes.users);
 app.use('/tag', routes.tags);
@@ -63,3 +69,56 @@ app.get('/search/:indexName', (req,res) => {
     
 });
 
+app.post('/login', async (req,res) => {
+    
+    console.log(req.body);
+
+    let userRecord = await authenticate(req.body);
+
+    if(userRecord && Object.keys(userRecord).length > 0) {
+        //set jwt token here
+        var token = jwt.sign({ username: userRecord.username }, secret, {
+            expiresIn: 1800 // 30 minutes
+          });
+        res.status(200).send({access_token: token, principal: userRecord});
+    }else {
+        res.status(401).send({
+            "error": "Access denied"
+        })
+    }
+    
+});
+
+app.post('/register', async (req,res) => {
+    
+    console.log(req.body);
+
+    let userRecord = await getUserInfoByUsername(req.body.username)
+    
+
+    if(userRecord && Object.keys(userRecord).length > 0) {
+        
+        res.status(409).send({
+            "error": "User already exists"
+        })
+        
+        
+    }else {
+        let result = await registerUser(req.body);
+        console.log(result)
+        if (result && Object.keys(result).length > 0) {
+            //set jwt token here
+            var token = jwt.sign({ username: result.username }, secret, {
+                expiresIn: 1800 // 30 minutes
+            });
+            res.status(200).send({access_token: token, principal: result});
+        }else {
+            res.status(500).send({
+                message: "Internal error occured trying to register."
+            });
+        }
+        
+        
+    }
+    
+});

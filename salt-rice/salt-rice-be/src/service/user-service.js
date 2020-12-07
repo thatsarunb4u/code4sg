@@ -15,9 +15,9 @@ let registerUser = async (newUserJSON) => {
     registerUserInDB(newUserJSON)
 }
 
-let getUserInfoByNRIC = async (NRIC) => {
+let getUserInfoByUsername = async (username) => {
     
-    let UUID = CryptoJS.SHA256(NRIC).toString()
+    let UUID = CryptoJS.SHA256(username).toString()
 
     let userInfo = await getUserInfoFromDB(UUID)
 
@@ -43,5 +43,5 @@ let flagUser = async (ID) => {
     return await flagUserInDB(ID)
 }
 export {
-    registerUser, getUserInfoByNRIC, getUserInfoByID, getUserInfoByUUID, flagUser
+    registerUser, getUserInfoByUsername, getUserInfoByID, getUserInfoByUUID, flagUser
 }

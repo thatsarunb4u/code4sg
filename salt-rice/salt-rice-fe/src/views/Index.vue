@@ -73,6 +73,8 @@
 <script>
 import Banner from "../components/Banner.vue";
 import Cards from "../components/Cards.vue";
+import {protectedFetch} from '../mixins/appUtils';
+/* import store from '../store'; */
 
 export default {
   name: "Index",
@@ -104,7 +106,7 @@ export default {
         this.loading = true;
         this.currentSort = method;
         const response = await (
-          await fetch(`${process.env.VUE_APP_BASE_API}/post?sort=${method}`)
+          await protectedFetch(`${process.env.VUE_APP_BASE_API}/post?sort=${method}`)
         ).json();
 
         setTimeout(async () => {
@@ -130,7 +132,7 @@ export default {
       try {
         this.loading = true;
         const response = await (
-          await fetch(
+          await protectedFetch(
             `${process.env.VUE_APP_BASE_API}/${
               query ? `post/bytagortitle/${query}` : "post"
             }`
@@ -150,8 +152,9 @@ export default {
   },
   async beforeRouteEnter(to, from, next) {
     try {
+      /* console.log(defaultOpts); */
       const response = await (
-        await fetch(`${process.env.VUE_APP_BASE_API}/post`)
+        await protectedFetch(`${process.env.VUE_APP_BASE_API}/post`)
       ).json();
 
       next((vm) => {

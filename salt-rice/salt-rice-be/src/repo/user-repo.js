@@ -1,20 +1,6 @@
 import {dbConnPool} from './db-client'
 
-let registerUserInDB = async (newUserJSON) => {
-    let conn;
-    try {
-  
-      console.log(newUserJSON)
-      conn = await dbConnPool.getConnection();
-      const result = await conn.query("INSERT INTO user (UUID, nickname, age ) VALUES ('"+newUserJSON.UUID+"','"+ newUserJSON.nickname+"','"+newUserJSON.age+"')" );
-      return result
-  
-    } catch (err) {
-      throw err;
-    } finally {
-      if (conn) conn.release(); //release to pool
-    }
-}
+
 
 let getUserInfoFromDB = async (UUID) => {
     let conn;
@@ -71,5 +57,5 @@ let flagUserInDB = async (ID) => {
 }
 
 export {
-    registerUserInDB, getUserInfoFromDB,getUserInfoByIdFromDB,flagUserInDB
+    getUserInfoFromDB,getUserInfoByIdFromDB,flagUserInDB
 }

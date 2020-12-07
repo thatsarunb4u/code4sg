@@ -1,65 +1,33 @@
 <template>
   <div>
     <h1>Login</h1>
-    <form @submit="submit">
-      <label for="title">Title</label>
+    <form @submit.prevent="login">
+      <label for="mobile">Mobile</label>
       <input
-          id="title"
-          v-model="title"
+          id="mobile"
+          v-model="mobile"
           autocomplete="off"
           name="title"
-          placeholder="Enter Post's title.."
+          placeholder="Enter your mobile number.."
           required
+          maxlength="8"
           type="text"
+          
       />
-      <label for="message">Message</label>
-      <textarea
-          id="message"
-          v-model="message"
-          autocomplete="off"
-          cols="30"
-          placeholder="Enter your message here.."
-          required
-          rows="10"
-          style="resize: vertical;"
-      ></textarea>
-      <label for="category">Category</label>
-      <select id="category" v-model="category" name="category">
-        <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">{{ category.categoryName }}</option>
-      </select>
-      <label for="tags">Tags</label>
+      <label for="password">Password</label>
       <input
-          id="tags"
-          ref="tagInput"
+          id="password"
+          v-model="password"
           autocomplete="off"
-          name="tags"
-          placeholder="Enter tags followed by space..."
-          type="text"
-          @input="(e) => {addTag(e.target.value, e); recommendTag(e.target.value);}"
+          name="title"
+          placeholder="Enter your password.."
+          required
+          type="password"
       />
-      <div v-show="tagSuggestions.length" class="tag-suggestion">
-        <ul>
-          <li
-              v-for="suggestion in tagSuggestions"
-              :key="suggestion.tagID"
-              @click="addTag(`${suggestion.tagName},`)"
-          >
-            {{ suggestion.tagName }}
-          </li>
-        </ul>
-      </div>
-      <button v-for="tag in tags" :key="tag" class="tag-button" @click="e => e.preventDefault()">
-        #{{ tag }}
-        <span @click="removeTag(tag)">x</span>
-      </button>
-      <label style="display: block; margin-top: 5px;">
-        Post anonymously
-        <input v-model="isAnonymous" type="checkbox"/>
-      </label>
+      
       <div class="button-group">
-        <router-link class="cancel-button" style="float: left;" tag="button" to="/" type="button">Cancel</router-link>
-        <button class="draft-button" type="button" @click="draft">Save as draft</button>
-        <button class="submit-button" type="submit">Post</button>
+        <button class="reset-button" type="button" @click="reset">Reset</button>
+        <button class="submit-button" type="submit">Login</button>
       </div>
     </form>
   </div>
@@ -70,79 +38,45 @@ export default {
   name: "Login",
   data() {
     return {
-      error: false,
-      title: "",
-      message: "",
-      category: 1,
-      timeoutTag: null,
-      tagSuggestions: [],
-      tags: [],
-      isAnonymous: false
+      mobile: "",
+      password: "",
     };
   },
   methods: {
-    async submit(e) {
+    async login() {
       try {
-        e.preventDefault();
-        if (!e.isTrusted) return;
-        if (!this.title) return;
-        if (!this.message) return;
-        if (!this.category) return;
+        
+        if (!this.mobile) return;
+        if (!this.password) return;
 
-        this.addTag(this.$refs.tagInput.value);
-        const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/post`, {
+        const response = await fetch(`${process.env.VUE_APP_BASE_API}/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json"},
           body: JSON.stringify({
-            title: this.title,
-            body: this.message,
-            categoryID: Number(this.category), // category will be dynamic once I get all categories from server
-            authorID: 1, // authentication have not been implemented yet, just putting 1 for now
-            isAnonymous: this.isAnonymous,
-            tags: this.tags.map((tagName) => ({ tagName }))
+            username: this.mobile,
+            password: this.password,
           })
-        })).json();
+        });
 
-        // put 500 page error when true
-        if (response.errno) this.error = true;
-        else await this.$router.push(`/post/${response.insertId}`);
+        if (response.status == 200) {
+          //store jwt token here in store.
+          console.log("Token:" + response.body.access_token);
+          this.$router.push(`/`);
+        }else if(response.status == 401 ) {
+          console.error("Unauthorized")
+        } else {
+          console.error("Error authenticating:" + response.body)
+        }
+        
       } catch (err) {
         console.error(err);
       }
     },
-    draft() {
-      // todo: send draft to server... Or save to localstorage?
+    reset() {
+      this.mobile = "";
+      this.password = "";
+      
     },
-    addTag(tag) {
-      const value = tag.split(/,|\s/)[0];
-
-      if (!(tag[tag.length - 1] === "," || tag[tag.length - 1] === " ")) return;
-      if (!value) return;
-
-      this.$refs.tagInput.value = "";
-      this.recommendTag("");
-      this.tags = [...new Set([...this.tags, value])];
-    },
-    removeTag(tag) {
-      this.tags.splice(this.tags.findIndex((e) => e === tag), 1);
-    },
-    recommendTag(tag) {
-      const value = tag.split(/,|\s/)[0];
-      if (!tag || !value) return this.tagSuggestions = [];
-
-      clearTimeout(this.timeoutTag);
-      this.timeoutTag = setTimeout(async () => {
-        try {
-          const response = await (await fetch(`${process.env.VUE_APP_BASE_API}/tag/byname/${value}`)).json();
-
-          // put 500 page error when true
-          if (response.errno) this.error = true;
-          this.tagSuggestions = Object.freeze(response);
-        } catch (err) {
-          console.error(err);
-        }
-      }, 500);
-    }
   },
   computed: {
     categories() {

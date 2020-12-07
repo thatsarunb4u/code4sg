@@ -3,7 +3,8 @@
     <router-link to="/" tag="a">
       <img src="/images/saltrice.svg" alt="SaltRice logo" class="logo" />
     </router-link>
-    <nav>
+    
+    <nav v-if="isLoggedIn">
       <div class="icon-login">
         <a
           @click="showEditProfile = !showEditProfile"
@@ -54,7 +55,7 @@
                 alt="toogle user-icon"
                 class="usericon-menu"
                 id="user-icon-desktop"
-              /><span class="usericon-label">Username</span></span
+              /><span class="usericon-label">{{username}}</span></span
             ></a
           >
         </li>
@@ -64,6 +65,7 @@
       v-bind:class="showEditProfile ? 'show' : ''"
       class="edit-profile hide"
       id="editprofile-screen"
+      v-if="isLoggedIn"
     >
       <div class="head">
         <img
@@ -85,100 +87,56 @@
       <div class="border"></div>
       <div class="body">
         <div class="nickname">
-          <p>Nick Name</p>
-          <a href="#"
+          <p>Guide</p>
+          <!-- <a href="#"
             ><img
               src="@/assets/images/edit.png"
               alt="toogle icon-pen"
               class="icon-pen"
               id="icon-pen-nickname"
-          /></a>
+          /></a> -->
         </div>
-        <div class="inline-flex">
-          <span>
-            <svg
-              class="star"
-              xmlns="http://www.w3.org/2000/svg"
-              width="15.77"
-              height="15"
-              viewBox="0 0 31.242 29.713"
-            >
-              <path
-                d="M15.621,1.318,20.448,11.1l10.794,1.569L23.431,20.28l1.844,10.75-9.654-5.075L5.967,31.031,7.811,20.28,0,12.668,10.794,11.1Z"
-                transform="translate(0 -1.318)"
-              />
-            </svg>
-            <svg
-              class="star"
-              xmlns="http://www.w3.org/2000/svg"
-              width="15.77"
-              height="15"
-              viewBox="0 0 31.242 29.713"
-            >
-              <path
-                d="M15.621,1.318,20.448,11.1l10.794,1.569L23.431,20.28l1.844,10.75-9.654-5.075L5.967,31.031,7.811,20.28,0,12.668,10.794,11.1Z"
-                transform="translate(0 -1.318)"
-              />
-            </svg>
-            <svg
-              class="star"
-              xmlns="http://www.w3.org/2000/svg"
-              width="15.77"
-              height="15"
-              viewBox="0 0 31.242 29.713"
-            >
-              <path
-                d="M15.621,1.318,20.448,11.1l10.794,1.569L23.431,20.28l1.844,10.75-9.654-5.075L5.967,31.031,7.811,20.28,0,12.668,10.794,11.1Z"
-                transform="translate(0 -1.318)"
-              />
-            </svg>
-            <svg
-              class="star"
-              xmlns="http://www.w3.org/2000/svg"
-              width="15.77"
-              height="15"
-              viewBox="0 0 31.242 29.713"
-            >
-              <path
-                d="M15.621,1.318,20.448,11.1l10.794,1.569L23.431,20.28l1.844,10.75-9.654-5.075L5.967,31.031,7.811,20.28,0,12.668,10.794,11.1Z"
-                transform="translate(0 -1.318)"
-              />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="15.77"
-              height="15"
-              viewBox="0 0 31.242 29.713"
-            >
-              <path
-                d="M15.621,1.318,20.448,11.1l10.794,1.569L23.431,20.28l1.844,10.75-9.654-5.075L5.967,31.031,7.811,20.28,0,12.668,10.794,11.1Z"
-                transform="translate(0 -1.318)"
-                fill="#ffc529"
-              />
-            </svg>
-          </span>
-          <span id="rating_value">4.98</span>
-        </div>
+        
         <div class="margin-top">
           <a href="" class="actionButtonClear"
             ><span>25 </span><span>Posts</span></a
           >
         </div>
         <div class="margin-top"><span>25 </span><span>Comments</span></div>
+        <div class="margin-top logout" @click="logoutComp"><span>logout</span></div>
       </div>
     </div>
   </header>
 </template>
 
 <script>
+import {mapActions, mapGetters, mapState} from 'vuex';
+
 export default {
   name: "Header",
   data() {
     return {
       showMenu: false,
       showEditProfile: false,
+      /* username: '', */
+      /* username: store.getters.getUsername, */
     };
   },
+  methods: {
+    ...mapActions(['logout']),
+    async logoutComp(){
+      await this.logout()
+      await this.$router.push('/login');
+    }
+
+  },
+  computed: {
+    ...mapState({
+      /* isLoggedIn : 'isLoggedIn', */
+      username: state => state.auth.username,
+    }),
+    ...mapGetters(['isLoggedIn']),
+  }
 };
 </script>
 <style lang="scss">
@@ -205,6 +163,11 @@ header {
 
   .usericon-label {
     padding: 0em 0 0 0.5em;
+  }
+
+  .logout {
+    cursor: pointer;
+    font-weight: bold;
   }
 
   .inline-flex {

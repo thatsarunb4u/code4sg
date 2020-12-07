@@ -198,14 +198,16 @@
 <script>
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import {protectedFetch} from '../mixins/appUtils';
+
 dayjs.extend(relativeTime)
 
 async function getPostData(postID) {
   const post = await (
-    await fetch(`${process.env.VUE_APP_BASE_API}/post/bypostid/${postID}`)
+    await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/bypostid/${postID}`)
   ).json();
   const author = await (
-    await fetch(`${process.env.VUE_APP_BASE_API}/user/byID/${post.authorID}`)
+    await protectedFetch(`${process.env.VUE_APP_BASE_API}/user/byID/${post.authorID}`)
   ).json();
 
   // put 500 page error when true
@@ -250,7 +252,7 @@ export default {
     async upVote() {
       try {
         this.post.upVote++;
-        await fetch(
+        await protectedFetch(
           `${process.env.VUE_APP_BASE_API}/post/${this.post.postID}/upvote`
         );
         const { post, author } = await getPostData(this.$route.params.id);
@@ -264,7 +266,7 @@ export default {
     async downVote() {
       try {
         this.post.downVote++;
-        await fetch(
+        await protectedFetch(
           `${process.env.VUE_APP_BASE_API}/post/${this.post.postID}/downvote`
         );
         const { post, author } = await getPostData(this.$route.params.id);
@@ -292,9 +294,8 @@ export default {
         updatedAt: new Date(),
       });
 
-      await fetch(`${process.env.VUE_APP_BASE_API}/post/comment`, {
+      await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/comment`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           body: this.comment,
           postID: this.post.postID,
@@ -320,13 +321,13 @@ export default {
     async deletePost() {
       // todo: Modal that verifies the user intention
       // todo: user authorization token
-      await fetch(`${process.env.VUE_APP_BASE_API}/post/${this.post.postID}`, {
+      await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/${this.post.postID}`, {
         method: "DELETE",
       });
       await this.$router.push("/");
     },
     async flag() {
-      await fetch(
+      await protectedFetch(
         `${process.env.VUE_APP_BASE_API}/post/${this.post.postID}/flag`
       );
     },
