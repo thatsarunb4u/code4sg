@@ -1,22 +1,23 @@
 <template>
   <section id="authSection">
+    <div :class="`alert alert-${notification.type}`" v-show="notification.show">{{ notification.message }}</div>
     <div
-      v-bind:class="rightPanelActive ? 'right-panel-active' : ''"
-      class="authSectionContainer"
-      id="authSectionContainer"
+        v-bind:class="rightPanelActive ? 'right-panel-active' : ''"
+        class="authSectionContainer"
+        id="authSectionContainer"
     >
       <div class="form-container sign-up-container">
         <form @submit.prevent="registerComp">
           <h1>Create Account</h1>
           <span>Use your mobile for registration</span>
           <label for="name-reg">Name</label>
-          <input type="text" v-model="regnickname" id="name-reg" placeholder="Name" />
+          <input type="text" v-model="regnickname" id="name-reg" placeholder="Name"/>
           <label for="phone-reg">Mobile-Number</label>
-          <input id="phone-reg" v-model="regmobile" type="number" placeholder="xxxxxxxx" />
+          <input id="phone-reg" v-model="regmobile" type="number" placeholder="xxxxxxxx"/>
           <label for="pass-reg">Password</label>
-          <input id="pass-reg" v-model="regpassword" type="password" placeholder="Password" />
+          <input id="pass-reg" v-model="regpassword" type="password" placeholder="Password"/>
           <label for="pass-reg">Confirm Password</label>
-          <input id="pass-reg" v-model="regconfirmPassword" type="password" placeholder="Confirm Password" />
+          <input id="pass-reg" v-model="regconfirmPassword" type="password" placeholder="Confirm Password"/>
           <button class="color-white margin-top" type="submit">Sign Up</button>
         </form>
       </div>
@@ -25,9 +26,9 @@
           <h1>Sign in</h1>
           <span>or use your account</span>
           <label for="phone-login">Phone-Number</label>
-          <input id="phone-login" v-model="mobile" type="number" placeholder="xxxxxxxx" />
+          <input id="phone-login" v-model="mobile" type="number" placeholder="xxxxxxxx"/>
           <label for="pass-login">Password</label>
-          <input id="pass-login" v-model="password" type="password" placeholder="Password" />
+          <input id="pass-login" v-model="password" type="password" placeholder="Password"/>
           <a href="#">Forgot your password?</a>
           <button class="color-white" type="submit">Sign In</button>
         </form>
@@ -40,9 +41,9 @@
               To keep connected with us please login with your personal info
             </p>
             <button
-              class="ghost"
-              id="signIn"
-              @click="rightPanelActive = !rightPanelActive"
+                class="ghost"
+                id="signIn"
+                @click="rightPanelActive = !rightPanelActive"
             >
               Sign In
             </button>
@@ -51,9 +52,9 @@
             <h1>Hello, Friend!</h1>
             <p>Enter your personal details and start journey with us</p>
             <button
-              class="ghost"
-              id="signUp"
-              @click="rightPanelActive = !rightPanelActive"
+                class="ghost"
+                id="signUp"
+                @click="rightPanelActive = !rightPanelActive"
             >
               Sign Up
             </button>
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 /* import store from '../store'; */
 
 export default {
@@ -73,6 +74,11 @@ export default {
   components: {},
   data() {
     return {
+      notification: {
+        show: false,
+        type: "success",
+        message: ""
+      },
       rightPanelActive: false,
       mobile: "",
       password: "",
@@ -83,57 +89,55 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['register', 'login']),
+    ...mapActions(["register", "login"]),
     async loginComp() {
-      
-      if (!this.mobile) return;
-      if (!this.password) return;
+      if (!this.mobile || !this.password) return;
 
-      let response = await this.login({
-            username: this.mobile,
-            password: this.password,
-          });
-          console.log(response);
-        if (response.status == 200) {
-          //store jwt token here in store.
-          console.log("Token:" + response.access_token);
-          this.$router.push(`/`);
-        }else if(response.status == 401 ) {
-          console.error("Unauthorized")
-        } else {
-          console.error("Error authenticating:" + response)
-        }
-        
+      let response = await this.login({ username: this.mobile, password: this.password });
+
+      if (response.status !== 200) {
+        this.notification.message = "Failed to login, invalid your email or password";
+        this.notification.show = true;
+        this.notification.type = "error";
+      }
+
+      /**
+       * Set cookie in browser, expiry in 2 weeks
+       * todo: remove this when there is "Set-Cookie" header from response
+       * todo:important update domain name when in production
+       * todo:important use secure attr in cookie when in production
+       */
+      document.cookie = `token=${response.access_token};path=/;max-age=${1.21e+6};samesite=strict;`;
+      this.$router.push(`/`);
     },
     async registerComp() {
       try {
-        
+
         if (!this.regmobile) return;
         if (!this.regpassword) return;
         if (!this.regconfirmPassword) return;
-        if(!this.regnickname) return;
+        if (!this.regnickname) return;
 
-        if(this.regpassword != this.regconfirmPassword) {
+        if (this.regpassword != this.regconfirmPassword) {
           return;
         }
 
-        const response = await this.register(
-          {
-            username: this.regmobile,
-            password: this.regpassword,
-            nickname: this.regnickname,
-          });
+        const response = await this.register({
+          username: this.regmobile,
+          password: this.regpassword,
+          nickname: this.regnickname,
+        });
 
-        console.log(response)
+        console.log(response);
         //let jsonResponse = await response.json();
         if (response.status == 200) {
           //store jwt token here in store.
           //console.log("Token:" + jsonResponse.access_token);
           this.$router.push(`/`);
         } else {
-          console.error("Error registering in comp")
+          console.error("Error registering in comp");
         }
-        
+
       } catch (err) {
         console.error(err);
       }
@@ -141,7 +145,7 @@ export default {
     reset() {
       this.mobile = "";
       this.password = "";
-      
+
     },
   },
   /*  async beforeRouteEnter(to, from, next) {
@@ -152,7 +156,7 @@ export default {
                 console.log('logged in already');
                 this.$router.push(`/`);
                 return
-            }   
+            }
         }
         next()
     } catch (err) {
@@ -166,6 +170,41 @@ export default {
 * {
   box-sizing: border-box;
 }
+
+.alert {
+  margin: 10px 0px;
+  padding:12px;
+  border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: .9rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.alert-info {
+  color: #00529B;
+  background-color: #BDE5F8;
+  border: 1px solid darken(#BDE5F8, 15%);
+}
+
+.alert-warn {
+  color: #9F6000;
+  background-color: #FEEFB3;
+  border: 1px solid darken(#FEEFB3, 15%);
+}
+
+.alert-error {
+  color: #D8000C;
+  background-color: #FFBABA;
+  border: 1px solid darken(#FFBABA, 15%);
+}
+
+.alert-success {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  border: 1px solid darken(#DFF2BF, 15%);
+}
+
 section#authSection {
   padding: side-space(mobile-mini) side-space(mobile);
   display: flex;
@@ -199,6 +238,7 @@ section#authSection {
     display: block;
     padding-left: 0;
     margin-top: 1em;
+
     li.avatar-img {
       display: inline-block;
       margin: 1em 1em 1em 0;
@@ -221,6 +261,7 @@ section#authSection {
     &:active {
       transform: scale(0.95);
     }
+
     &:focus {
       outline: none;
     }
