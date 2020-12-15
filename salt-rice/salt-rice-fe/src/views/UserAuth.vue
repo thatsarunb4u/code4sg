@@ -96,7 +96,7 @@ export default {
       let response = await this.login({ username: this.mobile, password: this.password });
 
       if (response.status !== 200) {
-        this.notification.message = "Failed to login, invalid your email or password";
+        this.notification.message = "Failed to login, invalid phone number or password";
         this.notification.show = true;
         this.notification.type = "error";
       }
@@ -108,19 +108,13 @@ export default {
        * todo:important use secure attr in cookie when in production
        */
       document.cookie = `token=${response.access_token};path=/;max-age=${1.21e+6};samesite=strict;`;
-      this.$router.push(`/`);
+      await this.$router.push(`/`);
     },
     async registerComp() {
       try {
+        if (!this.regmobile || this.regpassword || this.regconfirmPassword || this.regnickname) return;
+        if (this.regpassword !== this.regconfirmPassword) return;
 
-        if (!this.regmobile) return;
-        if (!this.regpassword) return;
-        if (!this.regconfirmPassword) return;
-        if (!this.regnickname) return;
-
-        if (this.regpassword != this.regconfirmPassword) {
-          return;
-        }
 
         const response = await this.register({
           username: this.regmobile,
@@ -128,16 +122,13 @@ export default {
           nickname: this.regnickname,
         });
 
-        console.log(response);
-        //let jsonResponse = await response.json();
-        if (response.status == 200) {
-          //store jwt token here in store.
-          //console.log("Token:" + jsonResponse.access_token);
-          this.$router.push(`/`);
-        } else {
-          console.error("Error registering in comp");
+        if (response.status !== 200) {
+          this.notification.message = "Failed to register, already registered?";
+          this.notification.show = true;
+          this.notification.type = "error";
         }
 
+        await this.$router.push(`/`);
       } catch (err) {
         console.error(err);
       }
