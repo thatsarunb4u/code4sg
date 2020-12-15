@@ -10,18 +10,20 @@ const router = Router();
 
 router.get('/', async (req,res) => {
     try {
-        switch(req.query.sort?.toLowerCase()) {
+        const { page, limit, sort } = req.query;
+        console.log(page, limit, sort);
+        switch(sort?.toLowerCase()) {
             case "trending":
-                res.send(await getTrendingPosts()).end();
+                res.send(await getTrendingPosts(page, limit)).end();
                 break;
             case "advise":
-                res.send(await getNeedsAdvicePosts()).end();
+                res.send(await getNeedsAdvicePosts(page, limit)).end();
                 break;
             case "recent":
-                res.send(await getMostRecentPosts()).end();
+                res.send(await getMostRecentPosts(page, limit)).end();
                 break;
             default:
-                res.send(await getPosts()).end();
+                res.send(await getPosts(page, limit)).end();
                 break;
         }
     } catch (err) {
