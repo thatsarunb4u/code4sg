@@ -96,7 +96,7 @@ app.post('/login', async (req,res) => {
 app.post('/logout', async (req,res) => {
     
     console.log(req.body);
-    activeUsers.delete(request.principal.id);
+    activeUsers.delete(req.principal.id);
 
     res.status(200).send({access_token: null, principal: null});
     

@@ -130,11 +130,23 @@ let getByPostID = async (postID) => {
     }
   }
 
-  let getPosts = async () => {
+  let getPosts = async (page = 0, limit = 20) => {
     let conn;
     try {
       conn = await dbConnPool.getConnection();
-      const rows = await conn.query("SELECT p.*, COUNT(c.postID) as commentCount, u.nickname from post p left outer join user u ON p.authorID = u.userID LEFT OUTER JOIN comment c ON c.postID = p.postID GROUP BY p.postID");
+      const rows = await conn.query(`
+      SELECT
+          p.*,
+          COUNT(c.postID) as commentCount,
+          u.nickname
+      from
+          post p
+          left outer join user u ON p.authorID = u.userID
+          LEFT OUTER JOIN comment c ON c.postID = p.postID
+      GROUP BY
+          p.postID
+      LIMIT ${limit} OFFSET ${limit * page}
+      `);
       return rows
     } catch (err) {
       throw err;
@@ -156,7 +168,7 @@ let getByPostID = async (postID) => {
     }
   }
 
-  let getTrendingPosts = async () => {
+  let getTrendingPosts = async (page = 0, limit = 20) => {
     let conn;
     try {
       conn = await dbConnPool.getConnection();
@@ -169,7 +181,8 @@ let getByPostID = async (postID) => {
           GROUP BY comment.postID
       ) comment ON post.postID = comment.postID
       LEFT OUTER JOIN user ON post.authorID = user.userID
-      ORDER BY (post.upVote - post.downVote) DESC, commentCount DESC;
+      ORDER BY (post.upVote - post.downVote) DESC, commentCount DESC
+      LIMIT ${limit} OFFSET ${limit * page};
       `);
     } catch (err) {
       throw err;
@@ -178,7 +191,7 @@ let getByPostID = async (postID) => {
     }
   };
 
-let getNeedsAdvicePosts = async () => {
+let getNeedsAdvicePosts = async (page = 0, limit = 20) => {
   let conn;
   try {
     console.log("needs advicep posts")
@@ -192,7 +205,8 @@ let getNeedsAdvicePosts = async () => {
           GROUP BY comment.postID
       ) comment ON post.postID = comment.postID
       LEFT OUTER JOIN user ON post.authorID = user.userID
-      WHERE commentCount IS NULL;
+      WHERE commentCount IS NULL
+      LIMIT ${limit} OFFSET ${limit * page};
     `);
   } catch (err) {
     throw err;
@@ -201,7 +215,7 @@ let getNeedsAdvicePosts = async () => {
   }
 };
 
-let getMostRecentPosts = async () => {
+let getMostRecentPosts = async (page = 0, limit = 20) => {
   let conn;
   try {
     conn = await dbConnPool.getConnection();
@@ -214,7 +228,8 @@ let getMostRecentPosts = async () => {
         GROUP BY comment.postID
     ) comment ON post.postID = comment.postID
     LEFT OUTER JOIN user ON post.authorID = user.userID
-    ORDER BY createdAt DESC;
+    ORDER BY createdAt DESC
+    LIMIT ${limit} OFFSET ${limit * page};
     `);
   } catch (err) {
     throw err;

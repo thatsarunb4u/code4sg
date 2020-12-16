@@ -39,7 +39,7 @@
             :class="{ active: currentSort === 'trending' }"
             @click="sort('trending')"
           >
-            <img src="http://localhost:8080/images/trending.svg" alt="" />
+            <img src="../assets/images/trending.svg" alt="" />
             <span>Trending</span>
           </div>
           <div
@@ -47,7 +47,7 @@
             @click="sort('advise')"
           >
             <img
-              src="http://localhost:8080/images/question-answer.svg"
+              src="../assets/images/question-answer.svg"
               alt=""
             />
             <span>Needs advise</span>
@@ -56,7 +56,7 @@
             :class="{ active: currentSort === 'recent' }"
             @click="sort('recent')"
           >
-            <img src="http://localhost:8080/images/new.svg" alt="" />
+            <img src="../assets/images/new.svg" alt="" />
             <span>Recent posts</span>
           </div>
         </div>
@@ -97,16 +97,24 @@ export default {
     changeCategory(event) {
       this.category = parseInt(event.target.value);
     },
-    loadMore() {
-      // todo: pagination
-      this.cards = Object.freeze([...this.cards, ...this.cards]);
+    async loadMore() {
+      ++this.page;
+      const response = await (
+          await protectedFetch(`${process.env.VUE_APP_BASE_API}/post?sort=${this.currentSort}&page=${this.page}`)
+      ).json();
+
+      setTimeout(async () => {
+        this.cards = Object.freeze([...this.cards, ...response]);
+        this.loading = false;
+        if (response.errno) this.error = true;
+      }, 500);
     },
     async sort(method) {
       try {
         this.loading = true;
         this.currentSort = method;
         const response = await (
-          await protectedFetch(`${process.env.VUE_APP_BASE_API}/post?sort=${method}`)
+          await protectedFetch(`${process.env.VUE_APP_BASE_API}/post?sort=${method}&page=${this.page}`)
         ).json();
 
         setTimeout(async () => {

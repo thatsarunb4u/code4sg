@@ -125,8 +125,10 @@ export default {
   methods: {
     ...mapActions(['logout']),
     async logoutComp(){
-      await this.logout()
-      await this.$router.push('/login');
+      let response = await this.logout()
+      if (response.status == 200) {
+        await this.$router.push('/login');
+      }
     }
 
   },
