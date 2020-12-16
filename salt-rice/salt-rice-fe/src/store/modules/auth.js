@@ -55,11 +55,28 @@ const actions = {
           console.error(err);
         }
       },
-      logout: ({commit}) => {
+      logout: async ({commit}) => {
         console.log("Logout triggered.");
 
-        commit('setToken', null);
-        commit('setUsername', null);
+
+        const response = await fetch(`${process.env.VUE_APP_BASE_API}/logout`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json"},
+        });
+        console.log(response);
+
+        let jsonResponse = await response.json();
+        if (response.status == 200) {
+          //store jwt token here in store.
+          commit('setToken', null);
+          commit('setUsername', null);
+          this.$router.push(`/`);
+        } else {
+          console.error("Error logging out:" + response)
+          jsonResponse.status = 500;
+        }
+
+        return jsonResponse
        
       },
       register: async ({commit}, formObj) => {

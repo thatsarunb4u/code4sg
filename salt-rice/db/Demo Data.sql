@@ -105,13 +105,16 @@ INSERT INTO `comment` (`commentID`, `body`, `postID`, `authorID`, `upVote`, `dow
 	(77, 'People come and go.. family too, so you might feel a little lonely which is why everytime when people like you or my regular customers visit me, i am very happy. \n\nBest thing- i guess less stress \n', 29, 1, 0, 0, 1, 0, 0, '2020-11-15 08:29:10', '2020-11-15 08:29:10'),
 	(78, 'for me, i cannot do some exercise, thats the hardest part. I cannot run as much and do many sports. \n\nBest thing is my senior citizen discount hehe \n', 29, 1, 0, 0, 1, 0, 0, '2020-11-15 08:29:27', '2020-11-15 08:29:27'),
 	(79, 'i.	Personally for me, I had been through this \'persistent\' mode where I tried really hard to impress and do a lot of things for the ladies with the hope that she will be touched by my sincerity. But I feel that this mentality is quite tiring for me and sometimes the ladies might think that you are desperate. I feel that somehow I let my emotions control my actions entirely which is not good. So subsequently, I change my mindset. Instead of finding someone just to date, I took a long term perspective of finding someone with the hope of settling down in the near future. With this, I approach my date with the thought of knowing them as a person and see if they are compatible with my character and values. So if you are going by this approach, I feel that its more acceptable since you are trying to know that person for who she is and not because of your own desire to date her. So with this approach, she might slowly opened up to you and thats when you can slowly do more? ( e.g. plan for movies, exercise etc..) and it gives you the benefit that you can judge for yourself if she the one that you really want to take the next stage. If you find that she is not even opening up to you, then you can just drop the idea and move on. So when I take this approach, it changes the concept of \'persistent\'. Its no longer a chase or a sprinting race but more like a marathon which is more sustainable.', 30, 1, 0, 0, 1, 0, 0, '2020-11-15 08:31:43', '2020-11-15 08:31:43'),
-	(80, 'i.	Actually listen. Just doing active listening and then discussing about what they mention will benefit you greatly. Networking in physical presence is much better than online version. Dont worry too much, just use my first tip and you will see that networking can be quite natural and interesting. If you "Wayang", then it is very obvious and just refrain from doing that.', 31, 1, 0, 0, 1, 0, 0, '2020-11-15 08:33:07', '2020-11-15 08:33:07');
+	(80, 'i.	Actually listen. Just doing active listening and then discussing about what they mention will benefit you greatly. Networking in physical presence is much better than online version. Dont worry too much, just use my first tip and you will see that networking can be quite natural and interesting. If you "Wayang", then it is very obvious and just refrain from doing that.', 31, 1, 0, 0, 1, 0, 0, '2020-11-15 08:33:07', '2020-11-15 08:33:07'),
+	(81, '@Arun gfg', 1, 1, 0, 0, 1, 0, 0, '2020-11-17 17:52:02', '2020-11-17 17:52:02'),
+	(82, 'aaa', 1, 1, 0, 0, 1, 0, 0, '2020-11-28 17:27:38', '2020-11-28 17:27:38'),
+	(83, '@Bigby Sumner  asdg', 1, 1, 0, 0, 1, 0, 0, '2020-11-28 18:17:26', '2020-11-28 18:17:26');
 /*!40000 ALTER TABLE `comment` ENABLE KEYS */;
 
--- Dumping data for table saltrice.post: ~12 rows (approximately)
+-- Dumping data for table saltrice.post: ~13 rows (approximately)
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
 INSERT INTO `post` (`postID`, `title`, `body`, `categoryID`, `authorID`, `upVote`, `downVote`, `isAnonymous`, `isFlagged`, `isActive`, `createdAt`, `updatedAt`) VALUES
-	(1, 'Reflections', 'What do you feel have been the biggest regret in your life?', 1, 1, 9, 0, 0, 0, 1, '2020-11-08 13:30:26', '2020-11-15 10:39:12'),
+	(1, 'Reflections', 'What do you feel have been the biggest regret in your life?', 1, 1, 10, 1, 0, 0, 1, '2020-11-08 13:30:26', '2020-11-28 18:18:15'),
 	(18, 'Reflections', 'Did you have a lost love? Or regrets on your lost relationships? How did you deal with them?', 1, 4, 10, 0, 0, 0, 1, '2020-11-09 06:39:49', '2020-11-15 13:18:40'),
 	(25, 'Reflections', 'What do you think the turning points have been in your life? What would you have done differently?', 1, 5, 0, 0, 0, 0, 1, '2020-11-15 08:03:26', '2020-11-15 13:19:10'),
 	(26, 'Family – Children', 'At which point or stage in your life or their child\'s life do they feel that they have done their job as a parent?', 2, 2, 0, 0, 0, 0, 1, '2020-11-15 08:13:02', '2020-11-15 13:18:54'),
@@ -119,7 +122,7 @@ INSERT INTO `post` (`postID`, `title`, `body`, `categoryID`, `authorID`, `upVote
 	(28, 'Growing old', 'How should a person prepare for old age?', 3, 6, 5, 0, 0, 0, 1, '2020-11-15 08:19:47', '2020-11-15 13:19:55'),
 	(29, 'Growing Old', 'What’s the hardest thing about growing older? The best thing?', 3, 8, 0, 0, 0, 0, 1, '2020-11-15 08:23:46', '2020-11-15 13:20:14'),
 	(30, 'Dating', 'For ladies, what do you think of guys who continue to go after you even though you are not interested. Do you warm up to the guy eventually?// Kind of curious about what is everyone\'s mindset when it comes to persistence/chasing in dating. Would love to hear your opinions here!', 6, 11, 0, 0, 0, 0, 1, '2020-11-15 08:31:29', '2020-11-15 13:19:18'),
-	(31, 'Professional Work/Occupation', 'How do you network? How do you network other than brown nosing others and throwing your shame away and connecting with everyone and anyone on LinkedIn that has jobs or work at a company or industry that you think you like? Its so fake.', 9, 1, 0, 0, 0, 0, 1, '2020-11-15 08:32:56', '2020-11-15 10:00:59'),
+	(31, 'Professional Work/Occupation', 'How do you network? How do you network other than brown nosing others and throwing your shame away and connecting with everyone and anyone on LinkedIn that has jobs or work at a company or industry that you think you like? Its so fake.', 9, 1, 1, 0, 0, 0, 1, '2020-11-15 08:32:56', '2020-12-06 11:28:09'),
 	(32, 'Breakfast Ideas?', 'What are your healthy breakfast recipes be like?', 7, 8, 0, 0, 0, 0, 1, '2020-11-15 11:10:58', '2020-11-15 13:19:28'),
 	(33, 'Lunch recipes?', 'Do you prefer rice or bread for lunch?', 7, 1, 0, 0, 0, 1, 1, '2020-11-15 12:55:05', '2020-11-15 13:30:00'),
 	(34, 'Dinner ideas?', 'Share some dinner meal plan?', 7, 1, 0, 0, 0, 0, 1, '2020-11-15 14:27:02', '2020-11-15 14:27:02');
@@ -153,7 +156,8 @@ INSERT INTO `posttag` (`postTagID`, `postID`, `tagID`, `isActive`, `createdAt`, 
 	(34, 34, 29, 1, '2020-11-15 14:27:02', '2020-11-15 14:27:02'),
 	(35, 34, 31, 1, '2020-11-15 14:27:02', '2020-11-15 14:27:02'),
 	(36, 34, 32, 1, '2020-11-15 14:27:02', '2020-11-15 14:27:02'),
-	(37, 34, 33, 1, '2020-11-15 14:27:02', '2020-11-15 14:27:02');
+	(37, 34, 33, 1, '2020-11-15 14:27:02', '2020-11-15 14:27:02'),
+	(38, 35, 34, 1, '2020-11-28 18:18:40', '2020-11-28 18:18:40');
 /*!40000 ALTER TABLE `posttag` ENABLE KEYS */;
 
 -- Dumping data for table saltrice.tag: ~26 rows (approximately)
@@ -187,22 +191,24 @@ INSERT INTO `tag` (`tagID`, `tagName`, `isActive`, `createdAt`, `updatedAt`) VAL
 	(30, 'healthyrecipes', 1, '2020-11-15 12:55:05', '2020-11-15 12:55:05'),
 	(31, 'dinner', 1, '2020-11-15 14:27:02', '2020-11-15 14:27:02'),
 	(32, 'healthy', 1, '2020-11-15 14:27:02', '2020-11-15 14:27:02'),
-	(33, 'mealplan', 1, '2020-11-15 14:27:02', '2020-11-15 14:27:02');
+	(33, 'mealplan', 1, '2020-11-15 14:27:02', '2020-11-15 14:27:02'),
+	(34, 'aasa', 1, '2020-11-28 18:18:40', '2020-11-28 18:18:40');
 /*!40000 ALTER TABLE `tag` ENABLE KEYS */;
 
--- Dumping data for table saltrice.user: ~8 rows (approximately)
+-- Dumping data for table saltrice.user: ~18 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` (`userID`, `UUID`, `nickname`, `score`, `rank`, `age`, `isActive`, `isBlacklisted`, `createdAt`, `updatedAt`) VALUES
-	(1, '45a3b14e2be2680c40f1ceed731a768661c95589e40b979d6a3d1b2d2025872b', 'Daniel', NULL, NULL, 30, 1, 1, '2020-10-31 19:00:38', '2020-11-15 13:15:53'),
-	(2, '6fde8bf6575294e5929a1ca4091c2a67429f89152b194ffd7ebe689e30ea4f8b', 'Arun', NULL, NULL, 30, 1, 1, '2020-11-01 17:19:18', '2020-11-15 13:15:58'),
-	(4, '111111', 'Felix', NULL, NULL, 30, 1, 0, '2020-11-15 13:16:14', '2020-11-15 13:16:20'),
-	(5, '22222', 'Zhennan', NULL, NULL, NULL, 1, 0, '2020-11-15 13:16:32', '2020-11-15 13:16:32'),
-	(6, '33333', 'Manoj', NULL, NULL, NULL, 1, 0, '2020-11-15 13:16:43', '2020-11-15 13:16:43'),
-	(7, '44444', 'Ian', NULL, NULL, NULL, 1, 0, '2020-11-15 13:17:02', '2020-11-15 13:17:02'),
-	(8, '55555', 'Rachess', NULL, NULL, NULL, 1, 0, '2020-11-15 13:17:12', '2020-11-15 13:17:12'),
-	(9, '66666', 'Selvam', NULL, NULL, NULL, 1, 0, '2020-11-15 13:17:34', '2020-11-15 13:17:34'),
-	(10, '77777', 'John', NULL, NULL, NULL, 1, 0, '2020-11-15 13:17:49', '2020-11-15 13:17:49'),
-	(11, '8888', 'Yunus', NULL, NULL, NULL, 1, 0, '2020-11-15 13:18:01', '2020-11-15 13:18:01');
+INSERT INTO `user` (`userID`, `UUID`, `password`, `nickname`, `score`, `rank`, `age`, `isActive`, `isBlacklisted`, `createdAt`, `updatedAt`) VALUES
+	(1, '45a3b14e2be2680c40f1ceed731a768661c95589e40b979d6a3d1b2d2025872b', '', 'Bigby Sumner', NULL, NULL, 30, 1, 1, '2020-10-31 19:00:38', '2020-11-22 11:49:59'),
+	(2, '6fde8bf6575294e5929a1ca4091c2a67429f89152b194ffd7ebe689e30ea4f8b', '', 'Timothy Shafer', NULL, NULL, 30, 1, 1, '2020-11-01 17:19:18', '2020-11-22 11:50:12'),
+	(4, '111111', '', 'Rary Slade', NULL, NULL, 30, 1, 0, '2020-11-15 13:16:14', '2020-11-22 11:50:21'),
+	(5, '22222', '', 'Kelly Snape', NULL, NULL, NULL, 1, 0, '2020-11-15 13:16:32', '2020-11-22 11:50:30'),
+	(6, '33333', '', 'Kelsey Szymanski', NULL, NULL, NULL, 1, 0, '2020-11-15 13:16:43', '2020-11-22 11:51:01'),
+	(7, '44444', '', 'Dimmity Sinclair', NULL, NULL, NULL, 1, 0, '2020-11-15 13:17:02', '2020-11-22 11:51:18'),
+	(8, '55555', '', 'Katy Sena', NULL, NULL, NULL, 1, 0, '2020-11-15 13:17:12', '2020-11-22 11:51:09'),
+	(9, '66666', '', 'Geoffrey Schade', NULL, NULL, NULL, 1, 0, '2020-11-15 13:17:34', '2020-11-22 11:51:27'),
+	(10, '77777', '', 'Amy Sinistra', NULL, NULL, NULL, 1, 0, '2020-11-15 13:17:49', '2020-11-22 11:51:32'),
+	(11, '8888', '', 'Penny Sto', NULL, NULL, NULL, 1, 0, '2020-11-15 13:18:01', '2020-11-22 11:51:38'),
+	(12, 'd17f25ecfbcc7857f7bebea469308be0b2580943e96d13a3ad98a13675c4bfc2', '4fc82b26aecb47d2868c4efbe3581732a3e7cbcc6c2efb32062c08170a05eeb8', '11111', NULL, NULL, NULL, 1, 0, '2020-12-07 12:15:03', '2020-12-07 12:15:03');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
