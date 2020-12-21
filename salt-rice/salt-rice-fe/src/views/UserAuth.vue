@@ -6,30 +6,119 @@
       id="authSectionContainer"
     >
       <div class="form-container sign-up-container">
-        <form @submit.prevent="registerComp">
-          <h1>Create Account</h1>
-          <span>Use your mobile for registration</span>
-          <label for="name-reg">Name</label>
-          <input type="text" v-model="regnickname" id="name-reg" placeholder="Name" />
-          <label for="phone-reg">Mobile-Number</label>
-          <input id="phone-reg" v-model="regmobile" type="number" placeholder="xxxxxxxx" />
-          <label for="pass-reg">Password</label>
-          <input id="pass-reg" v-model="regpassword" type="password" placeholder="Password" />
-          <label for="pass-reg">Confirm Password</label>
-          <input id="pass-reg" v-model="regconfirmPassword" type="password" placeholder="Confirm Password" />
-          <button class="color-white margin-top" type="submit">Sign Up</button>
+        <form
+          v-bind:class="
+            rightPanelSignUpActive ? 'right-panel-sign-up-active' : ''
+          "
+          @submit.prevent="registerComp"
+          class="sign-up-form authSectionContainer"
+        >
+          <div class="form first form-container">
+            <h1>Create Account</h1>
+            <span>Use your mobile for registration</span>
+            <label for="phone-reg">Mobile-Number</label>
+            <input
+              id="phone-reg"
+              v-model="regmobile"
+              type="number"
+              placeholder="xxxxxxxx"
+              required
+            />
+            <label for="pass-reg">Password</label>
+            <input
+              id="pass-reg"
+              v-model="regpassword"
+              type="password"
+              placeholder="Password"
+              required
+            />
+            <label for="pass-reg">Confirm Password</label>
+            <input
+              id="pass-reg"
+              v-model="regconfirmPassword"
+              type="password"
+              placeholder="Confirm Password"
+              required
+            />
+            <a
+              href="#"
+              class="font-yellow"
+              id="signIn"
+              @click="rightPanelSignUpActive = !rightPanelSignUpActive"
+            >
+              Next
+            </a>
+            <a
+              href="#"
+              class="ghost resp"
+              id="signIn"
+              @click="rightPanelActive = !rightPanelActive"
+            >
+              Sign In Instead
+            </a>
+          </div>
+          <div class="form second form-container">
+            <h1>Create Account</h1>
+            <span>Personal Particulars</span>
+            <label for="name-reg">Name</label>
+            <input
+              type="text"
+              v-model="regnickname"
+              id="name-reg"
+              placeholder="Name"
+              required
+            />
+            <label for="name-reg">Age</label>
+            <input
+              type="number"
+              id="age-reg"
+              placeholder="Example: 21"
+              required
+            />
+            <a
+              href="#"
+              class="font-yellow"
+              id="signIn"
+              @click="rightPanelSignUpActive = !rightPanelSignUpActive"
+            >
+              Back
+            </a>
+            <button class="color-white margin-top" type="submit">
+              Sign Up
+            </button>
+          </div>
         </form>
       </div>
       <div class="form-container sign-in-container">
-        <form @submit.prevent="loginComp">
-          <h1>Sign in</h1>
+        <form @submit.prevent="loginComp" class="form">
+          <h1>Sign In</h1>
           <span>or use your account</span>
           <label for="phone-login">Phone-Number</label>
-          <input id="phone-login" v-model="mobile" type="number" placeholder="xxxxxxxx" />
+          <input
+            id="phone-login"
+            v-model="mobile"
+            type="number"
+            placeholder="xxxxxxxx"
+            required
+          />
           <label for="pass-login">Password</label>
-          <input id="pass-login" v-model="password" type="password" placeholder="Password" />
+          <input
+            id="pass-login"
+            v-model="password"
+            type="password"
+            placeholder="Password"
+            required
+          />
           <a href="#">Forgot your password?</a>
           <button class="color-white" type="submit">Sign In</button>
+          <a
+            href="#"
+            class="ghost resp"
+            id="signUp"
+            @click="rightPanelActive = !rightPanelActive"
+          >
+            Sign Up
+          </a>
         </form>
       </div>
       <div class="overlay-container">
@@ -65,7 +154,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 /* import store from '../store'; */
 
 export default {
@@ -74,6 +163,7 @@ export default {
   data() {
     return {
       rightPanelActive: false,
+      rightPanelSignUpActive: false,
       mobile: "",
       password: "",
       regmobile: "",
@@ -83,57 +173,52 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['register', 'login']),
+    ...mapActions(["register", "login"]),
     async loginComp() {
-      
       if (!this.mobile) return;
       if (!this.password) return;
 
       let response = await this.login({
-            username: this.mobile,
-            password: this.password,
-          });
-          console.log(response);
-        if (response.status == 200) {
-          //store jwt token here in store.
-          console.log("Token:" + response.access_token);
-          this.$router.push(`/`);
-        }else if(response.status == 401 ) {
-          console.error("Unauthorized")
-        } else {
-          console.error("Error authenticating:" + response)
-        }
-        
+        username: this.mobile,
+        password: this.password,
+      });
+      console.log(response);
+      if (response.status == 200) {
+        //store jwt token here in store.
+        console.log("Token:" + response.access_token);
+        this.$router.push(`/`);
+      } else if (response.status == 401) {
+        console.error("Unauthorized");
+      } else {
+        console.error("Error authenticating:" + response);
+      }
     },
     async registerComp() {
       try {
-        
         if (!this.regmobile) return;
         if (!this.regpassword) return;
         if (!this.regconfirmPassword) return;
-        if(!this.regnickname) return;
+        if (!this.regnickname) return;
 
-        if(this.regpassword != this.regconfirmPassword) {
+        if (this.regpassword != this.regconfirmPassword) {
           return;
         }
 
-        const response = await this.register(
-          {
-            username: this.regmobile,
-            password: this.regpassword,
-            nickname: this.regnickname,
-          });
+        const response = await this.register({
+          username: this.regmobile,
+          password: this.regpassword,
+          nickname: this.regnickname,
+        });
 
-        console.log(response)
+        console.log(response);
         //let jsonResponse = await response.json();
         if (response.status == 200) {
           //store jwt token here in store.
           //console.log("Token:" + jsonResponse.access_token);
           this.$router.push(`/`);
         } else {
-          console.error("Error registering in comp")
+          console.error("Error registering in comp");
         }
-        
       } catch (err) {
         console.error(err);
       }
@@ -141,7 +226,6 @@ export default {
     reset() {
       this.mobile = "";
       this.password = "";
-      
     },
   },
   /*  async beforeRouteEnter(to, from, next) {
@@ -165,6 +249,11 @@ export default {
 <style lang="scss">
 * {
   box-sizing: border-box;
+}
+header .logo {
+  @include layout(pc) {
+    padding-bottom: 1em;
+  }
 }
 section#authSection {
   padding: side-space(mobile-mini) side-space(mobile);
@@ -231,8 +320,16 @@ section#authSection {
   }
 
   .ghost {
+    color: black;
     background: transparent;
     border-color: color(black);
+
+    &.resp {
+      display: block;
+      @include layout(tablet) {
+        display: none;
+      }
+    }
   }
 
   .authSectionContainer {
@@ -249,42 +346,64 @@ section#authSection {
       top: 0;
       height: 100%;
       transition: all 0.6s ease-in-out;
+    }
 
-      form {
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        padding: 0 50px;
-        height: 100%;
-        justify-content: center;
-        text-align: center;
+    .form {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 0 50px;
+      height: 100%;
+      justify-content: center;
+      text-align: center;
 
-        label {
-          text-align: left;
-        }
+      label {
+        text-align: left;
+      }
 
-        input {
-          border: 1px solid #ccc;
-          padding: 12px 20px;
-          margin: 8px 0;
-          width: 100%;
-        }
+      input {
+        border: 1px solid #ccc;
+        padding: 12px 20px;
+        margin: 8px 0;
+        width: 100%;
+      }
+    }
+
+    form.sign-up-form {
+      .first,
+      .second {
+        text-align: left;
+        width: 100%;
+      }
+
+      .first {
+        left: 0;
+      }
+
+      .second {
+        left: 100%;
       }
     }
 
     .sign-in-container {
       left: 0;
-      width: 50%;
+      @include layout(tablet) {
+        width: 50%;
+        top: 0;
+      }
     }
 
     .sign-up-container {
-      left: 0;
-      width: 50%;
       opacity: 0;
+      width: 100%;
       background-color: #333;
+      @include layout(tablet) {
+        width: 50%;
+      }
     }
 
     .overlay-container {
+      display: none;
       position: absolute;
       top: 0;
       left: 50%;
@@ -292,6 +411,10 @@ section#authSection {
       height: 100%;
       overflow: hidden;
       transition: transform 0.6s ease-in-out;
+
+      @include layout(tablet) {
+        display: block;
+      }
     }
 
     .overlay {
@@ -350,7 +473,6 @@ section#authSection {
     }
 
     a {
-      color: #333;
       font-size: 14px;
       text-decoration: none;
       margin: 15px 0;
@@ -358,25 +480,50 @@ section#authSection {
   }
 
   .right-panel-active {
-    .overlay-container {
-      transform: translateX(-100%);
-    }
-
     .sign-up-container {
-      transform: translateX(100%);
+      transform: translateX(0);
       opacity: 1;
     }
 
-    .overlay {
-      transform: translateX(50%);
+    .sign-in-container {
+      transform: translateX(-100%);
     }
 
-    .overlay-left {
-      transform: translateY(0);
+    @include layout(tablet) {
+      .overlay-container {
+        transform: translateX(-100%);
+      }
+
+      .sign-up-container {
+        transform: translateX(100%);
+        opacity: 1;
+      }
+
+      .sign-in-container {
+        transform: translateX(0);
+      }
+
+      .overlay {
+        transform: translateX(50%);
+      }
+
+      .overlay-left {
+        transform: translateY(0);
+      }
+
+      .overlay-right {
+        transform: translateY(20%);
+      }
+    }
+  }
+  .right-panel-sign-up-active {
+    .first {
+      transform: translateX(-100%);
     }
 
-    .overlay-right {
-      transform: translateY(20%);
+    .second {
+      transform: translateX(-100%);
+      opacity: 1;
     }
   }
 }
