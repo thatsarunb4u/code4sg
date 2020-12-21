@@ -280,6 +280,7 @@ header {
 
     @include layout(tablet) {
       right: margin-top-card-element-responsive(tablet);
+      width: 198px;
     }
 
     @include layout(pc) {
