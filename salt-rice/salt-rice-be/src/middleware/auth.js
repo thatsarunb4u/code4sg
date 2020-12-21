@@ -20,6 +20,10 @@ let validateToken = (req,res,next) => {
           });
         }
         req.userId = decoded.username;
+        console.log(decoded);
+        
+        req.principal = decoded;
+        console.log("Active users:"+ activeUsers.length)
         next();
       });
 

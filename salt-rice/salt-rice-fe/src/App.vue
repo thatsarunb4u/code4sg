@@ -4,8 +4,8 @@
       <span>An update is available.</span>
       <button class="submit-button" @click="refreshApp">Update</button>
     </div>
- <Header/>
-    <router-view/>
+    <Header/>
+    <router-view />
     <Footer />
   </div>
 </template>

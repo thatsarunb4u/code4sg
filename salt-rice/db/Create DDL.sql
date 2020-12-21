@@ -5,6 +5,11 @@
 -- HeidiSQL Version:             11.0.0.5919
 -- --------------------------------------------------------
 
+-- Dumping database structure for saltrice
+CREATE DATABASE IF NOT EXISTS `saltrice` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `saltrice`;
+
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
@@ -12,9 +17,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 
--- Dumping database structure for saltrice
-CREATE DATABASE IF NOT EXISTS `saltrice` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `saltrice`;
+
 
 -- Dumping structure for table saltrice.blockeduser
 CREATE TABLE IF NOT EXISTS `blockeduser` (
@@ -42,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`categoryID`),
   KEY `category_name` (`categoryName`(255))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -64,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   KEY `post_comment_fk` (`postID`),
   CONSTRAINT `comment_author_fk` FOREIGN KEY (`authorID`) REFERENCES `user` (`userID`),
   CONSTRAINT `post_comment_fk` FOREIGN KEY (`postID`) REFERENCES `post` (`postID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -87,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `post` (
   KEY `post_author_fk` (`authorID`) USING BTREE,
   CONSTRAINT `post_author_fk` FOREIGN KEY (`authorID`) REFERENCES `user` (`userID`),
   CONSTRAINT `post_category_fk` FOREIGN KEY (`categoryID`) REFERENCES `category` (`categoryID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -104,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `posttag` (
   KEY `post_fk` (`postID`),
   CONSTRAINT `post_fk` FOREIGN KEY (`postID`) REFERENCES `post` (`postID`),
   CONSTRAINT `tag_fk` FOREIGN KEY (`tagID`) REFERENCES `tag` (`tagID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -116,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `tag` (
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`tagID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -124,6 +127,7 @@ CREATE TABLE IF NOT EXISTS `tag` (
 CREATE TABLE IF NOT EXISTS `user` (
   `userID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UUID` tinytext NOT NULL,
+  `password` tinytext NOT NULL,
   `nickname` tinytext DEFAULT NULL,
   `score` float DEFAULT NULL,
   `rank` tinytext DEFAULT NULL,
@@ -133,8 +137,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `createdAt` datetime DEFAULT current_timestamp(),
   `updatedAt` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`userID`),
-  UNIQUE KEY `UUID` (`UUID`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `UUID` (`UUID`(255)) USING HASH
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
