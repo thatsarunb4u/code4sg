@@ -24,7 +24,7 @@ let authenticateInDB = async (user) => {
   
       console.log(user)
       conn = await dbConnPool.getConnection();
-      const result = await conn.query(`SELECT userID, UUID, nickname, age, score, rank, isActive, isBlacklisted, createdAt, updatedAt from user where UUID = '${user.username}' and password = '${user.password}'` );
+      const result = await conn.query(`SELECT userID, UUID, nickname, age, score, r.title AS rank, isActive, isBlacklisted, u.createdAt, u.updatedAt from user u LEFT OUTER JOIN reputation r ON u.score <= r.ceil AND u.score >= r.floor where UUID = '${user.username}' and password = '${user.password}'` );
       
       delete result.meta
       

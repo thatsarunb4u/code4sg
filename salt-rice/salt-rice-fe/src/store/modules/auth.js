@@ -3,17 +3,20 @@ import {protectedFetch} from '../../mixins/appUtils'
 const state = {
     token: null,
     username: null,
+    principal: null,
 };
 
 const getters = {
     getToken: () => state.token,
     getUsername: () => state.username,
+    getPrincipal: () => state.principal,
     isLoggedIn: () => !!state.token,
 };
 
 const mutations = {
     setToken: (state, token) => { state.token = token;},
-    setUsername: (state, username) => { state.username = username;}
+    setUsername: (state, username) => { state.username = username;},
+    setPrincipal: (state, principal) => {state.principal = principal;}
 };
 
 const actions = {
@@ -38,6 +41,7 @@ const actions = {
                 //store jwt token here in store.
                 commit("setToken", jsonResponse.access_token);
                 commit("setUsername", jsonResponse.principal.nickname);
+                commit('setPrincipal', jsonResponse.principal);
                 jsonResponse.status = 200;
             }
 
@@ -63,6 +67,7 @@ const actions = {
           //store jwt token here in store.
           commit('setToken', null);
           commit('setUsername', null);
+          commit('setPrincipal', null);
           
         } else {
           console.error("Error logging out:" + response)
@@ -96,6 +101,7 @@ const actions = {
             console.log("Token:" + jsonResponse.access_token);
             commit('setToken', jsonResponse.access_token);
             commit('setUsername', jsonResponse.principal.nickname);
+            commit('setPrincipal', jsonResponse.principal);
             //this.$router.push(`/`);
           } else {
             console.error("Error registering:" + jsonResponse)

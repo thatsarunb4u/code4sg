@@ -8,7 +8,7 @@ let getUserInfoFromDB = async (UUID) => {
   
       console.log(UUID)
       conn = await dbConnPool.getConnection();
-      const result = await conn.query(`SELECT userID, UUID, nickname, age, score, rank, isActive, isBlacklisted, createdAt, updatedAt from user where UUID = '${UUID}'` );
+      const result = await conn.query(`SELECT userID, UUID, nickname, age, score, r.title AS rank, isActive, isBlacklisted, u.createdAt, u.updatedAt from user u LEFT OUTER JOIN reputation r ON u.score <= r.ceil AND u.score >= r.floor where UUID = '${UUID}'` );
       
       delete result.meta
       console.log(result[0])
@@ -27,7 +27,7 @@ let getUserInfoByIdFromDB = async (ID) => {
   
       console.log(ID)
       conn = await dbConnPool.getConnection();
-      const result = await conn.query("SELECT userID, UUID, nickname, age, score, rank, isActive, isBlacklisted, createdAt, updatedAt from user where userID = "+ID );
+      const result = await conn.query("SELECT userID, UUID, nickname, age, score, r.title AS rank, isActive, isBlacklisted, u.createdAt, u.updatedAt from user u LEFT OUTER JOIN reputation r ON u.score <= r.ceil AND u.score >= r.floor where userID = "+ID );
       
       delete result.meta
       console.log(result[0])
@@ -56,6 +56,24 @@ let flagUserInDB = async (ID) => {
   }
 }
 
+let updateScoreInDB = async (ID, score) => {
+  let conn;
+
+  try {
+
+    console.log(ID)
+    conn = await dbConnPool.getConnection();
+    const result = await conn.query("UPDATE user set score= score+"+score+" where userID="+ID );
+    await conn.query("UPDATE user SET rank = (case when score > 121 then 'Sage' when score > 41 then 'Mentor' when score >= 1 then 'Guide' end) WHERE userID="+ID );
+    return result
+
+  } catch (err) {
+    throw err;
+  } finally {
+    if (conn) conn.release(); //release to pool
+  }
+}
+
 export {
-    getUserInfoFromDB,getUserInfoByIdFromDB,flagUserInDB
+    getUserInfoFromDB,getUserInfoByIdFromDB,flagUserInDB, updateScoreInDB
 }

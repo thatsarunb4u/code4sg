@@ -4,6 +4,7 @@
 //flag
 
 import {dbConnPool} from '../repo/db-client'
+import {updateScoreInDB} from '../repo/user-repo';
 
 let createComment = async (input_json) => {
     let conn;
@@ -12,6 +13,9 @@ let createComment = async (input_json) => {
       conn = await dbConnPool.getConnection();
       const resp = await conn.query("INSERT into comment (body, postID, authorID, isAnonymous) VALUES ( ?, ?, ?, ?)", [ input_json['body'], input_json['postID'], input_json['authorID'], input_json['isAnonymous']]);
       console.log(resp);
+
+      await updateScoreInDB(input_json['authorID'], 5)
+
       return resp;
     } catch (err) {
       throw err;
@@ -68,6 +72,11 @@ let upvoteComment = async (commentID) => {
   try {
     conn = await dbConnPool.getConnection();
     const resp = await conn.query("UPDATE comment SET upVote = upVote + 1 WHERE commentID = "+commentID);
+
+    let commentObj = searchComments(req.params.commentId);
+    await updateScoreInDB(commentObj.authorID, 1);
+
+
     return resp;
   } catch (err) {
     throw err;

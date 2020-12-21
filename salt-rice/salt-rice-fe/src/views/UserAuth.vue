@@ -13,7 +13,7 @@
           <label for="name-reg">Name</label>
           <input type="text" v-model="regnickname" id="name-reg" placeholder="Name"/>
           <label for="phone-reg">Username</label>
-          <input id="phone-reg" v-model="regmobile" type="number" placeholder="Mobile no."/>
+          <input id="phone-reg" v-model="regmobile" type="text" maxlength="15" placeholder="Enter Mobile no."/>
           <label for="pass-reg">Password</label>
           <input id="pass-reg" v-model="regpassword" type="password" placeholder="Password"/>
           <label for="pass-reg">Confirm Password</label>
@@ -26,7 +26,7 @@
           <h1>Sign in</h1>
           <span>using your account</span>
           <label for="phone-login">Username</label>
-          <input id="phone-login" v-model="mobile" type="number" placeholder="Mobile no."/>
+          <input id="phone-login" v-model="mobile" type="text" maxlength="15" placeholder="Mobile no."/>
           <label for="pass-login">Password</label>
           <input id="pass-login" v-model="password" type="password" placeholder="Password"/>
           <a href="#">Forgot your password?</a>
@@ -106,7 +106,12 @@ export default {
     async registerComp() {
       try {
         if (!this.regmobile || !this.regpassword || !this.regconfirmPassword || !this.regnickname) return;
-        if (this.regpassword !== this.regconfirmPassword) return;
+        if (this.regpassword !== this.regconfirmPassword) {
+          this.notification.message = "Passwords do not match. Pls retry!";
+          this.notification.show = true;
+          this.notification.type = "error";
+          return;
+        }
 
 
         const response = await this.register({

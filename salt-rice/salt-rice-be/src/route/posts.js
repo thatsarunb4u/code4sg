@@ -6,6 +6,7 @@ import {
     getTrendingPosts, getNeedsAdvicePosts, getMostRecentPosts
 } from '../service/post-service';
 
+
 const router = Router();
 
 router.get('/', async (req,res) => {

@@ -87,7 +87,7 @@
       <div class="border"></div>
       <div class="body">
         <div class="nickname">
-          <p>Guide</p>
+          <p>{{rank}}</p>
           <!-- <a href="#"
             ><img
               src="@/assets/images/edit.png"
@@ -97,12 +97,10 @@
           /></a> -->
         </div>
         
-        <div class="margin-top">
-          <a href="" class="actionButtonClear"
-            ><span>25 </span><span>Posts</span></a
-          >
+        <!-- <div class="margin-top">
+          <span>25 </span><span>Posts</span>
         </div>
-        <div class="margin-top"><span>25 </span><span>Comments</span></div>
+        <div class="margin-top"><span>25 </span><span>Comments</span></div> -->
         <div class="margin-top logout" @click="logoutComp"><span>logout</span></div>
       </div>
     </div>
@@ -136,6 +134,7 @@ export default {
     ...mapState({
       /* isLoggedIn : 'isLoggedIn', */
       username: state => state.auth.username,
+      rank: state => state.auth.principal.rank,
     }),
     ...mapGetters(['isLoggedIn']),
   }
