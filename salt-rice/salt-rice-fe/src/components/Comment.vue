@@ -80,7 +80,7 @@
               ><skeleton width="5%"> {{ comment.downVote }}</skeleton></span
             >
           </div>
-          <div class="margin-right delete-margin" @click="deleteComment">
+          <!-- <div class="margin-right delete-margin" @click="deleteComment">
             <svg
               class="icon"
               style="enable-background: new 0 0 24 24"
@@ -102,8 +102,8 @@
                 </g>
               </g>
             </svg>
-          </div>
-          <div class="margin-right" @click="flag">
+          </div> -->
+          <div class="margin-left margin-right" @click="flag">
             <svg
               class="icon flag"
               xmlns="http://www.w3.org/2000/svg"

@@ -187,9 +187,9 @@
             }
           "
         />
-        <div class="more">
+        <!-- <div class="more">
           <a class="more-label" @click="loadMore">More comments</a>
-        </div>
+        </div> -->
       </div>
     </div>
   </section>
