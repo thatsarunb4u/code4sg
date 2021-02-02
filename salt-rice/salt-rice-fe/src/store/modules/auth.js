@@ -1,6 +1,7 @@
 import {protectedFetch} from '../../mixins/appUtils'
 
 const state = {
+    //token: !!localStorage.getItem("token"),
     token: null,
     username: null,
     principal: null,
@@ -40,6 +41,7 @@ const actions = {
             if (response.status == 200) {
                 //store jwt token here in store.
                 commit("setToken", jsonResponse.access_token);
+                //localStorage.setItem("token",jsonResponse.access_token);
                 commit("setUsername", jsonResponse.principal.nickname);
                 commit('setPrincipal', jsonResponse.principal);
                 jsonResponse.status = 200;
@@ -66,6 +68,7 @@ const actions = {
         if (response.status == 200) {
           //store jwt token here in store.
           commit('setToken', null);
+          //localStorage.setItem("token", null);
           commit('setUsername', null);
           commit('setPrincipal', null);
           
@@ -100,6 +103,7 @@ const actions = {
             //store jwt token here in store.
             console.log("Token:" + jsonResponse.access_token);
             commit('setToken', jsonResponse.access_token);
+            //localStorage.setItem("token",jsonResponse.access_token);
             commit('setUsername', jsonResponse.principal.nickname);
             commit('setPrincipal', jsonResponse.principal);
             //this.$router.push(`/`);

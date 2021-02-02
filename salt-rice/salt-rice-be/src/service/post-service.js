@@ -124,6 +124,7 @@ let getByPostID = async (postID) => {
 
       return postRecord
     } catch (err) {
+      console.log(err)
       throw err;
     } finally {
       if (conn) conn.release(); //release to pool

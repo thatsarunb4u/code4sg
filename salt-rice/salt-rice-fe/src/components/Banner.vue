@@ -7,10 +7,79 @@
     <div class="container">
       <a href="#card" class="cta bold">Lai, Lets Talk</a>
     </div>
+
+    <button @click="showDemo" class="demo">
+      <img class="play-button" src="@/assets/images/play.png" /> Take a tour
+    </button>
+    
+    <modal name="modal-player" :height="600" :adaptive="true">
+      <div slot="top-right">
+      <button style="cursor:pointer" @click="$modal.hide('modal-player')">
+        ❌
+      </button>
+    </div>
+      <div class="player-container">
+        <vue-core-video-player v-bind:src="video_url"></vue-core-video-player>
+      </div>
+    </modal>
+    <!-- <div v-if="showModal" id="modal-player">
+      <div class="player-container">
+        <vue-core-video-player src="/demo_mobile.mp4"></vue-core-video-player>
+      </div>
+    </div> -->
+
     <img src="@/assets/images/banner.png" alt="" />
   </section>
 </template>
-
+<script>
+export default {
+  name: "Banner",
+  data() {
+    return {
+      video_url : "/demo_desktop.mp4"
+    }
+  },
+  created() {
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        this.video_url="/demo_mobile.mp4"
+      } else {
+        this.video_url="/demo_desktop.mp4"
+      }
+      console.log(this.video_url)
+  },
+  methods: {
+    async showDemo() {
+      this.$modal.show("modal-player");
+    },
+    /* async getVidURL() {
+      console.log("Getting video URL")
+      let videoURL = "";
+      
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        videoURL="/demo_mobile.mp4"
+      } else {
+        videoURL="/demo_desktop.mp4"
+      }
+      console.log(videoURL)
+      return videoURL
+    } */
+  },
+  computed: {
+    /* getVidURL() {
+      console.log("Getting video URL")
+      //let videoURL = "";
+      
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        this.video_url="/demo_mobile.mp4"
+      } else {
+        this.video_url="/demo_desktop.mp4"
+      }
+      console.log(this.video_url)
+      return this.video_url
+    } */
+  }
+};
+</script>
 <style lang="scss" scoped>
 section#mainSection {
   background-size: 100%;
@@ -78,6 +147,47 @@ section#mainSection {
       padding: 1.2em 0.9em 1.2em 1.2em;
       font-size: calc(#{$font-size} + 4pt);
       margin-top: 5%;
+    }
+  }
+
+  .player-container{
+    height: 100%;
+    width: 100%;
+  }
+  .play-button {
+    width: 30%;
+    z-index: 2;
+    cursor: pointer;
+    float: left;
+  }
+
+  .demo img {
+    float: right;
+  }
+
+  .demo {
+    background: color(yellow);
+    padding: 0.7em;
+    text-decoration: none;
+    z-index: 1;
+    color: black;
+    position: absolute;
+    right: 35%;
+    cursor: pointer;
+    display: inline-block;
+
+    @include layout(tablet) {
+      right: side-space(mobile);
+      padding: 1.2em 0.9em 1.2em 1.2em;
+      font-size: calc(#{$font-size} + 1pt);
+      margin-top: 7%;
+    }
+
+    @include layout(pc) {
+      right: side-space(pc)-1.2em;
+      padding: 1.2em 0.9em 1.2em 1.2em;
+      font-size: calc(#{$font-size} + 4pt);
+      margin-top: 15%;
     }
   }
 

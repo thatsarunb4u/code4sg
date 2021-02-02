@@ -166,7 +166,7 @@
                 placeholder="Add your comment"
               />
               <div class="button-group">
-                <button type="submit" class="cancel-button" @click="cancel">
+                <button type="submit" class="cancel-button" @click="clearComment">
                   Cancel
                 </button>
                 <button type="submit" class="submit-button margin-left-responsive" @click="reply">
@@ -199,10 +199,12 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import {protectedFetch} from '../mixins/appUtils';
+import {mapState} from 'vuex';
 
 dayjs.extend(relativeTime)
 
 async function getPostData(postID) {
+    
   const post = await (
     await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/bypostid/${postID}`)
   ).json();
@@ -280,8 +282,8 @@ export default {
     async reply() {
       if (!this.comment) return;
 
-      this.post.comments.push({
-        authorID: 1,
+       this.post.comments.push({
+        authorID: principal.userID,
         authorNickname: "User", // both should be variables when authentication is implemented
         body: this.comment,
         commentID: this.post.comments.length + 1,
@@ -299,20 +301,22 @@ export default {
         body: JSON.stringify({
           body: this.comment,
           postID: this.post.postID,
-          authorID: 1,
+          authorID: this.principal.userID,
           isAnonymous: false,
         }),
       });
 
+      
       // clear posting comment data
-      this.cancel();
+      this.clearComment();
 
+      
       const { post, author } = await getPostData(this.$route.params.id);
 
       this.post = post;
       this.author = author;
     },
-    cancel() {
+    clearComment() {
       this.comment = "";
     },
     async loadMore() {
@@ -342,6 +346,12 @@ export default {
     postDownVotes() {
       return this.post.downVote;
     },
+
+    ...mapState({
+      principal: state => state.auth.principal,
+    })
+  
+
   },
   async beforeRouteEnter(to, from, next) {
     try {

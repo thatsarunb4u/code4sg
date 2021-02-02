@@ -12,12 +12,15 @@ let createComment = async (input_json) => {
 
       conn = await dbConnPool.getConnection();
       const resp = await conn.query("INSERT into comment (body, postID, authorID, isAnonymous) VALUES ( ?, ?, ?, ?)", [ input_json['body'], input_json['postID'], input_json['authorID'], input_json['isAnonymous']]);
+      console.log("Comment service:");
       console.log(resp);
 
-      await updateScoreInDB(input_json['authorID'], 5)
+      let updateScore = await updateScoreInDB(input_json['authorID'], 5)
+      console.log(updateScore)
 
       return resp;
     } catch (err) {
+      console.log(err)
       throw err;
     } finally {
       if (conn) conn.release(); //release to pool
@@ -48,6 +51,7 @@ let createComment = async (input_json) => {
       console.log(resp);
       return resp;
     } catch (err) {
+      console.log(err)
       throw err;
     } finally {
       if (conn) conn.release(); //release to pool

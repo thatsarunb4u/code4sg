@@ -23,7 +23,8 @@ let validateToken = (req,res,next) => {
         console.log(decoded);
         
         req.principal = decoded;
-        console.log("Active users:"+ activeUsers.length)
+        //console.log("Active users:"+ activeUsers.length)
+        console.log("Authenticated:"+decoded)
         next();
       });
 
