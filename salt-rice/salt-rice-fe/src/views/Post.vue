@@ -159,7 +159,7 @@
             </div>
           </div>
           <div class="profile-comment">
-            <form action="#">
+            <form action="#" @submit.prevent>
               <textarea
                 id="textarea"
                 v-model="comment"
