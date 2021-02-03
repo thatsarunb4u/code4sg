@@ -6,6 +6,7 @@
       :comment="comment"
       :loading="loading"
       @reply="(e) => $emit('reply', e)"
+      @subReply="subReply"
       @delete="deleteComment"
     />
   </div>
@@ -27,6 +28,7 @@ export default {
   },
   computed: {
     computedComments() {
+      console.log(this.comments);
       if (!this.loading) return this.comments;
       return Array(this.loadedComments)
         .fill()
@@ -45,6 +47,10 @@ export default {
         )
       );
     },
+    subReply(reply){
+
+      this.$emit("subReply", reply);
+    }
   },
 };
 </script>

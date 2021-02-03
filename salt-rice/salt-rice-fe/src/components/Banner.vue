@@ -8,16 +8,16 @@
       <a href="#card" class="cta bold">Lai, Lets Talk</a>
     </div>
 
-    <div @click="showDemo">
+    <div @click="showDemo" style="cursor:pointer">
       <a class="cte bold"
         ><img class="play-button" src="@/assets/images/play.png" />Take a
         tour</a
       >
     </div>
 
-    <button @click="showDemo" class="demo" style="display: none">
+   <!--  <button @click="showDemo" class="demo" style="display: none">
       <img class="play-button" src="@/assets/images/play.png" /> Take a tour
-    </button>
+    </button> -->
 
     <modal name="modal-player" :height="600" :adaptive="true">
       <div slot="top-right">

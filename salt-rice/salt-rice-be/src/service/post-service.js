@@ -108,18 +108,27 @@ let flag = async (postID) => {
 
 
 let getByPostID = async (postID) => {
+  
     let conn;
     try {
       conn = await dbConnPool.getConnection();
       const postRecords = await conn.query("SELECT * from post where postID="+postID);
-      const commentRecords = await conn.query("SELECT c.*, u.nickname as authorNickname FROM comment c INNER JOIN user u ON c.authorID = u.userID WHERE c.postID="+postID);
+      const commentRecords = await conn.query("SELECT c.*, u.nickname as authorNickname FROM comment c INNER JOIN user u ON c.authorID = u.userID WHERE parentCommentID IS NULL && c.postID="+postID);
       const tagRecords = await conn.query("SELECT t.* from posttag pt inner join tag t on pt.tagID = t.tagID where pt.postID="+postID);
+      console.log("cc " + commentRecords.length);
+      for(let i = 0; i < commentRecords.length; i++){
+        
+        const subCommentRecords = await conn.query("SELECT c.*, u.nickname as authorNickname FROM comment c INNER JOIN user u ON c.authorID = u.userID WHERE parentCommentID = " + commentRecords[i].commentID + " && c.postID="+postID);
+        
+        commentRecords[i].subComment = subCommentRecords;
+      }
 
       delete(commentRecords.meta)
       delete(tagRecords.meta)
 
       let postRecord = postRecords[0]
       postRecord.comments = commentRecords
+      
       postRecord.tags = tagRecords
 
       return postRecord
