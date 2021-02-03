@@ -1,8 +1,8 @@
-/* const zlib = require("zlib");
+const zlib = require("zlib");
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CompressionPlugin = require("compression-webpack-plugin");
-const zopfli = require("@gfx/zopfli"); */
+const zopfli = require("@gfx/zopfli");
 
 module.exports = {
      configureWebpack: {
