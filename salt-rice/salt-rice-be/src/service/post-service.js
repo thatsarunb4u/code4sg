@@ -113,12 +113,12 @@ let getByPostID = async (postID) => {
     try {
       conn = await dbConnPool.getConnection();
       const postRecords = await conn.query("SELECT * from post where postID="+postID);
-      const commentRecords = await conn.query("SELECT c.*, u.nickname as authorNickname FROM comment c INNER JOIN user u ON c.authorID = u.userID WHERE parentCommentID = 0 && c.postID="+postID);
+      const commentRecords = await conn.query("SELECT c.*, u.nickname as authorNickname FROM comment c INNER JOIN user u ON c.authorID = u.userID WHERE parentCommentID = 0 && c.postID="+postID+" ORDER BY createdAt DESC");
       const tagRecords = await conn.query("SELECT t.* from posttag pt inner join tag t on pt.tagID = t.tagID where pt.postID="+postID);
       console.log("cc " + commentRecords.length);
       for(let i = 0; i < commentRecords.length; i++){
         
-        const subCommentRecords = await conn.query("SELECT c.*, u.nickname as authorNickname FROM comment c INNER JOIN user u ON c.authorID = u.userID WHERE parentCommentID = " + commentRecords[i].commentID + " && c.postID="+postID);
+        const subCommentRecords = await conn.query("SELECT c.*, u.nickname as authorNickname FROM comment c INNER JOIN user u ON c.authorID = u.userID WHERE parentCommentID = " + commentRecords[i].commentID + " && c.postID="+postID + " ORDER BY createdAt ASC");
         commentRecords[i].subComment = [];
         commentRecords[i].subComment = subCommentRecords;
       }
