@@ -119,7 +119,7 @@ let getByPostID = async (postID) => {
       for(let i = 0; i < commentRecords.length; i++){
         
         const subCommentRecords = await conn.query("SELECT c.*, u.nickname as authorNickname FROM comment c INNER JOIN user u ON c.authorID = u.userID WHERE parentCommentID = " + commentRecords[i].commentID + " && c.postID="+postID);
-        
+        commentRecords[i].subComment = [];
         commentRecords[i].subComment = subCommentRecords;
       }
 
