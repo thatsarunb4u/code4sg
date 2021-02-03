@@ -283,7 +283,7 @@ export default {
       if (!this.comment) return;
 
        this.post.comments.push({
-        authorID: principal.userID,
+        authorID: this.principal.userID,
         authorNickname: "User", // both should be variables when authentication is implemented
         body: this.comment,
         commentID: this.post.comments.length + 1,

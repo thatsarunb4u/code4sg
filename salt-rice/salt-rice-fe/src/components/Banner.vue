@@ -8,16 +8,23 @@
       <a href="#card" class="cta bold">Lai, Lets Talk</a>
     </div>
 
-    <button @click="showDemo" class="demo">
+    <div @click="showDemo">
+      <a class="cte bold"
+        ><img class="play-button" src="@/assets/images/play.png" />Take a
+        tour</a
+      >
+    </div>
+
+    <button @click="showDemo" class="demo" style="display: none">
       <img class="play-button" src="@/assets/images/play.png" /> Take a tour
     </button>
-    
+
     <modal name="modal-player" :height="600" :adaptive="true">
       <div slot="top-right">
-      <button style="cursor:pointer" @click="$modal.hide('modal-player')">
-        ❌
-      </button>
-    </div>
+        <button style="cursor: pointer" @click="$modal.hide('modal-player')">
+          ❌
+        </button>
+      </div>
       <div class="player-container">
         <vue-core-video-player v-bind:src="video_url"></vue-core-video-player>
       </div>
@@ -36,16 +43,20 @@ export default {
   name: "Banner",
   data() {
     return {
-      video_url : "/demo_desktop.mp4"
-    }
+      video_url: "/demo_desktop.mp4",
+    };
   },
   created() {
-    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        this.video_url="/demo_mobile.mp4"
-      } else {
-        this.video_url="/demo_desktop.mp4"
-      }
-      console.log(this.video_url)
+    if (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    ) {
+      this.video_url = "/demo_mobile.mp4";
+    } else {
+      this.video_url = "/demo_desktop.mp4";
+    }
+    console.log(this.video_url);
   },
   methods: {
     async showDemo() {
@@ -77,7 +88,7 @@ export default {
       console.log(this.video_url)
       return this.video_url
     } */
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -150,15 +161,57 @@ section#mainSection {
     }
   }
 
-  .player-container{
-    height: 100%;
-    width: 100%;
+  /deep/ .vm--modal {
+    top: auto !important;
+    left: 10% !important;
+    height: auto !important;
+    width: 80% !important;
   }
+
+  .cte {
+    right: 8.2em;
+    padding: 0.8em 0.8em 0.8em 0.2em;
+    margin-top: 20%;
+    position: absolute;
+    background: #ffc529;
+    text-decoration: none;
+    color: black;
+    font-size: 12pt;
+    font-weight: bold;
+    width: 149px;
+    text-align: right;
+
+    @include layout(tablet) {
+      right: side-space(mobile);
+      padding: 0.9em 0.9em 0.9em 0.9em;
+      font-size: calc(#{$font-size} + 1pt);
+      margin-top: 12%;
+      width: 167px;
+    }
+
+    @include layout(pc) {
+      right: side-space(pc)-1.2em;
+      padding: 0.7em 0.9em 0.7em 2.2em;
+      font-size: calc(#{$font-size} + 4pt);
+      margin-top: 15%;
+      width: 216px;
+    }
+  }
+
   .play-button {
-    width: 30%;
+    width: 24px;
+    margin: 11px 13px;
+    padding: 0;
     z-index: 2;
     cursor: pointer;
-    float: left;
+
+    @include layout(tablet) {
+      margin: 14px 19px;
+    }
+
+    @include layout(pc) {
+      margin: 15px 28px;
+    }
   }
 
   .demo img {
