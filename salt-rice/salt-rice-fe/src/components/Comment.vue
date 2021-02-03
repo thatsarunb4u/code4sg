@@ -145,7 +145,7 @@
 								<img class="no-margin" src="@/assets/images/iconfinder_1_avatar_2754574.svg" alt="" />
 							</div>
 							<div>
-								<span>Username</span>
+								<span>{{this.username}}</span>
 							</div>
 						</div>
 						<div class="profile-comment">
@@ -171,6 +171,7 @@
 
 <script>
 import { protectedFetch } from '../mixins/appUtils';
+import {mapState} from 'vuex';
 
 export default {
 	name: 'Comment',
@@ -239,7 +240,13 @@ export default {
 
       this.$emit("subReply", reply);
     }
-	},
+  },
+  computed: {
+    ...mapState({
+      /* isLoggedIn : 'isLoggedIn', */
+      username: state => state.auth.username,
+    }),
+  },
 };
 </script>
 

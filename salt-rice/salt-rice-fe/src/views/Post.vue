@@ -155,7 +155,7 @@
               />
             </div>
             <div>
-              <span>Username</span>
+              <span>{{this.username}}</span>
             </div>
           </div>
           <div class="profile-comment">
@@ -388,6 +388,7 @@ export default {
 
     ...mapState({
       principal: state => state.auth.principal,
+      username: state => state.auth.username,
     })
   
 
