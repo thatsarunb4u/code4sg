@@ -185,7 +185,9 @@
               this.comment = replyComment;
               this.reply();
             }
+            
           "
+          @subReply="subReply"
         />
         <!-- <div class="more">
           <a class="more-label" @click="loadMore">More comments</a>
@@ -301,6 +303,43 @@ export default {
           postID: this.post.postID,
           authorID: 1,
           isAnonymous: false,
+        }),
+      });
+
+      // clear posting comment data
+      this.cancel();
+
+      const { post, author } = await getPostData(this.$route.params.id);
+
+      this.post = post;
+      this.author = author;
+    },
+    async subReply(reply) {
+      
+      console.log(reply);
+      this.post.comments.push({
+        authorID: 1,
+        authorNickname: "User", // both should be variables when authentication is implemented
+        body: reply.replyComment,
+        commentID: this.post.comments.length + 1,
+        createdAt: new Date(),
+        downVote: 0,
+        isActive: 1,
+        isFlagged: 0,
+        postID: this.post.postID,
+        upVote: 0,
+        updatedAt: new Date(),
+        parentCommentID: reply.parentCommentID
+      });
+
+      await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/comment`, {
+        method: "POST",
+        body: JSON.stringify({
+          body: reply.replyComment,
+          postID: this.post.postID,
+          authorID: 1,
+          isAnonymous: false,
+          parentCommentID: reply.parentCommentID
         }),
       });
 
