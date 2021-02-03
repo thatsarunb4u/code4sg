@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `isActive` int(10) unsigned NOT NULL DEFAULT 1,
   `isFlagged` int(10) unsigned NOT NULL DEFAULT 0,
   `isAnonymous` int(10) unsigned NOT NULL DEFAULT 0,
-  `parentCommentID` int(10) DEFAULT NULL,
+  `parentCommentID` int(10) NOT NULL DEFAULT 0,
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`commentID`),
