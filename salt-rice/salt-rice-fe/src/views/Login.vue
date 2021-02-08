@@ -2,13 +2,13 @@
   <div>
     <h1>Login</h1>
     <form @submit.prevent="login">
-      <label for="mobile">Mobile</label>
+      <label for="mobile">Username</label>
       <input
           id="mobile"
           v-model="mobile"
           autocomplete="off"
           name="title"
-          placeholder="Enter your mobile number.."
+          placeholder="Enter your mobile no./email.."
           required
           maxlength="8"
           type="text"

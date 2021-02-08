@@ -25,8 +25,8 @@
 							id="phone-reg"
 							v-model="regmobile"
 							type="text"
-							maxlength="15"
-							placeholder="Enter Mobile No."
+							maxlength="100"
+							placeholder="Enter Mobile No. / Email"
 							required
 						/>
 						<label for="pass-reg">Password</label>
@@ -77,7 +77,7 @@
 					<h1>Sign In</h1>
 					<span>using your account</span>
 					<label for="phone-login">Username</label>
-					<input id="phone-login" v-model="mobile" type="text" maxlength="15" placeholder="Mobile no." />
+					<input id="phone-login" v-model="mobile" type="text" maxlength="100" placeholder="Mobile no. / Email" />
 					<label for="pass-login">Password</label>
 					<input id="pass-login" v-model="password" type="password" placeholder="Password" required />
 					<a href="#">Forgot your password?</a>

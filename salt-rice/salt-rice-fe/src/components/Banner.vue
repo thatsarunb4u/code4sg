@@ -1,6 +1,6 @@
 <template>
   <section id="mainSection">
-    <h3>Need to <span class="font-yellow">discuss on something</span>?</h3>
+    <h3>Need to <span class="font-yellow">discuss something</span>?</h3>
 
     <p class="subhead">Find Right Person to Advice</p>
     <br />
