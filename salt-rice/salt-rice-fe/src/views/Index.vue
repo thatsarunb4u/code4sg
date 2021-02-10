@@ -50,7 +50,7 @@
               src="../assets/images/question-answer.svg"
               alt=""
             />
-            <span>Needs advise</span>
+            <span>Needs advice</span>
           </div>
           <div
             :class="{ active: currentSort === 'recent' }"
