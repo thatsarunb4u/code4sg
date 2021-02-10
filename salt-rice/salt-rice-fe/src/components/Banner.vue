@@ -41,7 +41,7 @@ export default {
 	data() {
 		return {
 			video_url: '/demo_desktop.mp4',
-      pause_play: ''
+			pause_play: '',
 		};
 	},
 	created() {
@@ -55,8 +55,19 @@ export default {
 	methods: {
 		async showDemo() {
 			this.$modal.show('modal-player');
+			setTimeout(function() {
+				document.querySelector('.play-pause-layer').style.display = 'none';
+				document.querySelector('.vcp-dashboard').style.display = 'none';
+			}, 2000);
 		},
-		
+		mouseMove: function() {
+			document.querySelector('.play-pause-layer').style.display = 'block';
+			document.querySelector('.vcp-dashboard').style.display = 'block';
+			setTimeout(function() {
+				document.querySelector('.play-pause-layer').style.display = 'none';
+				document.querySelector('.vcp-dashboard').style.display = 'none';
+			}, 2000);
+		},
 		/* async getVidURL() {
       console.log("Getting video URL")
       let videoURL = "";
