@@ -3,12 +3,13 @@ import 'dotenv/config';
 import routes from './route';
 import {testConnection, getTestRecords} from './repo/db-client';
 import {authenticate, registerUser} from './service/auth-service';
-import {getUserInfoByUsername, getUserInfoByID} from './service/user-service';
+import {getUserInfoByUsername, getUserInfoByID, resetPassword} from './service/user-service';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import {validateToken} from './middleware/auth';
 import jwt from 'jsonwebtoken';
 import {secret} from './config/app-config';
+
 
 
 const app = express();
@@ -101,6 +102,25 @@ app.post('/logout', async (req,res) => {
     res.status(200).send({access_token: null, principal: null});
     
 });
+
+app.post('/resetPassword', async (req,res) => {
+    console.log(req.body);
+
+    let userRecord = await getUserInfoByUsername(req.body.username)
+    if(userRecord === undefined){
+        console.log("User doesn't exists");
+        res.status(409).send({
+            "error": "User doesn't exists"
+        })
+    } else {
+        let result = await resetPassword(userRecord.userID, req.body.password);
+        console.log(result)
+        if (result === undefined) {
+            res.status(200).send();
+        }
+    }
+    
+})
 
 app.post('/register', async (req,res) => {
     

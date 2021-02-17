@@ -5,6 +5,7 @@
 
 import {registerUserInDB, getUserInfoFromDB, getUserInfoByIdFromDB, flagUserInDB} from '../repo/user-repo'
 import * as CryptoJS from 'crypto-js';
+import { resetPasswordInDB } from '../repo/auth-repo';
 
 let registerUser = async (newUserJSON) => {
     
@@ -14,6 +15,12 @@ let registerUser = async (newUserJSON) => {
 
     registerUserInDB(newUserJSON)
 }
+
+let resetPassword = async (userID, password) => {
+
+    let cryptoPassword = CryptoJS.SHA256(password).toString()
+    resetPasswordInDB(userID, cryptoPassword);
+}   
 
 let getUserInfoByUsername = async (username) => {
     
@@ -43,5 +50,5 @@ let flagUser = async (ID) => {
     return await flagUserInDB(ID)
 }
 export {
-    registerUser, getUserInfoByUsername, getUserInfoByID, getUserInfoByUUID, flagUser
+    registerUser, getUserInfoByUsername, getUserInfoByID, getUserInfoByUUID, flagUser, resetPassword
 }

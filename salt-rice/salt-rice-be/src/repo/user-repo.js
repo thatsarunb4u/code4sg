@@ -55,7 +55,6 @@ let flagUserInDB = async (ID) => {
     if (conn) conn.release(); //release to pool
   }
 }
-
 let updateScoreInDB = async (ID, score) => {
   let conn;
 

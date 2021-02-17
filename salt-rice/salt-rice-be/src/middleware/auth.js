@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import {secret} from '../config/app-config';
 
 let validateToken = (req,res,next) => {
-    if (req.originalUrl === '/login' || req.originalUrl === '/register') {
+    if (req.originalUrl === '/login' || req.originalUrl === '/register' || req.originalUrl === '/resetPassword') {
         return next();
     } 
     let token = req.headers["x-access-token"];
