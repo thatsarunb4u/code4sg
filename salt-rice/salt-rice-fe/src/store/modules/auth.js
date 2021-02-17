@@ -115,7 +115,30 @@ const actions = {
         } catch (err) {
             console.error(err);
         }
-    },
+    }, resetPassword: async ({commit}, formObj) => {
+      try {
+        console.log('Reset Password in progress...')
+        
+        console.log(formObj.username);
+        console.log(formObj.password);
+        commit('setToken', null);
+
+        const response = await fetch(`${process.env.VUE_APP_BASE_API}/resetPassword`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json"},
+          body: JSON.stringify({
+            username: formObj.username,
+            password: formObj.password,
+            
+          })
+        });
+        console.log(response.status);
+        return response
+
+      }catch (err) {
+        console.error(err);
+    }
+},
 };
 
 

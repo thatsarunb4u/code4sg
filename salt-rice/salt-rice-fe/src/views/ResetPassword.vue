@@ -6,85 +6,31 @@
 			knowledge of those that have gone before you, in a safe and open environment.
 		</p>
 
-		<div
-			v-bind:class="rightPanelActive ? 'right-panel-active' : ''" 
-			class="authSectionContainer"
-			id="authSectionContainer"
-		>
-			<div class="form-container sign-up-container">
-				<form
-					v-bind:class="rightPanelSignUpActive ? 'right-panel-sign-up-active' : ''"
-					@submit.prevent="registerComp"
-					class="sign-up-form authSectionContainer"
-				>
-					<div class="form first form-container">
-						<h1>Create Account</h1>
-						<span>Use your mobile for registration</span>
-						<label for="phone-reg">Username</label>
-						<input
-							id="phone-reg"
-							v-model="regmobile"
-							type="text"
-							maxlength="100"
-							placeholder="Enter Mobile No. / Email"
-							required
-						/>
-						<label for="pass-reg">Password</label>
-						<input id="pass-reg" v-model="regpassword" type="password" placeholder="Password" required />
-						<label for="pass-reg">Confirm Password</label>
-						<input
-							id="pass-reg"
-							v-model="regconfirmPassword"
-							type="password"
-							placeholder="Confirm Password"
-							required
-						/>
-						<a
-							href="#"
-							class="font-yellow"
-							id="signIn"
-							@click="rightPanelSignUpActive = !rightPanelSignUpActive"
-						>
-							Next
-						</a>
-						<a href="#" class="ghost resp" id="signIn" @click="rightPanelActive = !rightPanelActive">
-							Sign In Instead
-						</a>
-					</div>
-					<div class="form second form-container">
-						<h1>Create Account</h1>
-						<span>Personal Particulars</span>
-						<label for="name-reg">Name</label>
-						<input type="text" v-model="regnickname" id="name-reg" placeholder="Name" required />
-						<label for="name-reg">Age</label>
-						<input type="number" id="age-reg" placeholder="Example: 21" required />
-						<a
-							href="#"
-							class="font-yellow"
-							id="signIn"
-							@click="rightPanelSignUpActive = !rightPanelSignUpActive"
-						>
-							Back
-						</a>
-						<button class="color-white margin-top" type="submit">
-							Sign Up
-						</button>
-					</div>
-				</form>
-			</div>
+		<div class="authSectionContainer" id="authSectionContainer">
 			<div class="form-container sign-in-container">
-				<form @submit.prevent="loginComp" class="form">
-					<h1>Sign In</h1>
+				<form @submit.prevent="resetComp" class="form">
+					<h1>Reset Password</h1>
 					<span>using your account</span>
 					<label for="phone-login">Username</label>
-					<input id="phone-login" v-model="mobile" type="text" maxlength="100" placeholder="Mobile no. / Email" />
-					<label for="pass-login">Password</label>
+					<input
+						id="phone-login"
+						v-model="mobile"
+						type="text"
+						maxlength="100"
+						placeholder="Mobile no. / Email"
+					/>
+					<label for="pass-login">New Password</label>
 					<input id="pass-login" v-model="password" type="password" placeholder="Password" required />
-					<a href="/resetPassword">Forgot your password?</a>
-					<button class="color-white" type="submit">Sign In</button>
-					<a href="#" class="ghost resp" id="signUp" @click="rightPanelActive = !rightPanelActive">
-						Sign Up
-					</a>
+					<label for="pass-login-confirm">New Password Confirmation</label>
+					<input
+						id="pass-login-confirm"
+						v-model="passwordconfirm"
+						type="password"
+						placeholder="Password"
+						required
+					/>
+
+					<button class="color-white" type="submit">Reset</button>
 				</form>
 			</div>
 			<div class="overlay-container">
@@ -99,10 +45,10 @@
 						</button>
 					</div>
 					<div class="overlay-panel overlay-right">
-						<h1>Don't have an account?</h1>
-						<p>Fret not! Enter your personal details and start your journey with us.</p>
-						<button class="ghost" id="signUp" @click="rightPanelActive = !rightPanelActive">
-							Sign Up
+						<h1>Remember your password?</h1>
+						<p>Proceed to login page!</p>
+						<button class="ghost" id="signUp" @click="goToLogin">
+							Login
 						</button>
 					</div>
 				</div>
@@ -116,7 +62,7 @@ import { mapActions } from 'vuex';
 /* import store from '../store'; */
 
 export default {
-	name: 'UserAuth',
+	name: 'ResetPassword',
 	components: {},
 	data() {
 		return {
@@ -125,61 +71,38 @@ export default {
 				type: 'success',
 				message: '',
 			},
-			rightPanelActive: false,
-			rightPanelSignUpActive: false,
 			mobile: '',
 			password: '',
-			regmobile: '',
-			regpassword: '',
-			regconfirmPassword: '',
-			regnickname: '',
+			passwordconfirm: '',
 		};
 	},
 	methods: {
-		...mapActions(['register', 'login']),
-		async loginComp() {
-			if (!this.mobile || !this.password) return;
-
-			let response = await this.login({ username: this.mobile, password: this.password });
-
-			if (response.status !== 200) {
-				this.notification.message = 'Failed to login, invalid username or password!';
+		...mapActions(['resetPassword']),
+		async resetComp() {
+			if (!this.mobile || !this.password || !this.passwordconfirm) return;
+			if (this.passwordconfirm != this.password) {
+				this.notification.message = 'Passwords do not match. Pls retry!';
 				this.notification.show = true;
 				this.notification.type = 'error';
+				return;
 			}
+			let response = await this.resetPassword({
+				username: this.mobile,
+				password: this.password,
+			});
+			console.log(response.status);
+			if (response.status === 200) {
+				this.notification.message = 'Password Successfully Reset!';
+				this.notification.show = true;
+				this.notification.type = 'success';
 
-			await this.$router.push(`/`);
-		},
-		async registerComp() {
-			try {
-				if (!this.regmobile || !this.regpassword || !this.regconfirmPassword || !this.regnickname) return;
-				if (this.regpassword !== this.regconfirmPassword) {
-					this.notification.message = 'Passwords do not match. Pls retry!';
-					this.notification.show = true;
-					this.notification.type = 'error';
-					return;
-				}
-
-				const response = await this.register({
-					username: this.regmobile,
-					password: this.regpassword,
-					nickname: this.regnickname,
-				});
-
-				if (response.status !== 200) {
-					this.notification.message = 'Failed to register, username already exists!';
-					this.notification.show = true;
-					this.notification.type = 'error';
-				}
-
-				await this.$router.push(`/`);
-			} catch (err) {
-				console.error(err);
+				setTimeout(() => {
+					this.$router.push(`/`);
+				}, 2000);
 			}
 		},
-		reset() {
-			this.mobile = '';
-			this.password = '';
+		goToLogin() {
+			this.$router.push(`/`);
 		},
 	},
 	/*  async beforeRouteEnter(to, from, next) {
@@ -520,7 +443,7 @@ section#authSection {
 
 .introduction {
 	width: 90%;
-  padding-bottom: 10px;
+	padding-bottom: 10px;
 	@include layout(tablet) {
 		width: 70%;
 	}
