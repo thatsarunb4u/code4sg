@@ -80,7 +80,7 @@
 					<input id="phone-login" v-model="mobile" type="text" maxlength="100" placeholder="Mobile no. / Email" />
 					<label for="pass-login">Password</label>
 					<input id="pass-login" v-model="password" type="password" placeholder="Password" required />
-					<a href="/resetPassword">Forgot your password?</a>
+					<router-link :to="{ name: 'ResetPassword'}" style="pointer:cursor">Forgot your password?</router-link>
 					<button class="color-white" type="submit">Sign In</button>
 					<a href="#" class="ghost resp" id="signUp" @click="rightPanelActive = !rightPanelActive">
 						Sign Up
