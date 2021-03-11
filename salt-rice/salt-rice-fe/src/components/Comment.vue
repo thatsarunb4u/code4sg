@@ -145,7 +145,7 @@
 								<img class="no-margin" src="@/assets/images/iconfinder_1_avatar_2754574.svg" alt="" />
 							</div>
 							<div>
-								<span>{{this.username}}</span>
+								<span>{{ this.username }}</span>
 							</div>
 						</div>
 						<div class="profile-comment">
@@ -171,8 +171,8 @@
 
 <script>
 import { protectedFetch } from '../mixins/appUtils';
-import {mapState} from 'vuex';
-
+import { mapState } from 'vuex';
+import store from '../store';
 export default {
 	name: 'Comment',
 	props: {
@@ -204,18 +204,21 @@ export default {
 	},
 	methods: {
 		async upVote() {
-			this.comment.upVote++;
-			await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/upvote`);
+			
+			if (store.getters.isLoggedIn) {
+				this.comment.upVote++;
+				await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/upvote`);
+			}
 		},
 		async downVote() {
 			this.comment.downVote++;
 			await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/downvote`);
 		},
 		reply() {
-      let replyDict = [];
-      replyDict.replyComment = this.formatReply(this.replyComment);
-      replyDict.parentCommentID = this.comment.commentID;
-      this.$emit("subReply", replyDict);
+			let replyDict = [];
+			replyDict.replyComment = this.formatReply(this.replyComment);
+			replyDict.parentCommentID = this.comment.commentID;
+			this.$emit('subReply', replyDict);
 			this.cancel();
 		},
 		formatReply(reply) {
@@ -235,18 +238,17 @@ export default {
 		},
 		async flag() {
 			await protectedFetch(`${process.env.VUE_APP_BASE_API}/post/comment/${this.comment.commentID}/flag`);
-    },
-    subReply(reply){
-
-      this.$emit("subReply", reply);
-    }
-  },
-  computed: {
-    ...mapState({
-      /* isLoggedIn : 'isLoggedIn', */
-      username: state => state.auth.username,
-    }),
-  },
+		},
+		subReply(reply) {
+			this.$emit('subReply', reply);
+		},
+	},
+	computed: {
+		...mapState({
+			/* isLoggedIn : 'isLoggedIn', */
+			username: (state) => state.auth.username,
+		}),
+	},
 };
 </script>
 

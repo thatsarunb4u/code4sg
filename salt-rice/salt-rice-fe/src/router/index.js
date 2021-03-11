@@ -9,9 +9,7 @@ const routes = [
 		path: '/',
 		name: 'Index',
 		component: () => import(/* webpackChunkName: "connected" */ '@/views/Index.vue'),
-		meta: {
-			requiresAuth: true,
-		},
+		
 	},
 	{
 		path: '/post',
@@ -35,9 +33,7 @@ const routes = [
 		path: '/post/:id',
 		name: 'Post',
 		component: () => import(/* webpackChunkName: "connected" */ '@/views/Post.vue'),
-		meta: {
-			requiresAuth: true,
-		},
+		
 	},
 ];
 
