@@ -57,11 +57,12 @@ export default {
             password: this.password,
           })
         });
-
+        
         if (response.status == 200) {
           //store jwt token here in store.
           console.log("Token:" + response.body.access_token);
           this.$router.push(`/`);
+         
         }else if(response.status == 401 ) {
           console.error("Unauthorized")
         } else {

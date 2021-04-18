@@ -7,7 +7,7 @@
 		</p>
 
 		<div
-			v-bind:class="rightPanelActive ? 'right-panel-active' : ''" 
+			v-bind:class="rightPanelActive ? 'right-panel-active' : ''"
 			class="authSectionContainer"
 			id="authSectionContainer"
 		>
@@ -77,10 +77,18 @@
 					<h1>Sign In</h1>
 					<span>using your account</span>
 					<label for="phone-login">Username</label>
-					<input id="phone-login" v-model="mobile" type="text" maxlength="100" placeholder="Mobile no. / Email" />
+					<input
+						id="phone-login"
+						v-model="mobile"
+						type="text"
+						maxlength="100"
+						placeholder="Mobile no. / Email"
+					/>
 					<label for="pass-login">Password</label>
 					<input id="pass-login" v-model="password" type="password" placeholder="Password" required />
-					<router-link :to="{ name: 'ResetPassword'}" style="pointer:cursor">Forgot your password?</router-link>
+					<router-link :to="{ name: 'ResetPassword' }" style="pointer:cursor"
+						>Forgot your password?</router-link
+					>
 					<button class="color-white" type="submit">Sign In</button>
 					<a href="#" class="ghost resp" id="signUp" @click="rightPanelActive = !rightPanelActive">
 						Sign Up
@@ -147,8 +155,9 @@ export default {
 				this.notification.show = true;
 				this.notification.type = 'error';
 			}
-
-			await this.$router.push(`/`);
+			if (response.status === 200) {
+				await this.$router.push(`/`);
+			}
 		},
 		async registerComp() {
 			try {
@@ -520,7 +529,7 @@ section#authSection {
 
 .introduction {
 	width: 90%;
-  padding-bottom: 10px;
+	padding-bottom: 10px;
 	@include layout(tablet) {
 		width: 70%;
 	}
